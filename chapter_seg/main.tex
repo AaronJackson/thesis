@@ -60,8 +60,8 @@ a CNN that was trained to directly perform facial part segmentation.
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{figs/sampler.png}
-\caption{Example faces and their corresponding output from the CNN
-  cascade.}
+\caption{Examples from our facial part segmentation method}{Example
+  faces and their corresponding output from the CNN cascade.}
 \label{fig:sampler}
 \end{figure}
 
@@ -200,9 +200,10 @@ information and results in little performance improvement.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figs/FCN.pdf}
-\caption{Overview of the Fully Convolutional
-  Network~\cite{long2015fully}, low level information providing
-  refinement are reintroduced into the network during deconvolution.}
+\caption{VGG-16 Network}{Overview of the
+  Fully Convolutional Network~\cite{long2015fully}, low level
+  information providing refinement are reintroduced into the network
+  during deconvolution.}
 \label{fig:fcn}
 \end{figure}
 
@@ -231,8 +232,8 @@ This process is illustrated in Fig.~\ref{fig:gtmasks}.
 \includegraphics[height=3.5cm]{figs/gtmasks.pdf}
 \hspace{-1.4mm}
 \includegraphics[height=3.5cm]{figs/gtmasks_key.pdf}
-\caption{Example groundtruth segmentation mask produced from the
-  groundtruth landmarks.}
+\caption{Example groundtruth facial part masks}{Example groundtruth
+  segmentation mask produced from the groundtruth landmarks.}
 \label{fig:gtmasks}
 \end{figure}
 
@@ -262,10 +263,11 @@ partial occlusion.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figs/Proposed.pdf}
-\caption{The proposed architecture, comprising of two separate Fully
-  Convolutional Networks. The first performs Landmark Detection, the
-  output of which is encoded as multichannel representation which is
-  then passed into the Semantic Part Segmentation network.}
+\caption{Our proposed end-to-end architecture for facial part
+  segmentation}{The proposed architecture, comprising of two separate
+  Fully Convolutional Networks. The first performs Landmark Detection,
+  the output of which is encoded as multichannel representation which
+  is then passed into the Semantic Part Segmentation network.}
 \label{fig:proposed}
 \end{figure}
 
@@ -458,8 +460,9 @@ the proposed CNN cascade.
 \begin{figure}
 \includegraphics[width=0.5\linewidth]{figs/lan-vs-un.eps}
 \includegraphics[width=0.5\linewidth]{figs/lan-vs-un-mean.eps}
-\caption{Comparison of Unguided (---) and Connected Landmarks
-(-{ }-). Per-class averages shown on the right.}
+\caption{Unguided vs. Guided facial part segmentation}{Comparison of
+  Unguided (---) and Connected Landmarks (-{ }-). Per-class averages
+  shown on the right.}
 \label{fig:lan-vs-un}
 \end{figure}
 
@@ -481,9 +484,10 @@ there is some bias towards the connecting the landmarks approach.
 \begin{figure}
 \includegraphics[width=0.5\linewidth]{figs/gtguided-vs-unguided.eps}
 \includegraphics[width=0.5\linewidth]{figs/gtguided-vs-unguided-mean.eps}
-\caption{Comparison of guided by groundtruth (---) and unguided (-{ }-)
-facial part segmentation. Per-class averages shown on the right.
-}
+\caption{Groundtruth Guided vs. Unguided facial part
+  segmentation}{Comparison of guided by groundtruth (---) and unguided
+  (-{ }-) facial part segmentation. Per-class averages shown on the
+  right.  }
 \label{fig:gt-vs-un}
 \end{figure}
 
@@ -511,9 +515,10 @@ instead of groundtruth landmarks.
 \begin{figure}
 \includegraphics[width=0.5\linewidth]{figs/gtguided-vs-guided.eps}
 \includegraphics[width=0.5\linewidth]{figs/gtguided-vs-guided-mean.eps}
-\caption{Comparison of guidance from groundtruth landmarks (---) and
-  guidance from detected landmarks (-{ }-). Per-class averages shown
-  on the right.  }
+\caption{Groundtruth vs. Detected landmarks for guidance}{Comparison
+  of guidance from groundtruth landmarks (---) and guidance from
+  detected landmarks (-{ }-). Per-class averages shown on the right.
+}
 \label{fig:gt-vs-det}
 \end{figure}
 
@@ -540,18 +545,20 @@ all components for all methods is given in Fig.~\ref{fig:all}.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figs/Visual.pdf}
-\caption{Some visual results showing where the unguided network begins
-  to fail, and where the guidance begins to pay off. Observe how
-  visually close the results of the guided by groundtruth landmarks
-  and the guided by detected landmarks networks are.}
+\caption{Challenging images and their output from facial part
+  segmentation}{Some visual results showing where the unguided network
+  begins to fail, and where the guidance begins to pay off. Observe
+  how visually close the results of the guided by groundtruth
+  landmarks and the guided by detected landmarks networks are.}
 \label{fig:visual}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.6\linewidth]{figs/all.eps}
-\caption{Average performance of the four tested methods over all
-  facial components: part segmentation guided by groundtruth
+\caption{Average images and their output from facial part
+  segmentation}{Average performance of the four tested methods over
+  all facial components: part segmentation guided by groundtruth
   landmarks, part segmentation guided by detected landmarks, unguided
   part segmentation, part segmentation by joining up the detected
   landmarks.}
