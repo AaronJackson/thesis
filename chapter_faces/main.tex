@@ -272,7 +272,9 @@ the performance of our method with that of a similar method~\cite{zhu2016face} i
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/discretisation.pdf}
-  \caption{The voxelisation process creates a volumetric representation of the 3D face mesh, aligned with the 2D image.}
+  \caption{Dataset voxelisation procedure}{The voxelisation process
+    creates a volumetric representation of the 3D face mesh, aligned
+    with the 2D image.}
   \label{fig:discretisation}
 \end{figure}
 
@@ -303,7 +305,8 @@ described in the next subsection.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{curves/voxerror-eps-converted-to.pdf}
-\caption{The error introduced due to voxelisation, shown as a function of volume density.}
+\caption{Error due to voxelisation}{The error introduced due to
+  voxelisation, shown as a function of volume density.}
 \label{fig:voxerror}
 \end{figure}
 
@@ -330,7 +333,11 @@ combined from different resolutions to make per-pixel predictions. The second ho
   \begin{subfigure}[t]{1\textwidth}
   \centering
   \includegraphics[width=0.81\linewidth]{img/baseline.pdf}
-  \caption{The proposed \textit{Volumetric Regression Network (VRN)} accepts as input an RGB input and directly regresses a 3D volume completely bypassing the fitting of a 3DMM. Each rectangle is a residual module of 256 features.}
+  \caption{Baseline reconstruction architecture}{The proposed
+    \textit{Volumetric Regression Network (VRN)} accepts as input an
+    RGB input and directly regresses a 3D volume completely bypassing
+    the fitting of a 3DMM. Each rectangle is a residual module of 256
+    features.}
 
   \label{fig:cnnbaseline}
   \end{subfigure}
@@ -338,18 +345,27 @@ combined from different resolutions to make per-pixel predictions. The second ho
    \begin{subfigure}[t]{0.98\textwidth}
      \centering
   \includegraphics[width=\linewidth]{img/guided.pdf}
-  \caption{The proposed \textit{VRN - Guided} architecture firsts detects the 2D projection of the 3D landmarks, and stacks these with the original image. This stack is fed into the reconstruction network, which directly regresses the volume.}
+  \caption{Guided reconstruction architecture}{The proposed
+    \textit{VRN - Guided} architecture firsts detects the 2D
+    projection of the 3D landmarks, and stacks these with the original
+    image. This stack is fed into the reconstruction network, which
+    directly regresses the volume.}
   \label{fig:guidednet}
    \end{subfigure}
    ~
    \begin{subfigure}[t]{1\textwidth}
    \centering
   \includegraphics[width=0.6\linewidth]{img/multitask.pdf}
-  \caption{The proposed \textit{VRN - Multitask} architecture regresses both the 3D facial volume and a set of sparse facial landmarks.}
+  \caption{Multitask reconstruction architecture}{The proposed
+    \textit{VRN - Multitask} architecture regresses both the 3D facial
+    volume and a set of sparse facial landmarks.}
   \label{fig:cnnmultitask}
   \vspace{-2mm}
   \end{subfigure}
-  \caption{An overview of the proposed three architectures for Volumetric Regression: \textit{Volumetric Regression Network (VRN)}, \textit{VRN - Guided} and \textit{VRN - Multitask}.}
+  \caption{Overview of proposed architectures}{An overview of the
+    proposed three architectures for Volumetric Regression:
+    \textit{Volumetric Regression Network (VRN)}, \textit{VRN -
+      Guided} and \textit{VRN - Multitask}.}
   \label{fig:cnnall}
   \vspace{-5mm}
 \end{figure*}
@@ -372,7 +388,9 @@ unguided volumetric regression method. The goal of this multitask network is to 
   \centering
   \includegraphics[width=0.4\linewidth]{img/example_rough.png}
   \includegraphics[width=0.4\linewidth]{img/example_smooth.png}
-  \caption{Comparison between making hard (binary) vs soft (real) predictions. The latter produces a smoother result.}
+  \caption{Binary vs Real volumes}{Comparison between making hard
+    (binary) vs soft (real) predictions. The latter produces a
+    smoother result.}
   \label{fig:roughvssmooth}
   \vspace{-4mm}
 \end{figure}
@@ -412,43 +430,49 @@ In the case of the \textit{VRN - Guided}, the landmark detection module was trai
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{img/aflw2000res.pdf}
-\caption{Some visual results from the AFLW2000-3D dataset generated using our \textit{VRN - Guided} method.}
+\caption{Visual results on AFLW2000-3D dataset}{Some visual results
+  from the AFLW2000-3D dataset generated using our \textit{VRN -
+    Guided} method.}
 \label{fig:aflw2000res}
 \vspace{-4mm}
 \end{figure}
 
-\begin{figure*}
-\centering
-\begin{subfigure}[t]{0.43\textwidth}
-\centering
+\begin{figure}
+  \centering
   \includegraphics[width=\linewidth]{curves/aflw-eps-converted-to.pdf}
- %\caption{NME-based performance on the in-the-wild AFLW2000-3D dataset. The proposed \textit{Volumetric Regression Networks}, and EOS and 3DDFA are compared.}
+  \caption{NME performance on AFLW2000-3D images}{NME-based
+    performance on in-the-wild ALFW2000-3D dataset. The proposed
+    \textit{Volumetric Regression Networks}, and EOS and 3DDFA are
+    compared.}
   \label{roc:aflw2000}
-\end{subfigure}
-\hspace{13mm}
-\begin{subfigure}[t]{0.43\textwidth}
-\centering
-  \includegraphics[width=\linewidth]{curves/bu4dfe-eps-converted-to.pdf}
-%  \caption{NME-based performance on our large pose and expression renderings of the BU4DFE dataset. The proposed \textit{Volumetric Regression Networks}, and EOS and 3DDFA are compared.}
-  \label{roc:bu4dfe}
-\end{subfigure}
-\vspace{-13pt}
-\caption{NME-based performance on in-the-wild ALFW2000-3D dataset (left) and renderings from BU-4DFE (right).  The proposed \textit{Volumetric Regression Networks}, and EOS and 3DDFA are compared.}
-\label{roc:combined}
-\vspace{-4mm}
-\end{figure*}
+\end{figure}
 
 \begin{figure}
-\centering
+  \centering
+  \includegraphics[width=\linewidth]{curves/bu4dfe-eps-converted-to.pdf}
+  \caption{NME performance on BU-4DFE renderings}{NME-based
+    performance on renderings from BU-4DFE. The proposed
+    \textit{Volumetric Regression Networks}, and EOS and 3DDFA are
+    compared.}
+  \label{roc:bu4dfe}
+\end{figure}
+
+\begin{figure}
+  \centering
   \includegraphics[width=0.92\linewidth]{curves/florence-eps-converted-to.pdf}
-\caption{NME-based performance on our large pose renderings of the Florence dataset. The proposed \textit{Volumetric Regression Networks}, and EOS and 3DDFA are compared.}
+  \caption{NME performance on Florence renderings}{NME-based
+    performance on our large pose renderings of the Florence
+    dataset. The proposed \textit{Volumetric Regression Networks}, and
+    EOS and 3DDFA are compared.}
   \label{roc:florence}
 \end{figure}
 
 
 
 \begin{table}
-  \caption{Reconstruction accuracy on AFLW2000-3D, BU-4DFE and Florence in terms of NME. Lower is better.}
+  \caption{Reconstruction accuracy}{Reconstruction accuracy on
+    AFLW2000-3D, BU-4DFE and Florence in terms of NME. Lower is
+    better.}
   \label{tab:overview}
   \centering
   \small
@@ -599,7 +623,9 @@ reconstruction methods for which code is publicly available. These include the v
 
 \begin{figure}
 \includegraphics[width=\linewidth]{img/frontal.png}
-\caption{Result from \textit{VRN without alignment} (second columns), and a frontalised output from \textit{VRN - Guided} (third columns).}
+\caption{Visual results when spatial alignment is ignored}{Result from
+  \textit{VRN without alignment} (second columns), and a frontalised
+  output from \textit{VRN - Guided} (third columns).}
   \label{fig:frontal_visual}
 \end{figure}
 
@@ -629,7 +655,9 @@ expressions generally do not occur in the training set, yet as shown in Fig.~\re
 \begin{figure}
 \centering
   \includegraphics[width=0.90\linewidth]{curves/ablation_pose-eps-converted-to.pdf}
-  \caption{The effect of pose on reconstruction accuracy in terms of NME on the Florence dataset. The \textit{VRN - Guided} network was used.}
+  \caption{Effect of pose}{The effect of pose on reconstruction
+    accuracy in terms of NME on the Florence dataset. The \textit{VRN
+      - Guided} network was used.}
   \label{fig:effect_pose}
 \end{figure}
 
@@ -639,17 +667,20 @@ expressions generally do not occur in the training set, yet as shown in Fig.~\re
 \begin{figure}
   \centering
   \includegraphics[width=0.9\linewidth]{curves/ablation_expression-eps-converted-to.pdf}
-  \caption{The effect of facial expression on reconstruction accuracy in terms of NME on the BU-4DFE dataset. The \textit{VRN - Guided} network was used.}
+  \caption{Effect of facial expressions}{The effect of facial
+    expression on reconstruction accuracy in terms of NME on the
+    BU-4DFE dataset. The \textit{VRN - Guided} network was used.}
   \label{fig:effect_expression}
 \end{figure}
 
 %\textbf{Effect of using different Gaussian sizes for the landmark detector network.}
 \textbf{Effect of Gaussian size for guidance.} We trained a
-\textit{VRN - Guided}, however, this time,
-the facial landmark detector network of the \textit{VRN - Guided} regresses larger Gaussians ($\sigma = 2$ as
-opposed to the normal $\sigma = 1$). The performance of the 3D
-reconstruction dropped by a negligible amount, suggesting that as long
-as the Gaussians are of a sensible size, guidance will always help.
+\textit{VRN - Guided}, however, this time, the facial landmark
+detector network of the \textit{VRN - Guided} regresses larger
+Gaussians ($\sigma = 2$ as opposed to the normal $\sigma = 1$). The
+performance of the 3D reconstruction dropped by a negligible amount,
+suggesting that as long as the Gaussians are of a sensible size,
+guidance will always help.
 
 
 
