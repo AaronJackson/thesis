@@ -21,8 +21,8 @@
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.8\linewidth]{img/demo.png}
-  \caption{Some example results using our method when trained with a
-    high quality detailed training set.}
+  \caption{Example reconstructions}{Some example results using our
+    method when trained with a high quality detailed training set.}
   \label{fig:topdemo}
 \end{figure}
 
@@ -331,9 +331,10 @@ $\{w,h,d\}$.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{img/multistack.pdf}
-  \caption{The \textit{Ours - Multistack} network. Dark blue boxes
-    represent residual modules. Each Encoder-Decoder module has its
-    own loss, while still passing features to the next module.}
+  \caption{Proposed stacked architecture}{The \textit{Ours -
+      Multistack} network. Dark blue boxes represent residual
+    modules. Each Encoder-Decoder module has its own loss, while still
+    passing features to the next module.}
   \label{fig:multistack}
 \end{figure}
 
@@ -439,11 +440,11 @@ parameters (which also allows the network to fit into memory).
 \includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00020__max200_pad25_jpg.png}
 \includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00026__max200_pad25_jpg.png}
 \includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00031__max200_pad25_jpg.png}
-\caption{Visual results from our main network, \textit{Ours -
-    Multistack}, on a test split of Human3.6m~\cite{h36m_pami}. These
-  results demonstrate VRN's ability to deal with large and complex
-  pose. We also show the reconstructions with the texture projected
-  onto them.}
+\caption{Visual results from our main architecture}{Visual results
+  from our main network, \textit{Ours - Multistack}, on a test split
+  of Human3.6m~\cite{h36m_pami}. These results demonstrate VRN's
+  ability to deal with large and complex pose. We also show the
+  reconstructions with the texture projected onto them.}
 \label{fig:visres_ours}
 \end{figure}
 
@@ -549,14 +550,15 @@ days.
 \includegraphics[width=0.15\linewidth]{img/detailed/dfgdfgsgs_t.png}
 \includegraphics[width=0.15\linewidth]{img/detailed/gergeg_t.png}
 \includegraphics[width=0.15\linewidth]{img/detailed/sdfdsfs_t.png}
-\caption{Example 3D reconstructions from the web (Creative Commons)
-  using our method trained with high quality training data. The first
-  row shows the input image, the second shows the 3D reconstruction
-  from the front, and the third row shows the 3D reconstruction when
-  views from behind (i.e. the hallucinated side, in the case of these
-  images). The final row shows the frontal reconstruction with the
-  projected texture. These results show that VRN is capable of
-  regressing finer details.}
+\caption{Visual results when trained on high quality data}{Example 3D
+  reconstructions from the web (Creative Commons) using our method
+  trained with high quality training data. The first row shows the
+  input image, the second shows the 3D reconstruction from the front,
+  and the third row shows the 3D reconstruction when views from behind
+  (i.e. the hallucinated side, in the case of these images). The final
+  row shows the frontal reconstruction with the projected
+  texture. These results show that VRN is capable of regressing finer
+  details.}
   \label{fig:detailed}
 \end{figure}
 
