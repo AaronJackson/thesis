@@ -1,8 +1,7 @@
 \chapter{Background}
 
-In this chapter, an introduction to the various topics which have
-become dependencies of this research. One of the biggest being,
-convolutional neural networks.
+In this chapter, an introduction to the various research areas which
+have heavily influenced this thesis is provided.
 
 % \section{Problem Definition}
 
@@ -135,8 +134,11 @@ normalisation.
 While designing and developing a framework to work with deep neural
 networks \textit{might} be an interesting thought experiment for some,
 it is far from the focus of this thesis. The work presented throughout
-this thesis was developed under the Torch~\footnote{\url{http://torch.ch/}}
-framework. There are a number of reasons for this, but to name just a few:
+this thesis was developed primarily under the
+Torch~\footnote{\url{http://torch.ch/}, except for the work on facial
+  part segmentation, which was developed under
+  Cafe~\cite{jia2014caffe}}. There are a number of reasons for this,
+but to name just a few:
 
 \begin{enumerate}
 \item Efficient GPU support. This is important, of course, in any
@@ -151,7 +153,8 @@ framework. There are a number of reasons for this, but to name just a few:
   in more detail in Section~\ref{sec:background:volstorage}. However,
   regardless of how the data is optimised (in terms of compression or
   just raw data), volumes are big. Loading them sequentially and
-  applying augmentation, even on very fast hardware, remains slow.
+  applying augmentation, even on very fast hardware, remains a
+  computationally expensive task.
 \end{enumerate}
 
 
@@ -186,8 +189,8 @@ is denoted with a zero.
 
 \subsection{Voxelisation}
 
-The process of \textit{re-encoding} a mesh into a volumetric structure
-is referred to as voxelisation. Intuitively, this voxelisation process
+The process of transforming a mesh into a volumetric structure is
+referred to as voxelisation. Intuitively, this voxelisation process
 discretises the mesh. It is no longer possible to reproduce a
 non-integer form of the original mesh - a surface noticeably
 constructed out of small cubes. Ideally, there should be minimal
@@ -284,12 +287,10 @@ as patient information, along with a metadata describing the
 resolution and bit depth of the volumetric data. An argument can be
 made that none of this information is required if the volumetric
 representation is used as an intermediary state and doesn't have to be
-process by \textit{humans}. This applies to the work presented in this
-thesis. The volumetric representation used in the work described
-throughout this thesis is simply steams of bytes, which can be very
-efficiently read into memory.
-
-
+processed by \textit{humans}. This applies to the work presented in
+this thesis. The volumetric representation used in the work described
+throughout this thesis is a contiguous array of bytes, which can be
+very efficiently read into memory.
 
 
 \section{Related Work}
@@ -336,11 +337,7 @@ for this to work, context is required, both locally and
 globally. Global context tells us what is in the image and roughly
 where a particular object may be located. Local context then refines
 this global information, defining boundaries between classes with much
-greater precision. The reasons for including semantic segmentation in
-a thesis about 3D reconstruction may not be immediately clear. This is
-explained in detail in Section~\ref{sec:vrn:relationship_to_seg}, but
-the general idea is that we approach 3D reconstruction as a semantic
-segmentation problem.
+greater precision.
 
 Classical approaches to semantic segmentation involved first
 segmenting the image using statistical models, followed by
@@ -356,21 +353,23 @@ the Fully Convolutional Network (FCN) described
 in~\cite{long2015fully}, which was based on
 VGG-16~\cite{simonyan2014vgg}. In this work, information is forked
 from different layers throughout the network. Each fork is used to
-produce an intensity map for all known class. Forks earlier on in the
-network provide very detailed but noisy predictions about the location
-of classes, where as the latter forks are have very little noise, but
-can only approximate the location of a class. A diagram of the
-structure of FCN is shown in Figure~\ref{fig:background:fcn}. FCN was
-not intended to be trained from scratch. Instead, training was
-initialised from the parameters of VGG-16, once trained on the
-ImageNet dataset~\cite{krizhevsky2012imagenet}. The parameters in the
-latter layers of the network were reshaped from linear layers into a
-$1\times 1$ convolution. An interesting side effect of which, is the
-ability for the network to accept inputs of arbitrary sizes. The size
-of the input no longer dictates the number of parameters in the linear
-layers. Due to its simplicity and (at the time) \textit{state of the
-  art} results, it is no surprise the ideas behind FCN have become to
-standard for modern semantic segmentation methods.
+produce an intensity map for all known class (initially 59, from the
+PASCAL VOC 2010 dataset~\cite{everingham2010pascal}). Forks earlier on
+in the network provide very detailed but noisy predictions about the
+location of classes, where as the latter forks are have very little
+noise, but can only approximate the location of a class. A diagram of
+the structure of FCN is shown in Figure~\ref{fig:background:fcn}. FCN
+was not intended to be trained from scratch. Instead, training was
+initialised from the parameters of VGG-16, once the network had been
+trained on the ImageNet dataset~\cite{krizhevsky2012imagenet} for the
+task of classification. The parameters in the latter layers of the
+network were reshaped from linear layers into a $1\times 1$
+convolution. An interesting side effect of which, is the ability for
+the network to accept inputs of arbitrary sizes. The size of the input
+no longer dictates the number of parameters in the linear layers. Due
+to its simplicity and (at the time) \textit{state of the art} results,
+it is no surprise the ideas behind FCN have become to standard for
+modern semantic segmentation methods.
 
 Still, one of the limitations of FCN is that the resolution of its
 predictions are quite low. As such, several methods have proposed
@@ -398,7 +397,41 @@ in~\cite{newell2016stacked}, and performed human pose estimation with
 great precision. This level of precision is due to the being suited to
 combining features from the high and low parts of the network
 efficiently. As such, similar architectures have been used for
-semantic segmentation problems. In~\cite{badrinarayanan2017segnet},
+semantic segmentation problems.
+
+Architectures aside, a main drawback of this supervised approach to
+semantic segmentation is producing large quantities of detailed
+groundtruth semantic masks. There are several large datasets already
+available, such as PASCAL VOC~\cite{everingham2010pascal}, Microsoft
+COCO~\cite{lin2014microsoft} and
+Cityscapes~\cite{cordts2016cityscapes}. All of these datasets are
+fairly constrained in terms of the number of known
+classes. Respectively, these datasets have 59, 183 and 30 known
+classes. This is problematic when it comes to making semantic
+segmentation a viable tool for general semantic segmentation
+\textit{in-the-wild}. As such, numerous approaches have been devised
+to train these models in ways requiring less human
+intervention. In~\cite{richter2016playing}, hooks are added to
+visually detailed computer games, to allow automatic generation of
+instance aware semantic segmentation masks. A drawback of this is that
+most games are far from realistic enough to work on real images. As
+such, models trained on this data will also require domain adaptation
+- which is an entire research area in itself. In~\cite{bearman2016s},
+a weakly supervised approach is presented, where groundtruth semantic
+segmentation masks are avoided entirely. Instead, the method learns
+the semantic segmentation task from just a single point on each
+object.
+
+Another approach is described in~\cite{hu2018learning}, where the
+training set is formed of images where all classes have bounding
+boxes, but only some have groundtruth masks. The network is trained to
+produce both bounding boxes and semantic masks simultaneously by
+learning a mapping between the visual embedding from the bounding box
+feature extractors to the semantic segmentation feature
+extractors. The paper describes this working on 3000 segmentation
+classes.
+
+% In~\cite{badrinarayanan2017segnet},
 
 
 
