@@ -101,7 +101,7 @@ input to regressor $k$ is the estimate of the landmarks' location
 provided by regressor $k-1$, see also
 \cite{sanchez16,Cao2012shaperegression,xiongsupervised,zhu2015face,tzimiropoulos2015project}. The
 first component in the proposed CNN cascade is a CNN landmark detector
-based on VGG-16 \cite{simonyan2014very} converted to a fully
+based on VGG-16 \cite{simonyan2014vgg} converted to a fully
 convolutional network \cite{long2015fully}. Although the main
 contribution of our paper is not to propose a method for landmark
 localisation, our CNN landmark localisation method performs comparably
@@ -127,7 +127,7 @@ to fixing the parameters with an interpolation filter (as in
 FCN). These filters learn to reconstruct the object's shape, instead
 of just classifying each pixel. Although any of these methods could be
 incorporated within the proposed CNN cascade, for simplicity, we used
-the VGG-FCN \cite{simonyan2014very}. Note that all the aforementioned
+the VGG-FCN \cite{simonyan2014vgg}. Note that all the aforementioned
 methods perform unguided semantic segmentation, as opposed to the
 proposed landmark-guided segmentation which incorporates information
 about the pose of the object during both training and testing. To
@@ -240,7 +240,7 @@ This process is illustrated in Fig.~\ref{fig:gtmasks}.
 For our experiments we used the 68-point landmark annotations provided
 by the 300W challenge \cite{sagonas2013300}. In particular the
 training sets of LFPW \cite{belhumeur2011localizing}, Helen
-\cite{le2012interactive}, AFW \cite{ramanan2011} and iBUG
+\cite{le2012interactive}, AFW \cite{zhu2012face} and iBUG
 \cite{sagonas2013300} are all used for training while the 300W test
 set (600 images) is used for testing. Both training and test sets
 contain very challenging images in terms of appearance, pose,
@@ -274,7 +274,7 @@ partial occlusion.
 We propose a CNN cascade (shown in Fig.~\ref{fig:proposed} and listed
 in Table~\ref{tab:archlist}) which performs landmark localisation
 followed by facial part segmentation. Our cascade was based on the
-VGG-FCN \cite{simonyan2014very,long2015fully} using Caffe
+VGG-FCN \cite{simonyan2014vgg,long2015fully} using Caffe
 \cite{jia2014caffe} and consists of two main components:
 \begin{enumerate}
 \item Firstly, an FCN is trained to detect facial landmarks using
@@ -373,7 +373,7 @@ destroyed by a high loss.
 
 \begin{table}
   \caption{The
-    VGG-FCN~\cite{simonyan2014very,long2015fully}
+    VGG-FCN~\cite{simonyan2014vgg,long2015fully}
     architecture employed by our landmark detection and semantic
     part segmentation network.}
 \label{tab:archlist}

@@ -207,8 +207,8 @@ and alignment procedures.
 In this work, our goal is to reconstruct the full geometry of a human
 body from just a single image.  There are several ways of estimating
 the geometry using deep learning. The first is to directly regress the
-vertices using a top-down network such as VGG~\cite{simonyan2014very}
-or ResNet~\cite{he2016deep} trained with an L2 loss. This has at least
+vertices using a top-down network such as VGG~\cite{simonyan2014vgg}
+or ResNet~\cite{he2015deep} trained with an L2 loss. This has at least
 two disadvantages: firstly it requires the training data to be
 resampled to have a fixed number of vertices, which implies finding
 correspondence between all vertices of all meshes. Secondly, and more
@@ -411,7 +411,7 @@ number of features, our filters had sizes $f\times 3\times 1\times 1$,
 $f\times 1\times 3\times 1$ or $f\times 1\times 1\times 3$. These were
 combined into a flat volumetric residual module, as shown in
 Figure~\ref{fig:flat_vol_residual}, heavily inspired
-by~\cite{qiu2017pseudo}. This network also takes as input the image
+by~\cite{qiu2017learning}. This network also takes as input the image
 with corresponding landmarks. To provide a fair comparison with the
 other methods, we match the number of floating point operations of
 this network to \textit{Ours - Multistack} by reducing the number of
