@@ -324,6 +324,16 @@ and section.
 
 \subsection{Depth Estimation}
 
+A common approach to reconstructing the visible geometry of a 3D
+object or scene is to regress a distance value for each pixel from the
+camera. From this, a partial 3D reconstruction can be formed, or
+refined. In~\cite{saxena2006learning}, a method is presented which
+uses a Markvov Random Field (MRF) to regress the depth from a single
+image. This method struggles to regress sharp variations in depth,
+such as between foreground and far background. This method strongly
+influenced~\cite{liu2010single}, which added a second MRF capable of
+capturing a more global context using superpixels.
+
 \subsection{Shape from Shading}
 
 \subsection{Morphable Model Fitting}
@@ -441,12 +451,10 @@ which was trained on the 59 classes from VOC PASCAL
 
 The primary focus of this thesis is not on semantic
 segmentation. However, in Chapter~\ref{chapter:seg}, we describe our
-facial part segmentation. However, deep learning based approaches to semantic
-segmentation, particularly the fully convolutional approach in
-~\cite{long2015fully}, have had a strong influence on how we approach
-the problems of 3D reconstruction.
-
-%
+method for facial part segmentation. Deep learning based approaches to
+semantic segmentation, particularly the fully convolutional approach
+in ~\cite{long2015fully}, have had a strong influence on how we
+approach the problems of 3D reconstruction.
 
 
 
