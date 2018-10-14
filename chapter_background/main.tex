@@ -390,14 +390,17 @@ gained a great deal of popularity. This architecture network reduces
 the spatial dimensionality as they pass through the
 \textit{encoder}. These features are then upsampled again using a
 \textit{decoder} part of the network, while being recombined with
-lower level information, much like in FCN~\cite{long2015fully}. For
-reasons which now may appear obviously, this network is also commonly
-referred to an hourglass network. This name was first used
-in~\cite{newell2016stacked}, and performed human pose estimation with
-great precision. This level of precision is due to the being suited to
-combining features from the high and low parts of the network
-efficiently. As such, similar architectures have been used for
-semantic segmentation problems.
+lower level information, much like in FCN~\cite{long2015fully}. This
+architecture has also been referred to as an hourglass network. This
+name was first used in~\cite{newell2016stacked}, and performed human
+pose estimation with great precision. This level of precision is due
+to the being suited to combining features from the high and low parts
+of the network efficiently (i.e. combining both global and local
+context). As such, similar architectures have been used for semantic
+segmentation problems. For example,
+SegNet~\cite{badrinarayanan2017segnet} uses an Encoder-Decoder
+architecture is used to perform semantic segmentation on 11 classes
+for autonomous driving in real time.
 
 Architectures aside, a main drawback of this supervised approach to
 semantic segmentation is producing large quantities of detailed
@@ -423,23 +426,27 @@ the semantic segmentation task from just a single point on each
 object.
 
 Another approach is described in~\cite{hu2018learning}, where the
-training set is formed of images where all classes have bounding
-boxes, but only some have groundtruth masks. The network is trained to
-produce both bounding boxes and semantic masks simultaneously by
-learning a mapping between the visual embedding from the bounding box
-feature extractors to the semantic segmentation feature
-extractors. The paper describes this working on 3000 segmentation
-classes. They refer to this approach as \textit{partially} supervised,
-as some groundtruth data is required.
+training set is formed of images where all classes are annotated with
+bounding boxes. However, only some classes have groundtruth masks. The
+network is trained to produce both bounding boxes and semantic
+segmentation masks simultaneously by learning a mapping between the
+visual embedding from the bounding box feature extractors, to the
+semantic segmentation feature extractors. The paper describes this
+working on 3000 segmentation classes. They refer to this approach as
+\textit{partially} supervised, as some groundtruth data is
+required. Additionally, the method has been shown to be able to
+segment up to 3000 classes - far higher than~\cite{long2015fully},
+which was trained on the 59 classes from VOC PASCAL
+2010~\cite{everingham2010pascal}.
 
-This thesis does not focus on semantic segmentation, apart from
-Chapter~\ref{chapter:seg}, where we trained a method to perform facial
-part segmentation. However, deep learning based approaches to semantic
+The primary focus of this thesis is not on semantic
+segmentation. However, in Chapter~\ref{chapter:seg}, we describe our
+facial part segmentation. However, deep learning based approaches to semantic
 segmentation, particularly the fully convolutional approach in
 ~\cite{long2015fully}, have had a strong influence on how we approach
 the problems of 3D reconstruction.
 
-% In~\cite{badrinarayanan2017segnet},
+%
 
 
 
