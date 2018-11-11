@@ -1,7 +1,7 @@
 % ******************************* PhD Thesis Template **************************
 % Please have a look at the README.md file for info on how to use the template
 
-\documentclass[a4paper,12pt,times,numbered,print,index,oneside]{classes/PhDThesisPSnPDF}
+\documentclass[a4paper,12pt,numbered,print,index,oneside]{classes/PhDThesisPSnPDF}
 
 % ******************************************************************************
 % ******************************* Class Options ********************************
@@ -78,7 +78,7 @@
 % Uncomment to change page style
 % \pagestyle{PageStyleII}
 
-% \renewcommand{\baselinestretch}{1.5}
+\renewcommand{\baselinestretch}{1.5}
 
 % ********************************** Preamble **********************************
 % Preamble: Contains packages and user-defined commands and settings
@@ -137,8 +137,9 @@
 % ******************************** Main Matter *********************************
 \mainmatter
 
-% \include{chapter_introduction/main} % Introduction
+\include{chapter_introduction/main} % Introduction
 \include{chapter_background/main} % Background
+\include{chapter_literature/main} % Literature Review
 \include{chapter_seg/main} % Facial Part Segmentation
 \include{chapter_faces/main} % VRN for Faces
 \include{chapter_humans/main} % VRN for Humans
@@ -147,7 +148,6 @@
 % \include{chapter_criticalassessment/main} % Critical Assessment
 % \include{chapter_furtherwork/main} % Further work
 % \include{chapter_conclusions/main} % Conclusions, relisting contributions
-
 
 % ********************************** Back Matter *******************************
 % Backmatter should be commented out, if you are using appendices after References

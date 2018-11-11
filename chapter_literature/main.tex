@@ -1,0 +1,210 @@
+\chapter{Literature Review}
+
+
+This section attempts to provide a comprehensive literature review of
+the works relevant to this thesis. This thesis focuses primarily on
+the 3D reconstruction of human faces and bodies. Much of the
+literature discussed in this chapter has an obvious
+relevance. However, in the cases which are less obvious, connections
+have attempted to be made with references to the relevant chapter and
+section.
+
+
+\section{Semantic Segmentation}
+
+Semantic segmentation is the process by which pixels of an image are
+labelled by the objects contained in the image. For example, all dogs
+may be labelled as red, while cats may be labelled as green. In order
+for this to work, context is required, both locally and
+globally. Global context tells us what is in the image and roughly
+where a particular object may be located. Local context then refines
+this global information, defining boundaries between classes with
+greater precision.
+
+Classical approaches to semantic segmentation involved first
+segmenting the image using statistical models, followed by
+individually classifying the segmented objects. See for
+example~\cite{arbelaez2012semantic,carreira2012semantic}, which use a
+Conditional Random Field (CRF) to separate the image. However, these
+methods generally struggle to adequately incorporate high and low
+level feature descriptors necessary for accurate segmentation and
+labelling.
+
+CNNs drastically changed the landscape of semantic segmentation. The
+first work producing satisfactory semantic segmentation was the Fully
+Convolutional Network (FCN) described in~\cite{long2015fully}, which
+is based on VGG-16~\cite{simonyan2014vgg}. In this work, information
+is forked from different layers throughout the network. Each fork is
+used to produce an intensity map for all known class (initially 59,
+targeted at the PASCAL VOC 2010
+dataset~\cite{everingham2010pascal}). Forks earlier on in the network
+provide very detailed but noisy predictions about the location of
+classes, where as the latter forks are have very little noise, but can
+only approximate the location of a class. A diagram of the structure
+of FCN is shown in Figure~\ref{fig:background:fcn}. FCN was not
+intended to be trained from scratch. Instead, training was initialised
+from the parameters of VGG-16, once the network had been trained on
+the ImageNet dataset~\cite{krizhevsky2012imagenet} for the task of
+classification. The parameters in the last few layers of the network
+were reshaped from linear layers into a $1\times 1$ convolution. An
+interesting side effect of which, is the ability for the network to
+accept inputs of arbitrary sizes. The size of the input no longer
+dictates the number of parameters in the linear layers. Due to its
+simplicity and (at the time) state of the art results, it is no
+surprise the ideas behind FCN have become the standard for modern
+semantic segmentation methods.
+
+Still, one of the limitations of FCN is that the resolution of its
+predictions are quite low. As such, several methods have proposed
+extensions to FCN to compensate for this limitation. The most common
+addition has been to add a CRF to the output of the network, to
+provide further refinement. The work of \cite{chen2015semantic}
+first upsamples the predicted scores using bilinear interpolation
+and then refines the output by applying a dense CRF. The method of
+\cite{zheng2015conditional} performs recurrent end-to-end training of
+the FCN and the dense CRF. Finally, the work in \cite{noh2015learning}
+employs learnt deconvolution layers, as opposed to fixing the
+parameters with an interpolation filter (as in FCN). These filters
+learn to reconstruct the object's mask, in addition to upsampling its
+input.
+
+In the past year or so, the Encoder-Decode network architecture has
+gained a great deal of popularity. This architecture reduces the
+spatial dimensionality of the feature as they are passed through the
+\textit{encoder}. These features are then upsampled again using a
+\textit{decoder} part of the network, while being recombined with
+lower level information, much like in FCN~\cite{long2015fully}. This
+architecture has also been referred to as an hourglass network. This
+name was first used in~\cite{newell2016stacked}, and performed human
+pose estimation with great precision. This level of precision is due
+to the being suited to combining features from the high and low parts
+of the network efficiently (i.e. combining both global and local
+context). As such, similar architectures have been used for semantic
+segmentation problems. For example,
+SegNet~\cite{badrinarayanan2017segnet} uses an Encoder-Decoder
+architecture is used to perform semantic segmentation on 11 classes
+for autonomous driving in real time.
+
+Architectures aside, a main drawback of this supervised approach to
+semantic segmentation is producing large quantities of detailed
+groundtruth semantic masks. There are several large datasets already
+available, such as PASCAL VOC~\cite{everingham2010pascal}, Microsoft
+COCO~\cite{lin2014microsoft} and
+Cityscapes~\cite{cordts2016cityscapes}. All of these datasets are
+fairly constrained in terms of the number of known
+classes. Respectively, these datasets have 59, 183 and 30 known
+classes. This is problematic when it comes to making semantic
+segmentation a viable tool for general semantic segmentation
+\textit{in-the-wild}. As such, numerous approaches have been devised
+to train these models in ways requiring less human
+intervention. In~\cite{richter2016playing}, hooks are added to
+visually detailed computer games, to allow automatic generation of
+instance aware semantic segmentation masks. A drawback of this is that
+most games are far from realistic enough to work on real images. As
+such, models trained on this data will also require domain adaptation
+- which is an entire research area in itself. In~\cite{bearman2016s},
+a weakly supervised approach is presented, where groundtruth semantic
+segmentation masks are avoided entirely. Instead, the method learns
+the semantic segmentation task from just a single point on each
+object.
+
+Another approach is described in~\cite{hu2018learning}, where the
+training set is formed of images where all classes are annotated with
+bounding boxes. However, only some classes have groundtruth masks. The
+network is trained to produce both bounding boxes and semantic
+segmentation masks simultaneously by learning a mapping between the
+visual embedding from the bounding box feature extractors, to the
+semantic segmentation feature extractors. The paper describes this
+working on 3000 segmentation classes. They refer to this approach as
+\textit{partially} supervised, as some groundtruth data is
+required. Additionally, the method has been shown to be able to
+segment up to 3000 classes - far higher than~\cite{long2015fully},
+which was trained on the 59 classes from VOC PASCAL
+2010~\cite{everingham2010pascal}.
+
+The primary focus of this thesis is not semantic
+segmentation. However, in Chapter~\ref{chapter:seg}, we describe our
+method for facial part segmentation, in which each component of the
+face (such as eyes, lips, nose, etc) are assigned a pixel wise
+label. Deep learning based approaches to semantic segmentation,
+particularly the fully convolutional approach described in
+~\cite{long2015fully}, have been heavily influential in our work on 3D
+reconstruction.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[scale=0.9]
+  \networkLayer{3.0}{0.48}{0}{0.0}{color=green!30}{96}
+  \networkLayer{1.5}{1.28}{0.48}{0.0}{color=green!30}{256}
+  \networkLayer{0.75}{1.92}{1.76}{0.0}{color=green!30}{384}
+  \networkLayer{0.75}{1.92}{3.68}{0.0}{color=green!30}{384}
+  \networkLayer{0.75}{1.28}{5.60}{0.0}{color=green!30}{256}
+  \networkLayer{0.37}{2.05}{6.88}{0.0}{color=green!30}{4096}
+  \networkLayer{0.37}{2.05}{8.93}{0.0}{color=green!30}{4096}
+  \networkLayer{0.37}{0.5}{10.98}{0.0}{color=green!30}{1000}
+
+  \networkLayer{0.75}{0.5}{12}{0.0}{color=red!30}{$\times 2$}
+  \networkLayer{1.5}{0.5}{13}{0.0}{color=red!30}{$\times 2$}
+  \networkLayer{3}{0.5}{14.5}{0.0}{color=red!30}{$\times 2$}
+
+  \draw [>->] (1.92,1.75) -- (1.92,2.5) -- (13.5,2.5);
+  \draw [>->] (6.88,1) -- (6.88,1.25) -- (12.5,1.25);
+
+  \draw (13.5,3) circle [radius=0.3] node {$+$};
+  \draw (12.5,1.75) circle [radius=0.3] node {$+$};
+\end{tikzpicture}
+\caption[The VGG-16 network]{Basic VGG-16~\cite{simonyan2014vgg}
+  network with modifications added from
+  FCN~\cite{long2015fully}. Information from lower levels of the
+  network summed to upsampled output of the tailing end of the
+  network. The number of features is shown below each convolution.}
+\label{fig:background:fcn}
+\end{figure}
+
+\subsection{Part Segmentation}
+
+\subsection{Facial Part Segmentation}
+
+\section{Face Alignment}
+
+\section{Human Pose Estimation}
+
+\section{Depth Estimation}
+
+A common approach to reconstructing the visible geometry of a 3D
+object or scene is to regress a distance value for each pixel from the
+camera. From this, a partial 3D reconstruction can be formed, or
+refined. In~\cite{saxena2006learning}, a method is presented which
+uses a Markvov Random Field (MRF) to regress the depth from a single
+image. This method struggles to regress sharp variations in depth,
+such as between foreground and far background. This method strongly
+influenced~\cite{liu2010single}, which added a second MRF capable of
+capturing a more global context using superpixels.
+
+As the popularity of Convolutional Neural Networks (CNNs) grew,
+interest moved away from MRF based approaches. There are now numerous
+approaches to depth estimation using CNNs.
+
+\section{Face Reconstruction}
+
+\subsection{Shape from Shading}
+
+\subsection{Morphable Model Fitting}
+
+
+\section{Human Body Reconstruction}
+
+
+
+
+
+
+
+
+
+
+
+%%% Local Variables:
+%%% TeX-master: "../thesis"
+%%% End:
+
