@@ -167,6 +167,62 @@ reconstruction.
 
 \section{Face Alignment}
 
+Until recently, the highest performing methods for face alignment were
+based on a cascaded regression approach. These methods estimate the
+location of facial landmarks by applying a sequence of
+regressors. Provided to these regressors is typically
+SIFT~\cite{lowe2004distinctive} and other hand selected
+features. These regressors are applied in a cascaded fashion where the
+input to regressor $k$ is the estimate from regressor $k-1$. More
+details of such approaches to face alignment can be found
+in~\cite{sanchez16,cao2014facewarehouse,xiongsupervised,zhu2015face,tzimiropoulos2015project}.
+
+The remainder of this section will focus on deep learning based
+approaches to face alignment. Many of these methods estimate the
+facial landmarks by regressing a 2D Gaussian on top of each landmark
+location~\cite{bulat2016two,bulat2017far,mahpod2018facial,kowalski2017deep,merget2018robust}.
+This spatial approach is commonly referred to as heatmap
+regression. In~\cite{bulat2016two}, the authors propose a method for
+3D face alignment by first detecting the 2D landmarks using heatmap
+regression. If desired, the process can be stopped here. Optionally,
+this stack of heatmaps is passed through a second network, this time
+for regression, accompanied by the original input image. The output of
+this second stage is 68 $(x, y, z)$ landmarks. This work was extended
+in~\cite{bulat2017far}, where the second regressor
+in~\cite{bulat2016two} is replaced with a CNN producing a 3D heatmap
+representation.
+
+This same heatmap based approach was used in a multi-stage approach
+described in~\cite{kowalski2017deep}, where the landmark detections
+are refined after each stage. Between each stage, the \textit{current}
+landmark prediction and some generated features are passed. At the
+beginning of each stage, the inputs are transformed using the
+landmarks to make the problem less challenging.
+
+..
+
+
+Our work does not attempt to improve the \textit{state-of-the-art} in
+face alignment. Instead, we optionally employ face alignment as a tool
+for guidance in Chapters~\ref{chapter:seg} and~\ref{chapter:face},
+which we show can improve the performance of these methods quite
+significantly.
+
+% zhang2016joint
+% Joint face detection and alignment using multitask cascaded
+% convolutional networks
+
+% ren2014face
+% Face alignment at 3000 fps via regressing local binary features
+
+% ranjan2017hyperface
+% HyperFace: A Deep Multi-task Learning Framework for Face Detection,
+% Landmark Localization, Pose Estimation, and Gender Recognition
+
+% mahpod2018facial
+% Facial Landmark Point Localization using Coarse-to-Fine Deep Recurrent
+% Neural Network
+
 \section{Human Pose Estimation}
 
 \section{Depth Estimation}
