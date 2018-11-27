@@ -2,29 +2,27 @@
 \chapter{A CNN Cascade for Landmark Guided Semantic Part Segmentation}
 \label{chapter:seg}
 
-This chapter discusses our method for semantic part segmentation of
-the human face. The exact relationship between this and proceeding
-chapters of this thesis may not appear obvious, nor is it particularly
-relevant to the area of \textit{Volumetric Regression
-  Networks}. However, this work strongly influenced the future work.
+The exact relationship between this work on facial part segmentation
+and the preceding chapters of this thesis may not appear obvious, nor
+is it particularly relevant to the area of \textit{Volumetric
+  Regression Networks}. However, this work strongly influenced the
+future work, since in many ways our 3D reconstruction approach can be
+thought of a type of two class segmentation problem (inside the face
+or body, or outside).
 
-% \begin{abstract}
-%   This paper proposes a CNN cascade for semantic part segmentation
-%   guided by pose-specific information encoded in terms of a set of
-%   landmarks (or keypoints). There is large amount of prior work on
-%   each of these tasks separately, yet, to the best of our knowledge,
-%   this is the first time in literature that the interplay between pose
-%   estimation and semantic part segmentation is investigated. To
-%   address this limitation of prior work, in this paper, we propose a
-%   CNN cascade of tasks that firstly performs landmark localisation and
-%   then uses this information as input for guiding semantic part
-%   segmentation. We applied our architecture to the problem of facial
-%   part segmentation and report large performance improvement over the
-%   standard unguided network on the most challenging face
-%   datasets. Testing code and models will be published online at
-%   \url{http://cs.nott.ac.uk/~psxasj/}.  \keywords{pose estimation,
-%     landmark localisation, semantic part segmentation, faces}
-% \end{abstract}
+
+This chapter proposes a CNN cascade for semantic part segmentation of
+guided by post-sepcific information encoded in terms of a set of
+landmarks. There is large amount of prior work on each of these tasks
+separately, yet, to the best of our knowledge, this is the first time
+in literature that the interplay between pose estimation and semantic
+part segmentation is investigated. To address this limitation of prior
+work, in this paper, we propose a CNN cascade of tasks that firstly
+performs landmark localisation and then uses this information as input
+for guiding semantic part segmentation. We applied our architecture to
+the problem of facial part segmentation and report large performance
+improvement over the standard unguided network on the most challenging
+face datasets.
 
 
 \section{Introduction}
