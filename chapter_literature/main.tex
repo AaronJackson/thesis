@@ -243,6 +243,40 @@ approaches to depth estimation using CNNs.
 
 \section{Face Reconstruction}
 
+Works on face reconstruction typically fit into one of three
+categories. Perhaps the most common of these are 3D Morphable Model
+(3DMM) fitting based approaches, such
+as~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint,tran2018extreme,jiang20183d,jiang2018pose}. These
+3DMM based methods use a low dimensional embedding to encode
+information about the face, such as shape, expression and pose, in a
+small number of coefficients. The majority of these mentioned 3DMM
+approaches regress these coefficients using a CNN.
+
+In particular,~\cite{jourabloo2016large} use a cascade of CNNs, which
+first regress the camera projection, followed by the pose, and then
+finally shape and expression. Additionally,~\cite{jourabloo2016large}
+extract features from their model fitting which can assist in facial
+landmark localisation. A method capable of working with 3DMM of
+several resolutions is proposed in~\cite{huber2016multiresolution},
+along with several models of different resolution, ranging from
+roughly 30,000 to 3500 vertices. This method does not use a CNN,
+instead regressing parameters for shape and pose from the landmarks
+only, by minimising a cost function which evaluates the fitting.
+
+A 3D face reconstruction method intended for face alignment is
+proposed in~\cite{zhu2016face}.
+
+Constraining the pose, shape and (optionally) appearance into a small
+number of parameters has the undesirable side effect of being unable
+to capture finer details, such as wrinkles. In~\cite{tran2018extreme},
+a CNN is used for model fitting, followed by a refinement step which
+iteratively improves the finer details. However, during this iterative
+refinement, the correspondence between vertices, as well as the scale
+and spatial location of the fitting is lost.
+
+
+
+
 \subsection{Shape from Shading}
 
 \subsection{Morphable Model Fitting}
@@ -263,4 +297,3 @@ approaches to depth estimation using CNNs.
 %%% Local Variables:
 %%% TeX-master: "../thesis"
 %%% End:
-
