@@ -1,0 +1,79 @@
+|      | Date | Paper                                        | DL  | SfS | SfM      | 3DMM | Depthmap | Synthetic | Monocular | Multiview | Comments                          |
+|------+------+----------------------------------------------+-----+-----+----------+------+----------+-----------+-----------+-----------+-----------------------------------|
+| [1]  | 2003 | Face Reconstruction from Monocular video ... |     |     | Yes      | Yes  |          |           |           |           |                                   |
+| [6]  | 2003 | Reconstruction of Partially Damaged Face ... |     |     |          | Yes  |          | Partially | Yes       |           | Attempts to recover damaged faces |
+| [7]  | 2004 | Automatic 3D Reconstruction for Face Rec ... |     |     |          | Yes  |          |           | Yes       |           | Uses PCA image features           |
+| [4]  | 2006 | 3D and Infrared Face Reconstruction from ... |     |     |          |      | Yes      |           |           | Yes       |                                   |
+| [12] | 2006 | 3D Demi-Landmarks-Based Statistical Face ... |     |     |          | Yes  |          |           |           |           | Face from CT scan of Skull        |
+| [5]  | 2007 | 3D Face Reconstruction from Stereo: ...      |     |     |          |      |          |           |           | Yes       |                                   |
+| [11] | 2008 | Automatic 3D Face Reconstruction from Si ... |     |     | Optional | Yes  |          |           | Yes       |           |                                   |
+| [8]  | 2010 | 3D Face Reconstruction from a Single ...     |     | Yes |          | Yes  |          |           | Yes       |           |                                   |
+| [9]  | 2010 | 3D Face Reconstruction Using a Single or ... |     |     |          | Yes  |          |           | Yes       | Optional  |                                   |
+| [10] | 2012 | Three Dimensional Face Reconstruction ...    |     |     |          | Yes  |          |           | Yes       |           | RBF                               |
+| [2]  | 2014 | Total Moving Face Reconstruction             |     | Yes | Yes      | Yes  |          |           |           |           |                                   |
+| [13] | 2015 | Unconstrained 3D Face Reconstruction         |     | Yes |          | Yes  |          |           |           | Yes       |                                   |
+| [3]  | 2016 | 3D Face Reconstruction by Learning from ...  | Yes |     |          | Yes  |          | Yes       | Yes       |           |                                   |
+| [14] | 2016 | Adaptive 3D Face Reconstruction from ...     |     |     |          | Yes  |          |           |           | Yes       |                                   |
+
+
+DL = Deep Learning
+SfS = Shape from Shading
+3DMM = 3D Morphable Model based
+SfM = Shape from Motion / Video
+Depthmap = Method produces a depth map
+
+
+[1] Face Reconstruction from Monocular video using uncertainty
+analysis and a generic model - Chowdhury
+
+[2] Total Moving Face Reconstruction - Suwajanakorn
+
+[3] 3D Face Reconstruction by Learning from Syntehtic Data -
+Richardson
+
+[4] 3D and Infrared Face Reconstruction from RGB data using Canonical
+Correlation Analysis - Reiter
+
+[5] 3D Face Reconstruction from Stereo: A model based approach - Zheng
+
+[6] Reconstruction of Partially Damanged Face Images Based on a
+Morphable Face Model - Hwang
+
+[7] Automatic 3D Reconstruction for Face Recognition - Hu
+
+[8] 3D Face Reconstruction from a Single Image Using a Single
+Reference Face Shape - Ira Kemelmacher-Sclizerman
+
+[9] 3D Face Reconstruction using a Single or Multiple Views
+
+[10] Three Dimensional Face Reconstruction From a Single Image by a
+Coupled RBF Network - Song
+
+[11] Automatic 3D Face Reconstruction from Single Images or Video
+
+[12] 3D Semi-Landmarks-Based Statistical Face Reconstruction - Berar
+
+[13] Unconstrained 3D Face Reconstruction
+
+[14] Adaptive 3D Face Reconstruction from Unconstrained Photo Collections
+
+
+TODO:
+
+[15] Large Pose Face Alignment via CNN Based Dense 3D Model Fitting
+
+[16] A Multiresolution 3D Morphable Face Model and Fitting Framework
+
+[17] Estimating 3D Shape and Texture using pixel intensity, edges,
+specular highlights, texture constrains and a prior
+
+[18] Face Alignment across Large Poses: A 3D Solution 2016
+
+[19] Joint Face Alignment and 3D Face Reconstruction
+
+[20] Extreme 3D Face Reconstruction: Seeing through occlusions
+
+[21] 3D Face Reconstruction with geometry details from a Single Image
+
+[22] Pose invariant 3D Face Reconstruction
+
