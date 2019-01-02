@@ -22,29 +22,38 @@ details of such approaches to face alignment can be found
 in~\cite{sanchez16,cao2014facewarehouse,xiongsupervised,zhu2015face,tzimiropoulos2015project}.
 
 The remainder of this section will focus on deep learning based
-approaches to face alignment. Many of these methods estimate the
-facial landmarks by regressing a 2D Gaussian on top of each landmark
+approaches to face alignment. A CNN casecade is presented
+in~\cite{sun2013deep} to directly produce the landmark
+locations. Similarly in~\cite{bulat2016two}, the authors propose a
+method for 3D face alignment by first detecting the 2D landmarks using
+heatmap regression. If desired, the process can be stopped
+here. Optionally, this stack of heatmaps is passed through a second
+network, this time for regression, accompanied by the original input
+image. The output of this second stage is 68 $(x, y, z)$
+landmarks. A multitask approach is proposed in~\cite{zhang2014facial},
+regressing the location of the facial landmarks while performing
+facial attribute classification.
+
+Many CNN based alignment methods estimate the facial landmarks by
+regressing a 2D Gaussian on top of each landmark
 location~\cite{bulat2016two,bulat2017far,mahpod2018facial,kowalski2017deep,merget2018robust}.
 This spatial approach is commonly referred to as heatmap
-regression. In~\cite{bulat2016two}, the authors propose a method for
-3D face alignment by first detecting the 2D landmarks using heatmap
-regression. If desired, the process can be stopped here. Optionally,
-this stack of heatmaps is passed through a second network, this time
-for regression, accompanied by the original input image. The output of
-this second stage is 68 $(x, y, z)$ landmarks. This work was extended
-in~\cite{bulat2017far}, where the second regressor
-in~\cite{bulat2016two} is replaced with a CNN producing a 3D heatmap
-representation.
+regression. One such example is the extension to~\cite{bulat2016two}
+in~\cite{bulat2017far}, where the second regressor is replaced with a
+CNN producing a 3D heatmap representation. A similar heatmap based
+approach was used in a multi-stage approach described
+in~\cite{kowalski2017deep}, where the landmark detections are refined
+after each stage. Between each stage, the \textit{current} landmark
+prediction and some generated features are passed. At the beginning of
+each stage, the inputs are transformed using the landmarks to make the
+problem less challenging.
 
-A similar heatmap based approach was used in a multi-stage approach
-described in~\cite{kowalski2017deep}, where the landmark detections
-are refined after each stage. Between each stage, the \textit{current}
-landmark prediction and some generated features are passed. At the
-beginning of each stage, the inputs are transformed using the
-landmarks to make the problem less challenging.
-
-..
-
+An indirect approach is discussed in~\cite{zhu2016face}, where a 3DMM
+is first fitted, from which 3D landmarks are taken. This work is
+discussed in further detail in
+Section~\ref{chap:literature:sec:face_recon}. A similar idea is
+propsed in~\cite{jourabloo2016large}, where a dense 3D model is fit to
+the face first.
 
 Our work does not attempt to improve the \textit{state-of-the-art} in
 face alignment. Instead, we optionally employ face alignment as a tool
@@ -52,40 +61,9 @@ for guidance in Chapters~\ref{chapter:seg} and~\ref{chapter:face},
 which we show can improve the performance of these methods quite
 significantly.
 
-% zhang2016joint
-% Joint face detection and alignment using multitask cascaded
-% convolutional networks
-
-% ren2014face
-% Face alignment at 3000 fps via regressing local binary features
-
-% ranjan2017hyperface
-% HyperFace: A Deep Multi-task Learning Framework for Face Detection,
-% Landmark Localization, Pose Estimation, and Gender Recognition
-
-% mahpod2018facial
-% Facial Landmark Point Localization using Coarse-to-Fine Deep Recurrent
-% Neural Network
-
-\section{Human Pose Estimation}
-
-\section{Depth Estimation}
-
-A common approach to reconstructing the visible geometry of a 3D
-object or scene is to regress a distance value for each pixel from the
-camera. From this, a partial 3D reconstruction can be formed, or
-refined. In~\cite{saxena2006learning}, a method is presented which
-uses a Markvov Random Field (MRF) to regress the depth from a single
-image. This method struggles to regress sharp variations in depth,
-such as between foreground and far background. This method strongly
-influenced~\cite{liu2010single}, which added a second MRF capable of
-capturing a more global context using superpixels.
-
-As the popularity of Convolutional Neural Networks (CNNs) grew,
-interest moved away from MRF based approaches. There are now numerous
-approaches to depth estimation using CNNs.
 
 \section{Face Reconstruction}
+\label{chap:literature:sec:face_recon}
 
 3D face reconstruction is the process of estimating the 3D geometry of
 a face. This is typically from one or more images, but methods relying
@@ -156,7 +134,12 @@ algorithm with a Shape from Shading (SfS) method. The method first
 estimates the facial pose, which is used to rotate an average face
 shape to the correct pose. For each frame, 3D flow updates the mesh,
 which both refines the detail, and updates aspects such as expression
-and pose.
+and pose. Another Shape from Shading approach is proposed
+in~\cite{jiang20183d}, which first aligns a coarse face reconstruction
+using 2D landmark detections. This coarse model is then
+\textit{corrected} using medium scale features from the
+image. Finally, the shape from shading step refines the mesh and
+introduces finer details.
 
 Our method for 3D face reconstruction, described in
 Chapter~\ref{chapter:face} is very different to the aforementioned
@@ -166,11 +149,13 @@ a volumetric representation. This avoids the requirement to find
 correspondence between vertices, which is a challenging problem in
 itself. Second, our method is direct, producing a volumetric
 representation of the facial geometry in just a single step. Third,
-unlike~\cite{tran2018extreme} we do not lose track of spatial location
-or scale, while still being able to regress finer details, as shown in
-Chapter~\ref{chapter:human} on human bodies.
+unlike~\cite{tran2018extreme} we do not lose any pose or scale
+information, and show potential for detailed reconstruction,
+demonstrated in Chapter~\ref{chapter:human} on human bodies.
 
 
+
+\section{Human Pose Estimation}
 
 \section{Human Body Reconstruction}
 
