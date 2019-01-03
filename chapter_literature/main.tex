@@ -112,7 +112,7 @@ fitting method is then used during inferences. Synthetic data was also
 used for training a general purpose 3D reconstruction
 method~\cite{li2015joint}. Methods trained using synthetic training
 data often fail on real or ``in-the-wild'' images due to unrealistic
-or constrained lighting.
+renderings or constrained lighting.
 
 A partially synthetic approach to 3D face reconstruction (indirectly
 for face alignment) is proposed in~\cite{zhu2016face}. The method used
@@ -292,8 +292,8 @@ of the network efficiently (i.e. combining both global and local
 context). As such, similar architectures have been used for semantic
 segmentation problems. For example,
 SegNet~\cite{badrinarayanan2017segnet} uses an Encoder-Decoder
-architecture is used to perform semantic segmentation on 11 classes
-for autonomous driving in real time.
+architecture to perform semantic segmentation on 11 classes for
+autonomous driving in real time.
 
 Architectures aside, a main drawback of this supervised approach to
 semantic segmentation is producing large quantities of detailed
@@ -324,9 +324,8 @@ bounding boxes. However, only some classes have groundtruth masks. The
 network is trained to produce both bounding boxes and semantic
 segmentation masks simultaneously by learning a mapping between the
 visual embedding from the bounding box feature extractors, to the
-semantic segmentation feature extractors. The paper describes this
-working on 3000 segmentation classes. They refer to this approach as
-\textit{partially} supervised, as some groundtruth data is
+semantic segmentation feature extractors. They refer to this approach
+as \textit{partially} supervised, as some groundtruth data is
 required. Additionally, the method has been shown to be able to
 segment up to 3000 classes - far higher than~\cite{long2015fully},
 which was trained on the 59 classes from VOC PASCAL
