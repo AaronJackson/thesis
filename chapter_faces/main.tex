@@ -44,6 +44,32 @@
 % \end{abstract}
 % \vspace{-4mm}
 
+3D face reconstruction is a fundamental Computer Vision problem, often
+considered to be of extraordinary difficultly. Current systems often
+assume the availability of multiple facial images as input, sometimes
+from the same subject. Additional, there are a number of
+methodological challenges involved, which must be addressed. These
+challenges include establishing a dense correspondence across large
+poses, expressions and non-uniform illumination. In general, these
+methods require complex and inefficient pipelines for model building
+and fitting. IN this work, we propose to address many of these
+limitations by constraining the problem of 3D face reconstruction to
+the spatial domain. We do this by training a Convolutional Neural
+Network (CNN), on an appropriate dataset, consisting of 2D images and
+3D facial models, or scans. Our CNN works with just a single 2D facial
+image and does not require accurate alignment. Our method works for
+arbitrary facial poses and expressions, and can be used to
+reconstruction the whole 3D facial geometry, including non-visible
+parts. Our method bypasses the construction (during training) and
+fitting (during inference) of a 3D Morphable Model. We achive this via
+a simple CNN architecture that performs direct regression of a
+volumetric representation of the 3D facial geometry from a single 2D
+image. We also demonstrate how the related task of facial landmark
+localisation can be incorporated into the proposed framework and help
+improve reconstruction quality, especially in the cases of large poses
+and facial expressions.
+
+
 \section{Introduction}
 3D face reconstruction is the problem of recovering the 3D facial
 geometry from 2D images. Despite many years of research, it is still
@@ -283,7 +309,7 @@ the performance of our method with that of a similar method~\cite{zhu2016face} i
 % Is it reasonable to say 2D to 3D image segmentation?
 To alleviate the aforementioned learning problem, we propose to
 reformulate the problem of 3D face reconstruction as one of 2D to 3D
-image segmentation: in particular, we convert each 3D facial scan into 
+image segmentation: in particular, we convert each 3D facial scan into
 a 3D binary volume $\mathbf{V}_{whd}$ by discretizing the 3D space
 into voxels $\{w,h,d\}$, assigning a value of 1 to all
 points enclosed by the 3D facial scan, and 0 otherwise. That is to say
@@ -543,7 +569,7 @@ Florence~\cite{masi2d3dFaceData} dataset. Facial images were rendered
 in a similar fashion to the ones of BU-4DFE but for slightly different
 parameters: Each face is rendered in 20 difference poses, using a
 pitch of -15, 20 or 25 degrees and each of the five evenly spaced
-rotations between -80 and 80. 
+rotations between -80 and 80.
 
 \textbf{Error metric}. To measure the accuracy of reconstruction for each face, we used the Normalised Mean Error (NME) defined as the average per vertex Euclidean distance between the estimated and ground truth reconstruction normalised by the outer 3D interocular distance:
 
