@@ -162,21 +162,39 @@ Chapter~\ref{chapter:human}, we present our method for 3D human body
 reconstruction. Human pose estimation is optionally used as guidance
 for this method.
 
-Almost all recent methods for human pose estimation have depended on
-convolutional neural
-networks~\cite{toshev2014deeppose,tompson2014joint,pfister2015flowing,newell2016stacked,carreira2016human,zhao2018through}. These
-methods typically take a single image as input and as output produce
-the landmarks. However,~\cite{pfister2015flowing} uses video
-and~\cite{zhao2018through} monitors radio waves.
-
-Commonly referred to as DeepPose,~\cite{toshev2014deeppose} proposes
+Modern approaches to estimating human pose are based on methods
+employing CNNs. These methods generally fall into one of two
+categories. The first is to directly regress the coordinates of the
+joints using an L2 (or similar) loss, see for
+example~\cite{li20143d,park20163d,tekin2016structured,tekin2016direct,zhou2016deep,chen2016synthesizing,ghezelghieh2016learning,toshev2014deeppose,tompson2014joint}. In
+particular,~\cite{park20163d} estimates the 3D pose by combining the
+2D predictions with image features. An autoencoder is employed
+in~\cite{tekin2016structured} to constrain pose to something
+plausible. Similarly,~\cite{zhou2016deep} have the same goal but
+achieve this by using a kinematic model. Synthetic training data is
+used for the full training procedure in~\cite{chen2016synthesizing},
+to ensure that the network is trained with accurate data. However,
+in~\cite{ghezelghieh2016learning}, they only augment their existing
+training set with synthetic data. ~\cite{toshev2014deeppose} propose
 an iterative method, in which images are first passed through an
 initalisation CNN. The output from this is then combined again with
 the input image and passed through a second CNN multiple times
-iteratively. In~\cite{tompson2014joint}, a multi-resolution CNN is
+iteratively.  In~\cite{tompson2014joint}, a multi-resolution CNN is
 trained jointly with a Markov Random Field, helping to refine the
-prediction from the CNN by constraining pose.
+prediction from the CNN by constraining pose. An iterative method is
+presented in~\cite{carreira2016human}. However,
+unlike~\cite{toshev2014deeppose}, which directly outputs the locations
+of the joints after each iteration,~\cite{carreira2016human} outputs a
+displacement vector for each joint. The displacement is applied and
+the points are \textit{rendered} to heatmaps, which fed into the
+network again for the next iteration. For the first iteration, a mean
+pose is provided to the network.
 
+The second approach to CNN based human pose estimation is to regress
+heatmaps, as done
+in~\cite{newell2016stacked,pfister2015flowing,zhou2016sparseness,pavlakos2017coarse,mehta2017vnect,zhao2018through}. In
+these methods, an intensity value is regressed for each pixel, giving
+a likely hood of the joint in that pixel.
 In~\cite{newell2016stacked}, a novel ``stacked hourglass'' network is
 proposed. This architecture gradually reduces and increases the
 spatial resolution while combining features from different
@@ -186,33 +204,25 @@ is available to the last few layers of the network. A loss function is
 used between each hourglass, which allows the network to refine and
 reevaluate the pose as it passes through the network (similar to idea
 of iterative methods,
-e.g.~\cite{toshev2014deeppose,carreira2016human}). The final output of
-this network is 16 2D heatmaps, giving each pixel a likelihood value
-for the location of the joint from which the joint locations can be
-taken. This architecture in particular, despite intended for human
-pose estimation, has strongly influenced our work on 3D
-reconstruction, discussed further in Chapters~\ref{chapter:face}
-and~\ref{chapter:human}.
+e.g.~\cite{toshev2014deeppose,carreira2016human}). This architecture
+in particular, despite intended for human pose estimation, has
+strongly influenced our work on 3D reconstruction, discussed further
+in Chapters~\ref{chapter:face} and~\ref{chapter:human}. A 3D heatmap
+is regressed in~\cite{pavlakos2017coarse}, which is a similar idea to
+our own 3D reconstruction, but for pose, not geometry. A part based
+heatmap regression method is presented in~\cite{mehta2017vnect}.
 
-Another iterative method is presented
-in~\cite{carreira2016human}. However,
-unlike~\cite{toshev2014deeppose}, which directly outputs the locations
-of the joints after each iteration,~\cite{carreira2016human} outputs a
-displacement vector for each joint. The displacement is applied and
-the points are \textit{rendered} to heatmaps, which fed into the
-network again for the next iteration. For the first iteration, a mean
-pose is provided to the network.
-
-In~\cite{pfister2015flowing}, video is used instead of a single
-image. The method accepts an arbitrary number of neighbouring frames
-for each time $t$. Features between frames are combined using what
-they call ``Spatial Fusion Layers''. For each frame at time $t$, a
-pose heatmap. Optical flow is used from the neighbouring frames to
-time $t$ to refine the prediction at. Finally,
+In~\cite{pfister2015flowing}, video is used
+instead of a single image. The method accepts an arbitrary number of
+neighbouring frames for each time $t$. Features between frames are
+combined using what they call ``Spatial Fusion Layers''. For each
+frame at time $t$, a pose heatmap. Optical flow is used from the
+neighbouring frames to time $t$ to refine the prediction at. Finally,
 in~\cite{zhao2018through}, the authors present their method for
 \textit{seeing through walls}, by using a standard CNN trained on 2D
 radio frequency heatmaps, for both horizontal and vertical
 polarizations.
+
 
 
 \section{Human Body Reconstruction}
