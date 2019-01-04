@@ -143,80 +143,80 @@ are:
 
 %We note that what we do not show is the ability of the network to
 
-\section{Closely related work}
+% \section{Closely related work}
 
-This section reviews closely related work in 3D face reconstruction,
-depth estimation using CNNs and work on 3D representation modelling with CNNs.
+% This section reviews closely related work in 3D face reconstruction,
+% depth estimation using CNNs and work on 3D representation modelling with CNNs.
 
-\textbf{3D face reconstruction.} A full literature review of 3D face
-reconstruction falls beyond the scope of the paper; we simply note
-that our method makes minimal assumptions i.e. it requires just a
-single 2D image to reconstruct the full 3D facial structure, and works
-under arbitrary poses and expressions. Under the single image setting,
-the most related works to our method are based on 3DMM fitting
-\cite{blanz1999morphable, romdhani2005estimating, zhu2016face,
-  jourabloo2016large, huber2016multiresolution} and the work of
-\cite{liu2016joint} which performs joint face reconstruction and
-alignment, reconstructing however a neutral frontal face.
+% \textbf{3D face reconstruction.} A full literature review of 3D face
+% reconstruction falls beyond the scope of the paper; we simply note
+% that our method makes minimal assumptions i.e. it requires just a
+% single 2D image to reconstruct the full 3D facial structure, and works
+% under arbitrary poses and expressions. Under the single image setting,
+% the most related works to our method are based on 3DMM fitting
+% \cite{blanz1999morphable, romdhani2005estimating, zhu2016face,
+%   jourabloo2016large, huber2016multiresolution} and the work of
+% \cite{liu2016joint} which performs joint face reconstruction and
+% alignment, reconstructing however a neutral frontal face.
 
-The work of \cite{romdhani2005estimating} describes a multi-feature
-based approach to 3DMM fitting using non-linear least-squares
-optimization (Levenberg-Marquardt), which given appropriate
-initialisation produces results of good accuracy. More recent work has
-proposed to estimate the update for the 3DMM parameters using CNN
-regression, as opposed to non-linear optimization.  In
-\cite{jourabloo2016large}, the 3DMM parameters are estimated in six
-steps each of which employs a different CNN. Notably,
-\cite{jourabloo2016large} estimates the 3DMM parameters on a sparse
-set of landmarks, i.e. the purpose of \cite{jourabloo2016large} is 3D
-face alignment rather than face reconstruction. The method of
-\cite{zhu2016face} is currently considered the state-of-the-art in
-3DMM fitting. It is based on a single CNN that is iteratively applied to
-estimate the model parameters using as input the 2D image and a
-3D-based representation produced at the previous iteration.
-Finally, a state-of-the-art cascaded regression landmark-based
-3DMM fitting method is proposed in~\cite{huber2016multiresolution}.
+% The work of \cite{romdhani2005estimating} describes a multi-feature
+% based approach to 3DMM fitting using non-linear least-squares
+% optimization (Levenberg-Marquardt), which given appropriate
+% initialisation produces results of good accuracy. More recent work has
+% proposed to estimate the update for the 3DMM parameters using CNN
+% regression, as opposed to non-linear optimization.  In
+% \cite{jourabloo2016large}, the 3DMM parameters are estimated in six
+% steps each of which employs a different CNN. Notably,
+% \cite{jourabloo2016large} estimates the 3DMM parameters on a sparse
+% set of landmarks, i.e. the purpose of \cite{jourabloo2016large} is 3D
+% face alignment rather than face reconstruction. The method of
+% \cite{zhu2016face} is currently considered the state-of-the-art in
+% 3DMM fitting. It is based on a single CNN that is iteratively applied to
+% estimate the model parameters using as input the 2D image and a
+% 3D-based representation produced at the previous iteration.
+% Finally, a state-of-the-art cascaded regression landmark-based
+% 3DMM fitting method is proposed in~\cite{huber2016multiresolution}.
 
-Our method is different from the aforementioned methods in the following ways:
-\begin{itemize}
-\item Our method is direct. It does not estimate 3DMM parameters and,
-  in fact, it completely bypasses the fitting of a 3DMM. Instead, our
-  method directly produces a 3D volumetric representation of the
-  facial geometry.
-\item
-Because of this fundamental difference, our method is also radically different in terms of the CNN architecture used: we used one that is able to make spatial predictions at a voxel level, as opposed to the networks of \cite{zhu2016face, jourabloo2016large} which holistically predict the 3DMM parameters.
-\item
-Our method is capable of producing reconstruction results for completely unconstrained facial images from the web covering the full spectrum of facial poses with arbitrary facial expression and occlusions. When compared to the state-of-the-art CNN method for 3DMM fitting of \cite{zhu2016face}, we report large performance improvement.
-\end{itemize}
+% Our method is different from the aforementioned methods in the following ways:
+% \begin{itemize}
+% \item Our method is direct. It does not estimate 3DMM parameters and,
+%   in fact, it completely bypasses the fitting of a 3DMM. Instead, our
+%   method directly produces a 3D volumetric representation of the
+%   facial geometry.
+% \item
+% Because of this fundamental difference, our method is also radically different in terms of the CNN architecture used: we used one that is able to make spatial predictions at a voxel level, as opposed to the networks of \cite{zhu2016face, jourabloo2016large} which holistically predict the 3DMM parameters.
+% \item
+% Our method is capable of producing reconstruction results for completely unconstrained facial images from the web covering the full spectrum of facial poses with arbitrary facial expression and occlusions. When compared to the state-of-the-art CNN method for 3DMM fitting of \cite{zhu2016face}, we report large performance improvement.
+% \end{itemize}
 
-%Finally, our work is different from \cite{liu206joint} in two aspects: We reconstruct faces in arbitrary poses and expressions while \cite{liu2016joint} reconstructs a neutral frontal face. (b) We use a CNN that jointly performs reconstruction and alignment, and is trained end-to-end, whereas in \cite{liu2016joint} these tasks are performed in an alternating manner, and without the use of neural networks.
+% %Finally, our work is different from \cite{liu206joint} in two aspects: We reconstruct faces in arbitrary poses and expressions while \cite{liu2016joint} reconstructs a neutral frontal face. (b) We use a CNN that jointly performs reconstruction and alignment, and is trained end-to-end, whereas in \cite{liu2016joint} these tasks are performed in an alternating manner, and without the use of neural networks.
 
-Compared to works based on shape from shading \cite{kemelmacher20113d, suwajanakorn2014total}, our method cannot capture such fine details. However, we believe that this is primarily a problem related to the dataset used rather than of the method. Given training data like the one produced by \cite{kemelmacher20113d, suwajanakorn2014total}, then we believe that our method has the capacity to learn finer facial details, too.
+% Compared to works based on shape from shading \cite{kemelmacher20113d, suwajanakorn2014total}, our method cannot capture such fine details. However, we believe that this is primarily a problem related to the dataset used rather than of the method. Given training data like the one produced by \cite{kemelmacher20113d, suwajanakorn2014total}, then we believe that our method has the capacity to learn finer facial details, too.
 
-\textbf{CNN-based depth estimation.} Our work has been inspired by the
-work of \cite{eigen2015predicting, eigen2014depth} who showed that a
-CNN can be directly trained to regress from pixels to depth values
-using as input a single image. Our work is different from
-\cite{eigen2015predicting, eigen2014depth} in 3 important respects:
-Firstly, we focus on faces (i.e. deformable objects) whereas
-\cite{eigen2015predicting, eigen2014depth} on general scenes
-containing mainly rigid objects. Secondly, \cite{eigen2015predicting,
-  eigen2014depth} learn a mapping from 2D images to 2D depth maps,
-whereas we demonstrate that one can actually learn a mapping from 2D
-to the full 3D facial structure including the non-visible part of the
-face. Thirdly, \cite{eigen2015predicting, eigen2014depth} use a
-multi-scale approach by processing images from low to high
-resolution. In contrast, we process faces at fixed scale (assuming
-that this is provided by a face detector), but we build our CNN based
-on a state-of-the-art bottom-up top-down module
-\cite{newell2016stacked} that allows analysing and combining CNN
-features at different resolutions for eventually making predictions at
-voxel level.
+% \textbf{CNN-based depth estimation.} Our work has been inspired by the
+% work of \cite{eigen2015predicting, eigen2014depth} who showed that a
+% CNN can be directly trained to regress from pixels to depth values
+% using as input a single image. Our work is different from
+% \cite{eigen2015predicting, eigen2014depth} in 3 important respects:
+% Firstly, we focus on faces (i.e. deformable objects) whereas
+% \cite{eigen2015predicting, eigen2014depth} on general scenes
+% containing mainly rigid objects. Secondly, \cite{eigen2015predicting,
+%   eigen2014depth} learn a mapping from 2D images to 2D depth maps,
+% whereas we demonstrate that one can actually learn a mapping from 2D
+% to the full 3D facial structure including the non-visible part of the
+% face. Thirdly, \cite{eigen2015predicting, eigen2014depth} use a
+% multi-scale approach by processing images from low to high
+% resolution. In contrast, we process faces at fixed scale (assuming
+% that this is provided by a face detector), but we build our CNN based
+% on a state-of-the-art bottom-up top-down module
+% \cite{newell2016stacked} that allows analysing and combining CNN
+% features at different resolutions for eventually making predictions at
+% voxel level.
 
-\textbf{Recent work on 3D.} We are aware of only one
-work which regresses a volume using a CNN. The work
-of~\cite{choy20163d} uses an LSTM to regress the 3D structure of
-multiple object classes from one or more images. This is different from our work in at least two ways. Firstly, we treat our reconstruction as a semantic segmentation problem by regressing a volume which is spatially aligned with the image. Secondly, we work from only one image in one single step, regressing a much larger volume of $192\times 192\times 200$ as opposed to the $32\times 32\times 32$ used in~\cite{choy20163d}. The work of \cite{tulsiani2016learning} decomposes an input 3D shape into shape primitives which along with a set of  parameters can be used to re-assemble the given shape. Given the input shape, the goal of \cite{tulsiani2016learning} is to regress the shape primitive parameters which is achieved via a CNN. The method of \cite{pavlakos2017coarse} extends classical work on heatmap regression \cite{tompson2015efficient, pfister2015flowing} by proposing a 4D representation for regressing the location of \textit{sparse} 3D landmarks for human pose estimation. Different from \cite{pavlakos2017coarse}, we demonstrate that a 3D volumetric representation is particular effective for learning \textbf{dense} 3D facial geometry. In terms of 3DMM fitting, very recent work includes  \cite{richardson2016learning} which uses a CNN similar to the one of \cite{zhu2016face} for producing coarse facial geometry but additionally includes a second network for refining the facial geometry and a novel rendering layer for connecting the two networks. Another recent work is \cite{tran2016regressing} which uses a very deep CNN for 3DMM fitting.
+% \textbf{Recent work on 3D.} We are aware of only one
+% work which regresses a volume using a CNN. The work
+% of~\cite{choy20163d} uses an LSTM to regress the 3D structure of
+% multiple object classes from one or more images. This is different from our work in at least two ways. Firstly, we treat our reconstruction as a semantic segmentation problem by regressing a volume which is spatially aligned with the image. Secondly, we work from only one image in one single step, regressing a much larger volume of $192\times 192\times 200$ as opposed to the $32\times 32\times 32$ used in~\cite{choy20163d}. The work of \cite{tulsiani2016learning} decomposes an input 3D shape into shape primitives which along with a set of  parameters can be used to re-assemble the given shape. Given the input shape, the goal of \cite{tulsiani2016learning} is to regress the shape primitive parameters which is achieved via a CNN. The method of \cite{pavlakos2017coarse} extends classical work on heatmap regression \cite{tompson2015efficient, pfister2015flowing} by proposing a 4D representation for regressing the location of \textit{sparse} 3D landmarks for human pose estimation. Different from \cite{pavlakos2017coarse}, we demonstrate that a 3D volumetric representation is particular effective for learning \textbf{dense} 3D facial geometry. In terms of 3DMM fitting, very recent work includes  \cite{richardson2016learning} which uses a CNN similar to the one of \cite{zhu2016face} for producing coarse facial geometry but additionally includes a second network for refining the facial geometry and a novel rendering layer for connecting the two networks. Another recent work is \cite{tran2016regressing} which uses a very deep CNN for 3DMM fitting.
 
 %Several works have built upon the success of this approach using techniques such as CRFs to improve the detail [28] or using ResNet based architectures [30]
 

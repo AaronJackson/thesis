@@ -108,93 +108,93 @@ highly detailed data.
 % In~\cite{5597194} no fitting is performed. Instead, the closest
 % pose from a dataset of many pre-existing reconstructions
 
-\section{Closely Related Work}
+% \section{Closely Related Work}
 
 
-In this section we will give an overview of recent and popular
-approaches to human pose estimation (often a prerequisite to human
-reconstruction) and 3D reconstruction methods, both working from
-images and from landmarks.
+% In this section we will give an overview of recent and popular
+% approaches to human pose estimation (often a prerequisite to human
+% reconstruction) and 3D reconstruction methods, both working from
+% images and from landmarks.
 
-\paragraph{Human Pose Estimation.} All modern approaches to estimating
-the human pose are based on methods employing CNNs. These methods
-generally fall into one of two categories. The first is to directly
-regress the coordinates of the joints using an L2 (or similar)
-loss~\cite{li20143d,park20163d,tekin2016structured,tekin2016direct,zhou2016deep,chen2016synthesizing,ghezelghieh2016learning}.
-In particular,~\cite{park20163d} estimate the 3D pose by combining the
-2D predictions with image features. An autoencoder is employed
-in~\cite{tekin2016structured} to constrain the pose to something
-plausible. Similarly,~\cite{zhou2016deep} have the same goal but
-achieve this by using a kinematic model. Synthetic data is used for
-the full training procedure in~\cite{chen2016synthesizing}, to ensure
-that the network is trained with accurate data. However,
-in~\cite{ghezelghieh2016learning}, they only augment their existing
-training set with synthetic data. The second approach to CNN based
-human pose estimation is to regress a
-heatmap~\cite{zhou2016sparseness,pavlakos2017coarse,mehta2017vnect,bulat2016human}. In~\cite{zhou2016sparseness}
-they do this from video. In~\cite{pavlakos2017coarse} they regress a
-3D heatmap, which is a similar idea to our own work. Another temporal
-based approach is described in~\cite{mehta2017vnect}, where the 2D
-landmarks are first refined also as a heatmap. A part based heatmap
-regression approach is shown in~\cite{bulat2016human}.
+% \paragraph{Human Pose Estimation.} All modern approaches to estimating
+% the human pose are based on methods employing CNNs. These methods
+% generally fall into one of two categories. The first is to directly
+% regress the coordinates of the joints using an L2 (or similar)
+% loss~\cite{li20143d,park20163d,tekin2016structured,tekin2016direct,zhou2016deep,chen2016synthesizing,ghezelghieh2016learning}.
+% In particular,~\cite{park20163d} estimate the 3D pose by combining the
+% 2D predictions with image features. An autoencoder is employed
+% in~\cite{tekin2016structured} to constrain the pose to something
+% plausible. Similarly,~\cite{zhou2016deep} have the same goal but
+% achieve this by using a kinematic model. Synthetic data is used for
+% the full training procedure in~\cite{chen2016synthesizing}, to ensure
+% that the network is trained with accurate data. However,
+% in~\cite{ghezelghieh2016learning}, they only augment their existing
+% training set with synthetic data. The second approach to CNN based
+% human pose estimation is to regress a
+% heatmap~\cite{zhou2016sparseness,pavlakos2017coarse,mehta2017vnect,bulat2016human}. In~\cite{zhou2016sparseness}
+% they do this from video. In~\cite{pavlakos2017coarse} they regress a
+% 3D heatmap, which is a similar idea to our own work. Another temporal
+% based approach is described in~\cite{mehta2017vnect}, where the 2D
+% landmarks are first refined also as a heatmap. A part based heatmap
+% regression approach is shown in~\cite{bulat2016human}.
 
-In this work, we do not aim to estimate the human pose as a set of
-coordinates. Instead, we aim to reconstruct the full 3D geometry of
-the human, from just a single image. This includes any parts of the
-body which are self occluded. However, in doing so, we optionally make
-use of information from a human pose estimation step, which is
-provided to the network as 16 channels, each with a Guassian centred
-above the respective landmark.
+% In this work, we do not aim to estimate the human pose as a set of
+% coordinates. Instead, we aim to reconstruct the full 3D geometry of
+% the human, from just a single image. This includes any parts of the
+% body which are self occluded. However, in doing so, we optionally make
+% use of information from a human pose estimation step, which is
+% provided to the network as 16 channels, each with a Guassian centred
+% above the respective landmark.
 
 
-\paragraph{Reconstruction from Image.} Many human reconstruction
-methods estimate the geometry from one or more images. For
-example,~\cite{balan2007detailed,grest2005human,guan2009estimating}
-fit a model based on a single RGB or grey scale images. In particular,
-\cite{grest2005human} fit a skeleton model to the image by estimating
-the scale and pose of each body part
-separately. In~\cite{guan2009estimating}, they fit a shape model
-initialised by a user clicking on separate body parts, assisted by a
-segmentation mask. Another shape model based approach is proposed
-in~\cite{balan2007detailed}, using the SCRAPE
-model~\cite{anguelov2005scape}, which is fitted with a stochastic
-optimisation step. A general shape fitting method for reconstruction
-is proposed in~\cite{chen2010inferring}, where two Gaussian models are
-used - one for shape and one for pose, by solving non-linear
-optimisation problems. The authors demonstrate this method on human
-bodies and sharks. In~\cite{jiang20103d}, a single image and
-corresponding landmarks are used to lookup a similar human pose using
-a kd-tree, containing about 4 million examples. A method intended for
-multi-instance model fitting from a single image is described
-in~\cite{Zanfir_2018_CVPR}.
+% \paragraph{Reconstruction from Image.} Many human reconstruction
+% methods estimate the geometry from one or more images. For
+% example,~\cite{balan2007detailed,grest2005human,guan2009estimating}
+% fit a model based on a single RGB or grey scale images. In particular,
+% \cite{grest2005human} fit a skeleton model to the image by estimating
+% the scale and pose of each body part
+% separately. In~\cite{guan2009estimating}, they fit a shape model
+% initialised by a user clicking on separate body parts, assisted by a
+% segmentation mask. Another shape model based approach is proposed
+% in~\cite{balan2007detailed}, using the SCRAPE
+% model~\cite{anguelov2005scape}, which is fitted with a stochastic
+% optimisation step. A general shape fitting method for reconstruction
+% is proposed in~\cite{chen2010inferring}, where two Gaussian models are
+% used - one for shape and one for pose, by solving non-linear
+% optimisation problems. The authors demonstrate this method on human
+% bodies and sharks. In~\cite{jiang20103d}, a single image and
+% corresponding landmarks are used to lookup a similar human pose using
+% a kd-tree, containing about 4 million examples. A method intended for
+% multi-instance model fitting from a single image is described
+% in~\cite{Zanfir_2018_CVPR}.
 
-Several methods aim to estimate the 3D geometry using only the
-landmarks extracted via human pose
-estimation~\cite{bogo2016smplify,ramakrishna2012reconstructing}. Particularly,
-SMPLify~\cite{bogo2016smplify} (which uses the SMPL
-model~\cite{loper2015smpl}), was extended to also include further
-guidance from an segmentation mask
-in~\cite{varol2017learning}. However, such an approach will never be
-able to capable of regressing finer details, unless information from
-the image is also captured.
+% Several methods aim to estimate the 3D geometry using only the
+% landmarks extracted via human pose
+% estimation~\cite{bogo2016smplify,ramakrishna2012reconstructing}. Particularly,
+% SMPLify~\cite{bogo2016smplify} (which uses the SMPL
+% model~\cite{loper2015smpl}), was extended to also include further
+% guidance from an segmentation mask
+% in~\cite{varol2017learning}. However, such an approach will never be
+% able to capable of regressing finer details, unless information from
+% the image is also captured.
 
-Aside from SCRAPE~\cite{anguelov2005scape} and
-SMPL~\cite{loper2015smpl}, mentioned earlier, Dyna, the shape model
-capable of capturing large variations in body shape is presented
-in~\cite{Dyna:SIGGRAPH:2015}, but without an accompanying fitting
-method from a single image. A very recent shape model called Total
-Capture~\cite{Joo_2018_CVPR} captures many aspects of the body which
-are typically ignored by other shape models, including the face and
-hands.
+% Aside from SCRAPE~\cite{anguelov2005scape} and
+% SMPL~\cite{loper2015smpl}, mentioned earlier, Dyna, the shape model
+% capable of capturing large variations in body shape is presented
+% in~\cite{Dyna:SIGGRAPH:2015}, but without an accompanying fitting
+% method from a single image. A very recent shape model called Total
+% Capture~\cite{Joo_2018_CVPR} captures many aspects of the body which
+% are typically ignored by other shape models, including the face and
+% hands.
 
-Our work is different from all of the aforementioned methods in that
-we do not regress parameters for a shape model, nor do we regress the
-vertices directly. Further more, our method skips the model generation
-step entirely, which avoids the need to find dense correspondence
-between all training examples. Instead, we constrain the problem to
-the spatial domain, and directly regress the 3D structure using
-spatial convolutions in a CNN, via a volumetric representation from
-which the full 3D geometry can be recovered.
+% Our work is different from all of the aforementioned methods in that
+% we do not regress parameters for a shape model, nor do we regress the
+% vertices directly. Further more, our method skips the model generation
+% step entirely, which avoids the need to find dense correspondence
+% between all training examples. Instead, we constrain the problem to
+% the spatial domain, and directly regress the 3D structure using
+% spatial convolutions in a CNN, via a volumetric representation from
+% which the full 3D geometry can be recovered.
 
 
 
