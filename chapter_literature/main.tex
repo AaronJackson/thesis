@@ -228,6 +228,55 @@ polarizations.
 \section{Human Body Reconstruction}
 
 
+Many human reconstruction methods estimate the geometry from one or
+more images. For
+example,~\cite{balan2007detailed,grest2005human,guan2009estimating}
+fit a model based on a single RGB or grey scale images. In particular,
+\cite{grest2005human} fit a skeleton model to the image by estimating
+the scale and pose of each body part
+separately. In~\cite{guan2009estimating}, they fit a shape model
+initialised by a user clicking on separate body parts, assisted by a
+segmentation mask. Another shape model based approach is proposed
+in~\cite{balan2007detailed}, using the SCRAPE
+model~\cite{anguelov2005scape}, which is fitted with a stochastic
+optimisation step. A general shape fitting method for reconstruction
+is proposed in~\cite{chen2010inferring}, where two Gaussian models are
+used - one for shape and one for pose, by solving non-linear
+optimisation problems. The authors demonstrate this method on human
+bodies and sharks. In~\cite{jiang20103d}, a single image and
+corresponding landmarks are used to lookup a similar human pose using
+a kd-tree, containing about 4 million examples. A method intended for
+multi-instance model fitting from a single image is described
+in~\cite{Zanfir_2018_CVPR}.
+
+Several methods aim to estimate the 3D geometry using only the
+landmarks extracted via human pose
+estimation~\cite{bogo2016smplify,ramakrishna2012reconstructing}. Particularly,
+SMPLify~\cite{bogo2016smplify} (which uses the SMPL
+model~\cite{loper2015smpl}), was extended to also include further
+guidance from an segmentation mask
+in~\cite{varol2017learning}. However, such an approach will never be
+able to capable of regressing finer details, unless information from
+the image is also captured.
+
+Aside from SCRAPE~\cite{anguelov2005scape} and
+SMPL~\cite{loper2015smpl}, mentioned earlier, Dyna, the shape model
+capable of capturing large variations in body shape is presented
+in~\cite{Dyna:SIGGRAPH:2015}, but without an accompanying fitting
+method from a single image. A very recent shape model called Total
+Capture~\cite{Joo_2018_CVPR} captures many aspects of the body which
+are typically ignored by other shape models, including the face and
+hands.
+
+The work we present in Chapter~\ref{chapter:human} is different from
+all of the aforementioned methods in that we do not regress parameters
+for a shape model, nor do we regress the vertices directly. Further
+more, our method skips the model generation step entirely, which
+avoids the need to find dense correspondence between all training
+examples. Instead, we constrain the problem to the spatial domain, and
+directly regress the 3D structure using spatial convolutions using a
+CNN, via a volumetric representation from which the full 3D geometry
+can be recovered.
 
 
 \section{Semantic Segmentation}
