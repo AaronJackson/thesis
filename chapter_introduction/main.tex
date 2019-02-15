@@ -14,6 +14,16 @@ of doing this is to show where, how and why, our own work fits into
 challenging space.
 
 % 3D Morphable Models
+3D Morphable Models (3DMM) are perhaps the most popular approach to
+estimating facial 3D geometry. These methods regress parameters, more
+recently with Convolutional Neural Networks, for a face model [cite
+things], which varies the shape, expression, pose and optionally
+textural information. Such methods often work very reliably on
+\textit{normal}, neutral, reasonably frontal faces. However, many 3DMM
+methods fail dramatically under other conditions. As we show in
+Section~\ref{chapter:face:sec:ablation}, our own method has a very
+uniform and low error over all expressions, with only a small increase
+in error on large poses (such as 80 degrees).
 
 % Multiview
 
@@ -21,10 +31,47 @@ challenging space.
 
 % Depth Estimation
 
+% Contributions. Unsure about whether to approach this as
+% contributions or aims.
 
-\paragraph{Thesis Outline} This thesis is structured as follows: In
-Chapter~\ref{chapter:background} an introduction is given to the
-various topics which our works depends on. This includes Convolutional
+\section{Contributions}
+
+The contributions of this thesis can be summarised as follows:
+
+\begin{itemize}
+\item % 3D face reconstruction
+  We present a deeply learnt method for 3D face reconstruction, which
+  can be trained directly in an end-to-end fashion. Our method
+  reconstructions the full 3D facial structure, including parts which
+  occluded. We also show that our method works from just a single
+  images image without requiring accurate alignment or establishing a
+  dense correspondence between all training samples.  This allows us
+  to bypass the construction (during training) and fitting (during
+  inference) of a 3D Morphable Model (3DMM).  We refer to this method
+  as the \textbf{Volumetric Regression Network (VRN)}.
+
+\item % We show that our method handles large variations in pose and
+  % other difficult challenges.
+  We show how a related task of facial landmark localisation can be
+  incorporated into our method (also in an end-to-end fashion) to
+  improve the reconstruction quality, particularly on faces of large
+  pose and expression.
+
+\item We evaluate our method on both constrained and heavily
+  unconstrained images from the web, demonstrating that our method
+  \textbf{outperforms all prior work} on single image 3D face
+  reconstruction by a large margin.,
+
+\item We show that our method works on other deformable objects, such
+  as in the task of \textbf{human body reconstruction}, and that
+  provided high quality training data is available, our method is able
+  to both reconstruct difficult human poses and \textbf{fine details
+    such as wrinkles} in clothing.
+
+\end{itemize}
+
+\section{Outline} This thesis is structured as follows: In
+Chapter~\ref{chapter:background} . This includes Convolutional
 Neural Networks (CNNs) and 3D volumes, along with how they are
 generated via voxelisation. Following on from this is a literature
 review of related work in Chapter~\ref{chapter:literature}. Our first
