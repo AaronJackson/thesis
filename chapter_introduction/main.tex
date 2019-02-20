@@ -1,29 +1,75 @@
 \chapter{Introduction}
 
-The landscape of Computer Vision has shifted dramatically over the
+The landscape of computer vision has shifted dramatically over the
 past decade. Prior to this, general purpose solutions to difficult
-problems had low success rates on unconstrained images. This thesis
-primarily focuses on 3D face reconstruction, which is to estimate the
-3D geometry of a face from a one or more images. This problem
-inherently demands reliability on ``in-the-wild'' images. Such images
-pose many challenges, such as large variations in pose, expression and
-lighting, as well as self occlusion. In this introductory chapter, we
-will briefly discuss several general approaches to 3D face
-reconstruction, including their advantages and disadvantages. The aim
-of doing this is to show where, how and why, our own work fits into
-challenging space.
+problems had low success rates on unconstrained images. This is
+especially true for the primary focus of this thesis: 3D face
+reconstruction, which is to estimate the 3D geometry of a face from a
+one or more images. The problem of 3D face reconstruction inherently
+demands reliability on ``in-the-wild'' images since, while there
+\textit{are} many applications, very few are able to accommodate such
+environmental constraints. These unconstrained images pose many
+difficult challenges, from large variations in pose and expression, to
+self occlusion and lighting variation.
+
+Applications of 3D face reconstruction span a wide range of areas. The
+more obvious examples being personalisation of computer games, or
+trying on accessories online, such as glasses. However, this area has
+many other applications, such as facial expression analysis for
+measuring emotional arousal, which can often be useful in
+psychological studies. Facial performance transfer is another
+potential application, widely used in creative industries, such as
+development of computer games and animated films where typically a
+large number facial point markers have to be attached to the actor's
+face. There are also medical applications, such as simulating the
+result of reconstructive surgery after an accident.
+
+In this introductory chapter, we will briefly discuss several general
+approaches to 3D face reconstruction, including their advantages and
+disadvantages. The aim of doing this is to show where, how and why,
+our own work on 3D face reconstructions, fits into challenging space.
+
 
 % 3D Morphable Models
-3D Morphable Models (3DMM) are perhaps the most popular approach to
-estimating facial 3D geometry. These methods regress parameters, more
-recently with Convolutional Neural Networks, for a face model [cite
-things], which varies the shape, expression, pose and optionally
-textural information. Such methods often work very reliably on
-\textit{normal}, neutral, reasonably frontal faces. However, many 3DMM
-methods fail dramatically under other conditions. As we show in
-Section~\ref{chapter:face:sec:ablation}, our own method has a very
+\paragraph{3D Morphable Models (3DMM)} are perhaps the most popular
+approach to estimating facial 3D geometry. These methods regress
+parameters for a pre-computed face model [cite things], which varies
+the shape, expression, pose and optionally textural information. These
+methods are increasingly using Convolutional Neural Networks as a
+means to regress the parameters, and in general, work very reliably on
+\textit{normal} faces. However, 3DMM based approaches gradually
+perform worse as factors such as pose and expression increase. We show
+in Section~\ref{chapter:face:sec:ablation} that our method has a very
 uniform and low error over all expressions, with only a small increase
-in error on large poses (such as 80 degrees).
+in error on large poses (such as around 80 degrees). Another
+disadvantage of 3DMM based approaches is that the 3DMM must be
+generated - this requires finding the dense correspondence between all
+vertices of all samples, which also becomes difficult as pose and
+expression changes. Finally, since these methods are modelled, they
+are unable to directly produce finer details, such as wrinkles. In an
+extension to our own work, we show in~\ref{chapter:human} (where we
+perform 3D reconstruction of humans), that our method is able to
+directly fine details in clothing.
+
+
+\paragraph{Multiview and Photogrammetry} based methods require
+multiple images from many different angles in order to estimate the 3D
+geometry of a face (or other object). The primary drawback of such
+methods, of course, is that multiple images are not always available,
+especially under the aforementioned constraints associated with such a
+problem. Our own method uses only a single RGB image, without any
+additional depth data - from this single image, we regress the full 3D
+facial geometry. While the final 3D reconstruction from such methods
+can be of very high resolution and detail, finding corresponding
+features between each image is both memory and CPU intensive. 
+
+...
+
+
+blah blah blah
+
+
+...
 
 % Multiview
 
