@@ -27,7 +27,7 @@ result of reconstructive surgery after an accident.
 In this introductory chapter, we will briefly discuss several general
 approaches to 3D face reconstruction, including their advantages and
 disadvantages. The aim of doing this is to show where, how and why,
-our own work on 3D face reconstructions, fits into challenging space.
+our own work on 3D face reconstruction, fits into this challenging space.
 
 
 % 3D Morphable Models
@@ -55,25 +55,38 @@ directly fine details in clothing.
 \paragraph{Multiview and Photogrammetry} based methods require
 multiple images from many different angles in order to estimate the 3D
 geometry of a face (or other object). The primary drawback of such
-methods, of course, is that multiple images are not always available,
-especially under the aforementioned constraints associated with such a
-problem. Our own method uses only a single RGB image, without any
+methods is, of course, that multiple images are not always available,
+especially under the aforementioned constraints associated with 3D
+face reconstruction. While the final 3D reconstruction from such
+methods can be of very high resolution and detail, finding
+corresponding features between each image is both memory and CPU
+intensive. Our own method uses only a single RGB image, without any
 additional depth data - from this single image, we regress the full 3D
-facial geometry. While the final 3D reconstruction from such methods
-can be of very high resolution and detail, finding corresponding
-features between each image is both memory and CPU intensive. 
+facial geometry.
 
-...
+\paragraph{Shape-from-Shading (SfS)} methods attempt to recover the 3D
+geometry by analysing the shading and reflectance of a face relative
+to a \textit{albedo} (mean) face. Similarly to 3DMM based methods, SfS
+methods also tend to rely on a 3D model, inheriting many of the same
+problems, such as finding a dense correspondence. Additionally, many
+of these methods also require more than one image, which means SfS
+methods often also inherit the problems associated with multiview
+methods. Finally, more so than other methods, SfS methods struggle
+with lighting - in general, there \textit{has} to be shadows, so over
+or under illuminated faces will not be reconstructed. Our approach to
+3D face reconstruction works under almost all kinds of lighting.
 
-
-blah blah blah
-
-
-...
-
-% Multiview
-
-% Shape from Shading
+\paragraph{Depth Estimation} is arguable more popular among problems
+such as room reconstruction, however, there are several methods which
+attempt to reconstruct the 3D geometry of faces using this
+technique. These methods have grown in popularity with the growth of
+deep learning. The biggest flaw of depth estimation based approaches
+is that only the visible parts can be reconstructed, unless other
+methods are employed afterwards (such as 3DMM, again, inheriting many
+of the aforementioned problems). While also working from a single
+image, our method is able to hallucinate the non-visible parts of the
+face, including, to an a certain extent, those which have been self
+occluded.
 
 % Depth Estimation
 
