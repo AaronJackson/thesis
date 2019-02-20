@@ -1,0 +1,18 @@
+\chapter{Conclusion}
+
+This thesis proposed a novel approach to 3D face reconstruction,
+resilient to large pose, expressions and occlusion, which we have
+called Volumetric Regression Networks. We also showed that this idea
+can be applied to other deformable objects, such as the entire human
+body.
+
+\section{Future Work}
+
+
+
+
+
+
+%%% Local Variables:
+%%% TeX-master: "../thesis"
+%%% End:

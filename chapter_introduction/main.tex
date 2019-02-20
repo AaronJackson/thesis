@@ -4,7 +4,7 @@ The landscape of computer vision has shifted dramatically over the
 past decade. Prior to this, general purpose solutions to difficult
 problems had low success rates on unconstrained images. This is
 especially true for the primary focus of this thesis: 3D face
-reconstruction, which is to estimate the 3D geometry of a face from a
+reconstruction, which is to estimate the 3D geometry of a face from
 one or more images. The problem of 3D face reconstruction inherently
 demands reliability on ``in-the-wild'' images since, while there
 \textit{are} many applications, very few are able to accommodate such
@@ -49,7 +49,7 @@ expression changes. Finally, since these methods are modelled, they
 are unable to directly produce finer details, such as wrinkles. In an
 extension to our own work, we show in~\ref{chapter:human} (where we
 perform 3D reconstruction of humans), that our method is able to
-directly fine details in clothing.
+directly regress fine details in clothing.
 
 
 \paragraph{Multiview and Photogrammetry} based methods require
@@ -58,7 +58,7 @@ geometry of a face (or other object). The primary drawback of such
 methods is, of course, that multiple images are not always available,
 especially under the aforementioned constraints associated with 3D
 face reconstruction. While the final 3D reconstruction from such
-methods can be of very high resolution and detail, finding
+methods can be of very high resolution and detailed, finding
 corresponding features between each image is both memory and CPU
 intensive. Our own method uses only a single RGB image, without any
 additional depth data - from this single image, we regress the full 3D
@@ -101,11 +101,11 @@ The contributions of this thesis can be summarised as follows:
 \item % 3D face reconstruction
   We present a deeply learnt method for 3D face reconstruction, which
   can be trained directly in an end-to-end fashion. Our method
-  reconstructions the full 3D facial structure, including parts which
+  reconstructs the full 3D facial structure, including parts which are
   occluded. We also show that our method works from just a single
-  images image without requiring accurate alignment or establishing a
-  dense correspondence between all training samples.  This allows us
-  to bypass the construction (during training) and fitting (during
+  images without requiring accurate alignment or establishing a dense
+  correspondence between all training samples.  This allows us to
+  bypass the construction (during training) and fitting (during
   inference) of a 3D Morphable Model (3DMM).  We refer to this method
   as the \textbf{Volumetric Regression Network (VRN)}.
 
@@ -119,7 +119,7 @@ The contributions of this thesis can be summarised as follows:
 \item We evaluate our method on both constrained and heavily
   unconstrained images from the web, demonstrating that our method
   \textbf{outperforms all prior work} on single image 3D face
-  reconstruction by a large margin.,
+  reconstruction by a large margin.
 
 \item We show that our method works on other deformable objects, such
   as in the task of \textbf{human body reconstruction}, and that

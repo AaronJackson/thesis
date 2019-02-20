@@ -12,6 +12,14 @@ section.
 
 \section{Face Alignment}
 
+Face alignment the process of detecting or aligning a set of facial
+points to a facial image. Face alignment is a prerequisite to many 3D
+face reconstruction methods - in fact, methods such
+as~\cite{huber2016multiresolution} depend only on facial landmarks,
+discarding the image entirely. Our own methods optionally makes use of
+these landmarks to assist in the 3D reconstruction process. These are
+discussed in detail in Chapters~\ref{chapter:face} and~\ref{chapter:seg}.
+
 Until recently, the highest performing methods for face alignment were
 based on a cascaded regression approach. These methods estimate the
 location of facial landmarks by applying a sequence of
@@ -55,13 +63,6 @@ discussed in further detail in
 Section~\ref{chap:literature:sec:face_recon}. A similar idea is
 propsed in~\cite{jourabloo2016large}, where a dense 3D model is fit to
 the face first.
-
-Our work does not attempt to improve the \textit{state-of-the-art} in
-face alignment. Instead, we optionally employ face alignment as a tool
-for guidance in Chapters~\ref{chapter:seg} and~\ref{chapter:face},
-which we show can improve the performance of these methods quite
-significantly.
-
 
 \section{Face Reconstruction}
 \label{chap:literature:sec:face_recon}
@@ -160,8 +161,10 @@ demonstrated in Chapter~\ref{chapter:human} on human bodies.
 
 While this thesis does not focus on pose estimation, in
 Chapter~\ref{chapter:human}, we present our method for 3D human body
-reconstruction. Human pose estimation is optionally used as guidance
-for this method.
+reconstruction as an extension to our 3D face reconstruction
+work. Human pose estimation is optionally used as guidance for this
+method in a similar fashion to face alignment being used as guidance
+to 3D face reconstruction.
 
 Modern approaches to estimating human pose are based on methods
 employing CNNs. These methods generally fall into one of two
