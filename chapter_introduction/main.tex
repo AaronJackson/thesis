@@ -129,21 +129,50 @@ The contributions of this thesis can be summarised as follows:
 
 \end{itemize}
 
-\section{Outline} This thesis is structured as follows: In
-Chapter~\ref{chapter:background} . This includes Convolutional
-Neural Networks (CNNs) and 3D volumes, along with how they are
-generated via voxelisation. Following on from this is a literature
-review of related work in Chapter~\ref{chapter:literature}. Our first
-work, which focuses on the problem of 3D face reconstruction is
-explained in Chapter~\ref{chapter:face}. An extension to this work,
-performing 3D reconstruction of the full human body, is presented in
-Chapter~\ref{chapter:human}. While seemingly unrelated to the primary
-focus of the thesis, our preliminary work on semantic facial part
-labelling, which heavily influenced our approach to 3D reconstruction,
-is described in Chapter~\ref{chapter:seg}.
+\section{Outline}
 
+In \textbf{Chapter~\ref{chapter:background}}, an introduction to the
+background material is provided. This includes a brief introduction to
+gradient descent based optimisation, an overview of Convolutional
+Neural Networks (CNNs)the problems batch normalisation attempts to
+solve. This background discussion then moves onto volumetric
+representations and algorithms, such as voxelisation, surface
+extraction and some of the difficulties associated with volumetric
+representations.
 
+\textbf{Chapter~\ref{chapter:literature}} gives an overview of related
+literature, starting with face alignment, which is often a
+prerequisite to 3D face reconstruction methods. Continuing on, a
+discussion of the various existing 3D face reconstruction is
+given. The remainder of this chapter gives an overview of human pose
+estimation, human body reconstruction and semantic part segmentation.
 
+Our first work, focusing on landmark guided semantic part segmentation
+of the human face is described in
+\textbf{Chapter~\ref{chapter:seg}}. It is important to mention here
+that this thesis does not focus on semantic segmentation, but this
+work \textit{heavily} influenced our approach to the problem of 3D
+reconstruction, since our method shifts the 3D reconstruction problem
+into a volumetric segmentation problem.
+
+\textbf{Chapter~\ref{chapter:face}} is the primary focus of our
+thesis. This chapter describes our approach to 3D face reconstruction,
+which includes details about the datasets uses, the volumetric
+representation and the (small) amount of error it introduces, along
+with our approach and network architectures. This chapter also
+describes the numerous experiments carried out on the various
+datasets, comparisons with other methods, and ablation studies on
+pose, expression and influence of parameters used for guidance.
+
+An extension to our work on 3D face reconstruction is described in
+\textbf{Chapter~\ref{chapter:human}}, in which we show how our method
+can be applied to on another category of deformable objects: the full
+human body. We carry out experiments on two datasets, showing that our
+approach can handle both difficult poses and finer details.
+
+Finally, we conclude with a reflection and discussion of our work,
+what impact it may have had and the numerous areas worthy of attention
+as future work, in \textbf{Chapter~\ref{chapter:conclusion}}.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis"

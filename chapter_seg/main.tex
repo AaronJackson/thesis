@@ -3,12 +3,15 @@
 \label{chapter:seg}
 
 The exact relationship between this work on facial part segmentation
-and the preceding chapters of this thesis may not appear obvious, nor
-is it particularly relevant to the area of \textit{Volumetric
-  Regression Networks}. However, this work strongly influenced the
-future work, since in many ways our 3D reconstruction approach can be
-thought of a type of two class segmentation problem (inside the face
-or body, or outside).
+and the main focus of this thesis may not appear obvious, nor is it
+particularly relevant to the area of \textit{Volumetric Regression
+  Networks}. However, this work strongly influenced the future work,
+since in many ways our 3D reconstruction approach can be thought of a
+type of two class segmentation problem (inside the face or body, or
+outside). Additionally, this work was where we first began to explore
+how the use of guidance, in the form of facial landmarks, can assist
+the problem of facial part segmentation, and later, the problem of 3D
+face reconstruction.
 
 
 This chapter proposes a CNN cascade for semantic part segmentation of
@@ -98,24 +101,6 @@ In summary, this paper addresses the following research questions:
   information providing refinement are reintroduced into the network
   during deconvolution.}
 \label{fig:fcn}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}[scale=0.9]
-    \edef\height{3.0}
-    \foreach \i in {1,...,19} {
-      \pgfmathparse{Mod(\i,3)==0?1:0}
-      \ifnum\pgfmathresult>0
-      \pgfmathparse{\height*0.8}
-      \xdef\height{\pgfmathresult}
-      \networkLayer{\height}{0.48}{\i * 0.48}{0.0}{color=red!30}{96}
-      \else
-      \networkLayer{\height}{0.48}{\i * 0.48}{0.0}{color=green!30}{96}
-      \fi
-    }
-  \end{tikzpicture}
-  \caption[The VGG-16 network]{Testing}
 \end{figure}
 
 \section{Datasets}
@@ -214,7 +199,7 @@ aforementioned components is now discussed in more detail:
 % Training FCN for landmark localisation
 % % learning rate, momentum, number of iterations, training steps,
 % % chosen loss
-\textbf{Facial Landmark Detection} The training procedure for landmark
+\paragraph{Facial Landmark Detection} The training procedure for landmark
 detection is similar to training FCN for part segmentation. Landmarks
 are encoded as 2D Gaussians centred at the provided landmarks'
 location. Each landmark is allocated its own channel to prevent
@@ -239,7 +224,7 @@ described, for approximately 400,000 iterations, until convergence.
 
 
 % Finetuning part segmentation to become guided
-\textbf{Guided Facial Part Segmentation} To train our guided FCN part
+\paragraph{Guided Facial Part Segmentation} To train our guided FCN part
 segmentation network we followed \cite{long2015fully}. Softmax Loss
 was also used. If $N$ is the number of outputs (in our case, classes),
 $p_{i,j}$ is the predicted output for pixel $(i,j)$, and $n$ is the
