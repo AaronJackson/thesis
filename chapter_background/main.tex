@@ -110,7 +110,7 @@ parameters of the layer before each layer change. This problem is
 referred to as \textit{internal covariate shift}. A solution known as
 Batch Normalisation was proposed in~\cite{ioffe2015batch}, enabling
 networks with many layers (such as the 152 layers in
-ResNet~\cite{he2015deep}) to in much shorter times, if at all. Some
+ResNet~\cite{he2015deep}) to be trained in much shorter times. Some
 additional advantages of using batch normalisation include being able
 to use larger learning rates and reducing the need for such careful
 initialisation.
@@ -236,7 +236,7 @@ single direction.
   \label{fig:background:voltracing}
 \end{figure}
 
-\subsection{Computing an Isosurface}
+\subsection{Surface Extraction}
 
 Perhaps the most popular method for computing the isosurface of a
 volume is Marching Cubes~\cite{lorensen1987marching}, developed in
@@ -245,12 +245,13 @@ eight neighbouring voxels to form eight binary values, a single
 byte. This byte can be used to lookup a known polygon configuration
 from a table of $2^8 = 256$ entries. However, in the first version of
 Marching Cubes, only 15 unique polygon configurations were
-stored. This lead to cases of ambiguity when looking up the
-meshes. The side effect of this is that meshes would sometimes end up
-having holes in them. In~\cite{chernyaev1995marching}, additional
-unique configurations were proposed, leading to a total of 33. This
-removes the ambiguity, and results in the meshes being closed or
-\textit{water tight}.
+stored. This lead to cases of ambiguity when performing a lookup for
+certain voxel configurations. The side effect of this is that meshes
+would sometimes end up having holes in
+them. In~\cite{chernyaev1995marching}, additional unique
+configurations were proposed, leading to a total of 33. This removes
+the ambiguity, and results in the meshes being closed or \textit{water
+  tight}.
 
 
 \subsection{Size, Compression and Formats}

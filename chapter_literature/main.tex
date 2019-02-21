@@ -107,11 +107,11 @@ reconstruction.
 The data required for training 3D reconstruction methods typically
 consists of an image with a corresponding 3D scan and can be difficult
 to obtain. \cite{richardson20163d} avoid this issue by generating
-synthetic training data, composed of renderings of randomly generated
-3DMM with corresponding meshes. Faces are rendered under random
-lighting conditions and projected only the image plane. An incremental
-fitting method is then used during inferences. Synthetic data was also
-used for training a general purpose 3D reconstruction
+synthetic training data, comprising of renderings of randomly
+generated 3DMM with corresponding meshes. Faces are rendered under
+random lighting conditions and projected only the image plane. An
+incremental fitting method is then used during inferences. Synthetic
+data was also used for training a general purpose 3D reconstruction
 method~\cite{li2015joint}. Methods trained using synthetic training
 data often fail on real or ``in-the-wild'' images due to unrealistic
 renderings or constrained lighting.
@@ -314,10 +314,10 @@ dataset~\cite{everingham2010pascal}). Forks earlier on in the network
 provide very detailed but noisy predictions about the location of
 classes, where as the latter forks are have very little noise, but can
 only approximate the location of a class. A diagram of the structure
-of FCN is shown in Figure~\ref{fig:background:fcn}. FCN was not
-intended to be trained from scratch. Instead, training was initialised
-from the parameters of VGG-16, once the network had been trained on
-the ImageNet dataset~\cite{krizhevsky2012imagenet} for the task of
+of FCN is shown in Figure~\ref{fig:fcn}. FCN was not intended to be
+trained from scratch. Instead, training was initialised from the
+parameters of VGG-16, once the network had been trained on the
+ImageNet dataset~\cite{krizhevsky2012imagenet} for the task of
 classification. The parameters in the last few layers of the network
 were reshaped from linear layers into a $1\times 1$ convolution. An
 interesting side effect of which, is the ability for the network to
@@ -403,35 +403,35 @@ particularly the fully convolutional approach described in
 ~\cite{long2015fully}, have been heavily influential in our work on 3D
 reconstruction.
 
-\begin{figure}
-  \centering
-  \begin{tikzpicture}[scale=0.9]
-  \networkLayer{3.0}{0.48}{0}{0.0}{color=green!30}{96}
-  \networkLayer{1.5}{1.28}{0.48}{0.0}{color=green!30}{256}
-  \networkLayer{0.75}{1.92}{1.76}{0.0}{color=green!30}{384}
-  \networkLayer{0.75}{1.92}{3.68}{0.0}{color=green!30}{384}
-  \networkLayer{0.75}{1.28}{5.60}{0.0}{color=green!30}{256}
-  \networkLayer{0.37}{2.05}{6.88}{0.0}{color=green!30}{4096}
-  \networkLayer{0.37}{2.05}{8.93}{0.0}{color=green!30}{4096}
-  \networkLayer{0.37}{0.5}{10.98}{0.0}{color=green!30}{1000}
+% \begin{figure}
+%   \centering
+%   \begin{tikzpicture}[scale=0.9]
+%   \networkLayer{3.0}{0.48}{0}{0.0}{color=green!30}{96}
+%   \networkLayer{1.5}{1.28}{0.48}{0.0}{color=green!30}{256}
+%   \networkLayer{0.75}{1.92}{1.76}{0.0}{color=green!30}{384}
+%   \networkLayer{0.75}{1.92}{3.68}{0.0}{color=green!30}{384}
+%   \networkLayer{0.75}{1.28}{5.60}{0.0}{color=green!30}{256}
+%   \networkLayer{0.37}{2.05}{6.88}{0.0}{color=green!30}{4096}
+%   \networkLayer{0.37}{2.05}{8.93}{0.0}{color=green!30}{4096}
+%   \networkLayer{0.37}{0.5}{10.98}{0.0}{color=green!30}{1000}
 
-  \networkLayer{0.75}{0.5}{12}{0.0}{color=red!30}{$\times 2$}
-  \networkLayer{1.5}{0.5}{13}{0.0}{color=red!30}{$\times 2$}
-  \networkLayer{3}{0.5}{14.5}{0.0}{color=red!30}{$\times 2$}
+%   \networkLayer{0.75}{0.5}{12}{0.0}{color=red!30}{$\times 2$}
+%   \networkLayer{1.5}{0.5}{13}{0.0}{color=red!30}{$\times 2$}
+%   \networkLayer{3}{0.5}{14.5}{0.0}{color=red!30}{$\times 2$}
 
-  \draw [>->] (1.92,1.75) -- (1.92,2.5) -- (13.5,2.5);
-  \draw [>->] (6.88,1) -- (6.88,1.25) -- (12.5,1.25);
+%   \draw [>->] (1.92,1.75) -- (1.92,2.5) -- (13.5,2.5);
+%   \draw [>->] (6.88,1) -- (6.88,1.25) -- (12.5,1.25);
 
-  \draw (13.5,3) circle [radius=0.3] node {$+$};
-  \draw (12.5,1.75) circle [radius=0.3] node {$+$};
-\end{tikzpicture}
-\caption[The VGG-16 network]{Basic VGG-16~\cite{simonyan2014vgg}
-  network with modifications added from
-  FCN~\cite{long2015fully}. Information from lower levels of the
-  network summed to upsampled output of the tailing end of the
-  network. The number of features is shown below each convolution.}
-\label{fig:background:fcn}
-\end{figure}
+%   \draw (13.5,3) circle [radius=0.3] node {$+$};
+%   \draw (12.5,1.75) circle [radius=0.3] node {$+$};
+% \end{tikzpicture}
+% \caption[The VGG-16 network]{Basic VGG-16~\cite{simonyan2014vgg}
+%   network with modifications added from
+%   FCN~\cite{long2015fully}. Information from lower levels of the
+%   network summed to upsampled output of the tailing end of the
+%   network. The number of features is shown below each convolution.}
+% \label{fig:background:fcn}
+% \end{figure}
 
 \subsection{Part Segmentation}
 

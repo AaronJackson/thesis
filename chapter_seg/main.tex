@@ -20,7 +20,7 @@ landmarks. There is large amount of prior work on each of these tasks
 separately, yet, to the best of our knowledge, this is the first time
 in literature that the interplay between pose estimation and semantic
 part segmentation is investigated. To address this limitation of prior
-work, in this paper, we propose a CNN cascade of tasks that firstly
+work, in this chapter, we propose a CNN cascade of tasks that firstly
 performs landmark localisation and then uses this information as input
 for guiding semantic part segmentation. We applied our architecture to
 the problem of facial part segmentation and report large performance
@@ -41,17 +41,17 @@ recognition. Part segmentation is a special case of semantic image
 segmentation which is the task of assigning an object class label to
 each pixel in the image. In part segmentation, the assigned label
 corresponds to the part of the object that this pixel belongs to. In
-this paper, we investigate whether pose estimation can guide
+this chapter, we investigate whether pose estimation can guide
 contemporary CNN architectures for semantic part segmentation. This
 seems to be natural yet to the best of our knowledge this is the first
-paper that addresses this problem. To this end, we propose a
+work that addresses this problem. To this end, we propose a
 Convolutional Neural Network (CNN) cascade for landmark guided part
 segmentation and report large performance improvement over a standard
 CNN for semantic segmentation that was trained without guidance.
 
-Although the ideas and methods presented in this paper can probably be
-applied to any structured deformable object (e.g. faces, human body,
-cars, birds), we will confine ourselves to human faces. The main
+Although the ideas and methods presented in this chapter can probably
+be applied to any structured deformable object (e.g. faces, human
+body, cars, birds), we will confine ourselves to human faces. The main
 reason for this is the lack of annotated datasets. To the best of our
 knowledge, there are no datasets providing pixel-level annotation of
 parts and landmarks at the same time. While this is also true for the
@@ -76,14 +76,14 @@ a CNN that was trained to directly perform facial part segmentation.
 
 \subsection{Main contributions}
 
-In summary, this paper addresses the following research questions:
+In summary, this chapter addresses the following research questions:
 \begin{enumerate}
 \item Is a CNN for facial part segmentation needed at all? One might
   argue that by just predicting the facial landmarks and then
   connecting them in the same way as we created the part labels, we
   could get high quality facial part segmentation thus completely
   by-passing the part segmentation task. Our first result in this
-  paper is that indeed the latter method slightly outperforms a CNN
+  chapter is that indeed the latter method slightly outperforms a CNN
   trained for facial part segmentation (without guidance though).
 \item Can facial landmarks be used for guiding facial part
   segmentation, thus reversing the result mentioned above? Indeed, we
@@ -109,7 +109,7 @@ In summary, this paper addresses the following research questions:
 There are a few datasets which provide annotations of pixel-level
 parts \cite{bo2011shape,kae2013augmenting,chen2014detect} but to the
 best of our knowledge there are no datasets containing both part and
-landmark annotations. Hence, in our paper we rely on datasets for
+landmark annotations. Hence, in this work, we rely on datasets for
 facial landmarking. These datasets provide a pseudo-dense set of
 landmarks. Segmentation masks are constructed by joining the
 groundtruth landmarks together to fully enclose each facial
@@ -461,7 +461,7 @@ all components for all methods is given in Fig.~\ref{fig:all}.
 
 \section{Conclusion}
 
-In this paper we proposed a CNN architecture to improve the
+In this chapter we proposed a CNN architecture to improve the
 performance of part segmentation by task delegation. In doing so, we
 provided both landmark localisation and semantic part segmentation on
 human faces. However, our method should be applicable to our objects

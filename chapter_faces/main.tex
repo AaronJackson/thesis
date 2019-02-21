@@ -77,19 +77,20 @@ an open problem in Vision and Graphics research. Depending on the
 setting and the assumptions made, there are many variations of it as
 well as a multitude of approaches to solve it. This work is on 3D face
 reconstruction using only a single image. Under this setting, the
-problem is considered far from being solved. In this paper, we propose
-to approach it, for the first time to the best of our knowledge, by
-directly learning a mapping from pixels to 3D coordinates using a
-Convolutional Neural Network (CNN). Besides its simplicity, our
-approach works with totally unconstrained images downloaded from the
-web, including facial images of arbitrary poses, facial expressions
-and occlusions, as shown in Fig.~\ref{fig:preview}. \newline
-\textbf{Motivation.} No matter what the underlying assumptions are,
-what the input(s) and output(s) to the algorithm are, 3D face
-reconstruction requires in general complex pipelines and solving
-non-convex difficult optimization problems for both model building
-(during training) and model fitting (during testing). In the following
-paragraph, we provide examples from 5 predominant approaches:
+problem is considered far from being solved. In this chapter, we
+propose to approach it, for the first time to the best of our
+knowledge, by directly learning a mapping from pixels to 3D
+coordinates using a Convolutional Neural Network (CNN). Besides its
+simplicity, our approach works with totally unconstrained images
+downloaded from the web, including facial images of arbitrary poses,
+facial expressions and occlusions, as shown in
+Fig.~\ref{fig:preview}. \newline \textbf{Motivation.} No matter what
+the underlying assumptions are, what the input(s) and output(s) to the
+algorithm are, 3D face reconstruction requires in general complex
+pipelines and solving non-convex difficult optimization problems for
+both model building (during training) and model fitting (during
+testing). In the following paragraph, we provide examples from 5
+predominant approaches:
 
 \begin{enumerate}
 \item In the 3D Morphable Model (3DMM) \cite{blanz1999morphable,
@@ -129,8 +130,8 @@ paragraph, we provide examples from 5 predominant approaches:
   reconstruction by solving another energy minimisation problem.
 \end{enumerate}
 
-Simplifying the technical challenges involved in the
-aforementioned works is the main motivation of this paper.
+Simplifying the technical challenges involved in the aforementioned
+works is the main motivation of this work.
 
 \subsection{Main contributions}
 We describe a very simple approach which bypasses many of the
@@ -456,9 +457,9 @@ different standard deviations.
 
 
 \begin{table}
-  \caption[Reconstruction accuracy]{Reconstruction accuracy on
-    AFLW2000-3D, BU-4DFE and Florence in terms of NME. Lower is
-    better.}
+  \caption[Numerical performance of 3D face
+  reconstruction]{Reconstruction accuracy on AFLW2000-3D, BU-4DFE and
+    Florence in terms of NME. Lower is better.}
   \label{tab:overview}
   \centering
   \small
