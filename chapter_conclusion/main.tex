@@ -5,10 +5,11 @@
 %%%% A summary of the main part of the text
 
 In this thesis, we have proposed a novel approach to 3D face
-reconstruction, which can be learnt end-to-end and is resilient to
-large pose, unusual expressions and occlusion, while being insensitive
-to alignment, minimising the requirements for careful
-initialisation. We compared our method to several other
+reconstruction, which can be learnt in an end-to-end fashion and is
+resilient to large pose, unusual expressions and
+occlusion. Additionally, our method is insensitive to alignment,
+minimising the requirements for careful initialisation, improving
+reliability overall. We compared our method to several other
 state-of-the-art methods, and out performed all of them by a large
 margin. We showed how the related task of face alignment can be used
 to assist the 3D reconstruction process. We demonstrated that our
@@ -18,22 +19,65 @@ able to reconstruct fine details, such as wrinkles in clothing, when
 trained with high quality data. This strongly suggests that our method
 will also be capable of working on other deformable objects.
 
-%%%%    A deduction made on the basis of the main body
-%%%%    Your personal opinion on what has been discussed
-%%%%    A statement about the limitations of the work
-%%%%    A comment about the future based on what has been discussed
-%%%%    The implications of the work for future research
-
+To demonstrate our confidence in the 3D face reconstruction method
+presented in Chapter~\ref{chapter:face}, a website was
+developed\footnote{http://cvl-demos.cs.nott.ac.uk/vrn}, allowing users
+to upload an image of a face and be presented with an interactive 3D
+model. The impact of which far exceeded any of our expectations. To
+date, this website has reconstructed more than 1 million
+faces. Feedback from users has been positive and the resultant models
+have been used for a multitude of purposes; from comforting those who
+have lost loved ones, to being used in music videos and assisting in
+teaching school children about 3D printing. Additionally, code for our
+3D face reconstruction method has been made
+available\footnote{https://github.com/AaronJackson/vrn} under the MIT
+license.
 
 \section{Future Work}
 
+In Chapter~\ref{chapter:face} we presented results which demonstrate
+Volumetric Regression Networks as being a high performing,
+state-of-the-art method for 3D face reconstruction. Despite these
+results, 3D face reconstruction will continue to be an active research
+area for quite some time. In this section, we will discuss some
+potential directions for future work, specifically aimed at Volumetric
+Regression Networks.
 
 \subsection{Incremental Detail Refinement} % Detail
 
-\subsection{Texture Re-synthesis}
+Volumetric Regression Networks require a significant amount of
+training data to produce high quality results - this is a limitation
+of our method. Furthermore, obtaining high quality \textit{and}
+detailed data, containing blemishes and wrinkles, in a natural (or
+\textit{in-the-wild} setting is difficult, if not impossible. As such,
+there is a clear requirement for a method which is able to learn this
+in a semi-supervised, if not entirely unsupervised manner.
+
+\subsection{Texture Synthesis}
+
+Our method for 3D face reconstruction does not attempt to produce any
+kind of texture map or colour information, instead we focused on the
+reconstruction aspect only. The online demo of this method, mentioned
+earlier, does render faces with a texture. However, this is simply the
+original image projected onto the 3D model using the $x,y$
+coordinates. This occasionally results in strange artefacts around the
+sides of the reconstruction. An interesting direction for future work
+may be to improve this, by simultaneously regressing a warped texture
+image which can wrap around the regressed 3D model.
 
 \subsection{Fixed Correspondence}
 
+One of the advantages of 3DMM based approaches to 3D face
+reconstruction is that vertices have a fixed index across all meshes
+(except for a few cases, such as ??, where the mesh is modified in a
+refinement step). As VRN produces a volumetric representation, both
+the number of vertices and the order of them varies, depending on the
+face or surface extraction algorithm used. This somewhat hinders the
+ease-of-use for applications such as applications, as vertices would
+have to be selected manually. There are a number of potential
+solutions to this problem, such as regressing a vertex map, in a
+similar fashion to aforementioned texture synthesis. Alternatively, as
+a post-processing step, resampling and ordering the vertices.
 
 
 
