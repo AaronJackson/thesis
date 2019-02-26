@@ -2,21 +2,12 @@
 \chapter{Large Pose 3D Face Reconstruction via Volumetric Regression}
 \label{chapter:face}
 
-
-% \author{Aaron S. Jackson$^1$\hspace{1cm}
-% Adrian Bulat$^1$\hspace{1cm}
-% Vasileios  Argyriou$^2$\hspace{1cm}
-% Georgios Tzimiropoulos$^1$\hspace{1cm} \\
-% \\
-% $^1$ The University of Nottingham, UK\hspace{1cm}
-% $^2$ Kingston University, UK \\
-% \\
-% $^1$\{aaron.jackson, adrian.bulat, yorgos.tzimiropoulos\}@nottingham.ac.uk \\
-% $^2$ vasileios.argyriou@kingston.ac.uk
-% }
-
-\includegraphics[width=\linewidth]{img/preview.png}
-
+\begin{figure}
+  \includegraphics[width=\linewidth]{img/preview.png}
+  \caption[A 3D Reconstruction Preview]{A preview of our 3D
+    reconstruction method, applied on a wide variety of poses.}
+  \label{c:face:fig:preview}
+\end{figure}
 % \begin{abstract}
 %   3D face reconstruction is a fundamental Computer Vision problem of
 %   extraordinary difficulty. Current systems often assume the
@@ -84,7 +75,7 @@ coordinates using a Convolutional Neural Network (CNN). Besides its
 simplicity, our approach works with totally unconstrained images
 downloaded from the web, including facial images of arbitrary poses,
 facial expressions and occlusions, as shown in
-Fig.~\ref{fig:preview}. \newline \textbf{Motivation.} No matter what
+Figure~\ref{c:face:fig:preview}. \newline \textbf{Motivation.} No matter what
 the underlying assumptions are, what the input(s) and output(s) to the
 algorithm are, 3D face reconstruction requires in general complex
 pipelines and solving non-convex difficult optimization problems for
@@ -139,7 +130,7 @@ difficulties encountered in 3D face reconstruction by using a
 novel volumetric representation of the 3D facial geometry, and
 an appropriate CNN architecture that is trained to regress directly
 from a 2D facial image to the corresponding 3D volume. An overview of
-our method is shown in Fig.~\ref{fig:cnnall}. In summary, our contributions
+our method is shown in Figure~\ref{fig:cnnall}. In summary, our contributions
 are:
 \begin{itemize}
 \item Given a dataset consisting of 2D images and 3D face scans, we
@@ -233,12 +224,12 @@ by the 3D facial scan, and 0 otherwise. That is to say $ V_{whd}$ is
 the ground truth for voxel $\{w,h,d\}$ and is equal to 1, if voxel
 $\{w,h,d\}$ belongs to the 3D volumetric representation of the face
 and 0 otherwise (i.e. it belongs to the background). The conversion is
-shown in Fig.~\ref{fig:discretisation}. Notice that the process
+shown in Figure~\ref{fig:discretisation}. Notice that the process
 creates a volume fully aligned with the 2D image. The importance of
 spatial alignment is analysed in more detail in
 Section~\ref{sec:spatialimportance}. The error caused by
 discretization for a randomly picked facial scan as a function of the
-volume size is shown in Fig.~\ref{fig:voxerror}. Given that the error
+volume size is shown in Figure~\ref{fig:voxerror}. Given that the error
 of state-of-the-art methods \cite{roth2016adaptive,liu2016joint} is of
 the order of a few mms, we conclude that discretization by
 $192\times 192\times 200$ produces negligible error.
@@ -276,7 +267,7 @@ and residual learning \cite{he2015deep}. Our volumetric architecture
 consists of two hourglass modules which are stacked together without
 intermediate supervision. The input is an RGB image and the output is
 a volume of $192\times 192\times 200$ of real values. This
-architecture is shown in Fig.~\ref{fig:cnnbaseline}. As it can be
+architecture is shown in Figure~\ref{fig:cnnbaseline}. As it can be
 observed, the network has an encoding/decoding structure where a set
 of convolutional layers are firstly used to compute a feature
 representation of fixed dimension. This representation is further
@@ -340,14 +331,14 @@ At test time, and given an input 2D image, the network regresses a 3D
 volume from which the outer 3D facial mesh is recovered. Rather than
 making hard (binary) predictions at pixel level, we found that the
 soft sigmoid output is more useful for further processing. Both
-representations are shown in Fig.~\ref{fig:roughvssmooth} where
+representations are shown in Figure~\ref{fig:roughvssmooth} where
 clearly the latter results in smoother results. Finally, from the 3D
 volume, a mesh can be formed by generating the iso-surface of the
 volume. If needed, correspondence between this variable length mesh
 and a fixed mesh can be found using Iterative Closest Point (ICP).
 
 \textbf{VRN - Multitask}. We also propose a Multitask VRN, shown in
-Fig.~\ref{fig:cnnmultitask}, consisting of three hourglass
+Figure~\ref{fig:cnnmultitask}, consisting of three hourglass
 modules. The first hourglass provides features to a fork of two
 hourglasses. The first of this fork regresses the 68 iBUG landmarks
 \cite{sagonas2013semi} as 2D Gaussians, each on a separate
@@ -379,7 +370,7 @@ regression method, however the input to this architecture is an RGB
 image stacked with 68 channels, each containing a Gaussian ($\sigma =
 1$, approximate diameter of 6 pixels) centred on each of the 68
 landmarks. This stacked representation and architecture is
-demonstrated in Fig.~\ref{fig:guidednet}. During training we used the
+demonstrated in Figure~\ref{fig:guidednet}. During training we used the
 ground truth landmarks while during testing we used a stacked
 hourglass network trained for facial landmark localisation. We call
 this network \textit{VRN - Guided}.
@@ -489,12 +480,13 @@ fitting (3DDFA uses a CNN), a process completely bypassed by \textit{VRN}.
 
 
 Our results can be found in Table~\ref{tab:overview} and
-Figs.~\ref{roc:combined} and ~\ref{roc:florence}.  Visual results of
-the proposed \textit{VRN - Guided} on some very challenging images
-from AFLW2000-3D can be seen in Fig.~\ref{fig:aflw2000res}. Examples
-of failure cases along with a visual comparison between \textit{VRN}
-and \textit{VRN - Guided} can be found in the supplementary
-material. From these results, we can conclude the following:
+Figures~\ref{roc:aflw2000},~\ref{roc:bu4dfe} and~\ref{roc:florence}.
+Visual results of the proposed \textit{VRN - Guided} on some very
+challenging images from AFLW2000-3D can be seen in
+Figure~\ref{fig:aflw2000res}. Examples of failure cases along with a
+visual comparison between \textit{VRN} and \textit{VRN - Guided} can
+be found in the supplementary material. From these results, we can
+conclude the following:
 \begin{enumerate}
 \item Volumetric Regression Networks largely outperform 3DDFA and EOS
   on all datasets, verifying that directly regressing the 3D facial
@@ -596,8 +588,8 @@ anything.
 Although this network produces a reasonable face, it can only capture
 diminished expression, and the shape for all faces appears to remain
 almost identical. This is very noticeable in
-Fig.~\ref{fig:frontal_visual}. Numeric comparison is shown in
-Fig.~\ref{roc:combined} (left), as \textit{VRN without alignment}. We
+Figure~\ref{fig:frontal_visual}. Numeric comparison is shown in
+Figure~\ref{roc:aflw2000}, as \textit{VRN without alignment}. We
 believe that this further confirms that spatial alignment is of
 paramount importance when performing 3D reconstruction in this way.
 
@@ -622,7 +614,7 @@ experiments reported, we used the best performing \textit{VRN -
 To measure the influence of pose on the reconstruction error, we
 measured the NME for different yaw angles using all of our
 Florence~\cite{masi2d3dFaceData} renderings. As shown in
-Fig.~\ref{fig:effect_pose}, the performance of our method decreases as
+Figure~\ref{fig:effect_pose}, the performance of our method decreases as
 the pose increases. This is to be expected, due to less of the face
 being visible which makes evaluation for the invisible part
 difficult. We believe that our error is still very low considering
@@ -636,7 +628,7 @@ performance, we rendered frontal images in difference expressions from
 BU-4DFE (since Florence only exhibits a neutral expression) and
 measured the performance for each expression. This kind of extreme
 acted facial expressions generally do not occur in the training set,
-yet as shown in Fig.~\ref{fig:effect_expression}, the performance
+yet as shown in Figure~\ref{fig:effect_expression}, the performance
 variation across different expressions is quite minor.
 
 \begin{figure}

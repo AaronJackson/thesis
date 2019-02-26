@@ -2,12 +2,11 @@
 \label{chapter:background}
 
 In this chapter, an introduction to deep learning the various 3D
-geometry representations. The chapter begins by defining the problem
-which is motivating this research. This is followed by an introduction
-to neural networks in~\ref{sec:background:nn}, which includes a
-description of how they are trained and various techniques to make
-training them easier. In~\ref{sec:background:volumes}, the way in
-which we represent 3D geometry is described.
+geometry representations. This chapter begins by giving an
+introduction to neural networks, including gradient descent and
+Convolutional Neural Networks (CNN). This is followed by some details
+about 3D volumes and their associated algorithms for voxelisation and
+surface extraction.
 
 
 \section{Neural Networks}
@@ -33,7 +32,8 @@ image $x_i$ to label $y_i$ given a real vector of parameters $\theta$,
 \end{equation}
 
 \noindent To measure the performance this classifier, a loss function
-$\ell$ is defined, which is entirely dependant on the problem at hand,
+$\ell$ is defined, which is entirely dependant on the problem at
+hand. Hence, our loss over $x$ is defined as,
 
 \begin{equation}
   loss = \sum_i \ell(y_i, f(x_i ; \theta) .
@@ -238,6 +238,13 @@ single direction.
 
 \subsection{Surface Extraction}
 
+Surface extraction is the process of extracting a mesh which encloses
+a 3D object represented in volumetric space. Occasionally such methods
+require thresholds to extract separate regions of the volume, for
+example, in an MRI scan, where the brain  needs to be visualised
+independently of the skull (and hence, independently extracted from
+the volume).
+
 Perhaps the most popular method for computing the isosurface of a
 volume is Marching Cubes~\cite{lorensen1987marching}, developed in
 1987. The algorithm traverses through all voxels, using the value of
@@ -272,13 +279,14 @@ is clear that this may begin to cause problems.
 One solution might be to compress the volumes. However, compression
 introduces a significant computational overhead. It is a common trade
 off between processing power, available storage and I/O speeds. While
-compression of images has come away (even JPEG decoding is hardware
-accelerated on some platforms now), the same is not true for 3D
-volumes. Generic file compression options are of course available (Run
-Length Encoding, Huffman Coding and LZ77, just to name a few), but on
-large volumes being read many times per second, the CPU could easily
-become the bottleneck. In this work, we do not compress the volumes
-and instead use large SSDs to store our volumetric training data.
+compression of images has come a long way (even JPEG decoding is
+hardware accelerated on some platforms now), the same is not true for
+3D volumes. Generic file compression options are of course available
+(Run Length Encoding, Huffman Coding and LZ77, just to name a few),
+but on large volumes being read many times per second, the CPU could
+easily become the bottleneck. In this work, we do not compress the
+volumes and instead use large SSDs to store our volumetric training
+data.
 
 The format in which the volume is stored is another important
 consideration. There are many formats for storing volumetric

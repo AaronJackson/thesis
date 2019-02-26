@@ -33,44 +33,47 @@ our own work on 3D face reconstruction, fits into this challenging space.
 % 3D Morphable Models
 \paragraph{3D Morphable Models (3DMM)} are perhaps the most popular
 approach to estimating facial 3D geometry. These methods regress
-parameters for a pre-computed face model [cite things], which varies
-the shape, expression, pose and optionally textural information. These
-methods are increasingly using Convolutional Neural Networks as a
-means to regress the parameters, and in general, work very reliably on
-\textit{normal} faces. However, 3DMM based approaches gradually
-perform worse as factors such as pose and expression increase. We show
-in Section~\ref{chapter:face:sec:ablation} that our method has a very
-uniform and low error over all expressions, with only a small increase
-in error on large poses (such as around 80 degrees). Another
-disadvantage of 3DMM based approaches is that the 3DMM must be
-generated - this requires finding the dense correspondence between all
-vertices of all samples, which also becomes difficult as pose and
-expression changes. Finally, since these methods are modelled, they
-are unable to directly produce finer details, such as wrinkles. In an
-extension to our own work, we show in~\ref{chapter:human} (where we
-perform 3D reconstruction of humans), that our method is able to
-directly regress fine details in clothing.
+parameters for a pre-computed face
+model~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint},
+which varies the shape, expression, pose and optionally textural
+information. These methods are increasingly using Convolutional Neural
+Networks as a means to regress the parameters, and in general, work
+very reliably on \textit{normal} faces. However, 3DMM based approaches
+gradually perform worse as factors such as pose and expression
+increase. We show in Section~\ref{chapter:face:sec:ablation} that our
+method has a very uniform and low error over all expressions, with
+only a small increase in error on large poses (such as around 80
+degrees). Another disadvantage of 3DMM based approaches is that the
+3DMM must be generated - this requires finding the dense
+correspondence between all vertices of all samples, which also becomes
+difficult as pose and expression changes. Finally, since these methods
+are modelled, they are unable to directly produce finer details, such
+as wrinkles. In an extension to our own work, we show
+in Chapter~\ref{chapter:human} (where we perform 3D reconstruction of humans),
+that our method is able to directly regress fine details in clothing.
 
 
 \paragraph{Multiview and Photogrammetry} based methods require
 multiple images from many different angles in order to estimate the 3D
-geometry of a face (or other object). The primary drawback of such
-methods is, of course, that multiple images are not always available,
-especially under the aforementioned constraints associated with 3D
-face reconstruction. While the final 3D reconstruction from such
-methods can be of very high resolution and detailed, finding
-corresponding features between each image is both memory and CPU
-intensive. Our own method uses only a single RGB image, without any
-additional depth data - from this single image, we regress the full 3D
-facial geometry.
+geometry of a face (or other
+object)~\cite{dou2018multi,dai2018coarse,Piotraschke_2016_CVPR,mayo20093d}. The
+primary drawback of such methods is, of course, that multiple images
+are not always available, especially under the aforementioned
+environmental constraints associated with 3D face
+reconstruction. While the final 3D reconstruction from such methods
+can be of very high resolution and detailed, finding corresponding
+features between each image is both memory and CPU intensive. Our own
+method uses only a single RGB image, without any additional depth data
+- from this single image, we regress the full 3D facial geometry.
 
 \paragraph{Shape-from-Shading (SfS)} methods attempt to recover the 3D
 geometry by analysing the shading and reflectance of a face relative
 to a \textit{albedo} (mean) face. Similarly to 3DMM based methods, SfS
 methods also tend to rely on a 3D model, inheriting many of the same
-problems, such as finding a dense correspondence. Additionally, many
-of these methods also require more than one image, which means SfS
-methods often also inherit the problems associated with multiview
+problems, such as finding a dense
+correspondence~\cite{suwajanakorn2014total,jiang20183d}. Additionally,
+many of these methods also require more than one image, which means
+SfS methods often also inherit the problems associated with multiview
 methods. Finally, more so than other methods, SfS methods struggle
 with lighting - in general, there \textit{has} to be shadows, so over
 or under illuminated faces will not be reconstructed. Our approach to
@@ -78,20 +81,15 @@ or under illuminated faces will not be reconstructed. Our approach to
 
 \paragraph{Depth Estimation} is arguable more popular among problems
 such as room reconstruction, however, there are several methods which
-attempt to reconstruct the 3D geometry of faces using this
-technique. These methods have grown in popularity with the growth of
-deep learning. The biggest flaw of depth estimation based approaches
-is that only the visible parts can be reconstructed, unless other
-methods are employed afterwards (such as 3DMM, again, inheriting many
-of the aforementioned problems). While also working from a single
-image, our method is able to hallucinate the non-visible parts of the
-face, including, to an a certain extent, those which have been self
-occluded.
-
-% Depth Estimation
-
-% Contributions. Unsure about whether to approach this as
-% contributions or aims.
+attempt to reconstruct the frontal part of the facial 3D geometry
+using this technique~\cite{sun2011depth,sun2013depth}. It would be
+fair that these methods have declined in popularity. The biggest flaw
+of depth estimation based approaches is that only the visible parts
+can be reconstructed, unless other methods are employed afterwards
+(such as 3DMM, again, inheriting many of the aforementioned
+problems). While also working from a single image, our method is able
+to hallucinate the non-visible parts of the face, including, to an a
+certain extent, those which have been self occluded.
 
 \section{Contributions}
 

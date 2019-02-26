@@ -12,8 +12,8 @@ minimising the requirements for careful initialisation, improving
 reliability overall. We compared our method to several other
 state-of-the-art methods, and out performed all of them by a large
 margin. We showed how the related task of face alignment can be used
-to assist the 3D reconstruction process. We demonstrated that our
-method is able to work well also on the task of human body
+to assist the 3D reconstruction process. We also demonstrated that our
+method is able to work well on the task of human body
 reconstruction. In doing so, we also demonstrated that our method is
 able to reconstruct fine details, such as wrinkles in clothing, when
 trained with high quality data. This strongly suggests that our method
@@ -69,16 +69,27 @@ image which can wrap around the regressed 3D model.
 
 One of the advantages of 3DMM based approaches to 3D face
 reconstruction is that vertices have a fixed index across all meshes
-(except for a few cases, such as ??, where the mesh is modified in a
-refinement step). As VRN produces a volumetric representation, both
-the number of vertices and the order of them varies, depending on the
-face or surface extraction algorithm used. This somewhat hinders the
-ease-of-use for applications such as applications, as vertices would
-have to be selected manually. There are a number of potential
-solutions to this problem, such as regressing a vertex map, in a
-similar fashion to aforementioned texture synthesis. Alternatively, as
-a post-processing step, resampling and ordering the vertices.
+(except for a few cases, such as~\cite{tran2018extreme}, where the
+mesh is modified in a refinement step). As VRN produces a volumetric
+representation, both the number of vertices and the order of them
+varies, depending on the face or surface extraction algorithm
+used. This somewhat hinders the ease-of-use for applications such as
+applications, as vertices would have to be selected manually. There
+are a number of potential solutions to this problem, such as
+regressing a vertex map, in a similar fashion to aforementioned
+texture synthesis. Alternatively, as a post-processing step,
+resampling and ordering the vertices.
 
+\subsection{Temporal Consistency}
+
+As our method was designed to work from just a single image, no
+consideration was really given to how well it would work over temporal
+data. While we feel there performance is reasonably good on videos, it
+is possible that the shape of the face might change, potentially
+making it unsuitable for a variety of purposes. Hence, a nice addition
+to our method would be to optionally accept features from several
+previous frames. This would allow some temporal consistency to be
+established, hopefully constraining the face shape over time.
 
 
 %%% Local Variables:

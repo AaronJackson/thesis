@@ -4,11 +4,17 @@
 
 This section attempts to provide a comprehensive literature review of
 the works relevant to this thesis. This thesis focuses primarily on
-the 3D reconstruction of human faces and bodies. Much of the
-literature discussed in this chapter has an obvious
-relevance. However, in the cases which are less obvious, connections
-have attempted to be made with references to the relevant chapter and
-section.
+the 3D reconstruction of human faces, but includes an extension which
+shows our method working on full human bodies. Methods for 3D
+reconstruction of the face and body often depend on methods for first
+extracting landmarks. As such, an overview of literature relating to
+face alignment and human pose estimation is given in this literature
+review, providing some context for the works relating to 3D face and
+human body reconstruction. Additionally, some initial work on facial
+part segmentation turned out to be highly influential in our approach
+to the problem of face reconstruction. Hence, towards the end of this
+chapter, an overview of work relating to semantic segmentation and
+semantic part segmentation is provided.
 
 \section{Face Alignment}
 
@@ -31,17 +37,20 @@ details of such approaches to face alignment can be found
 in~\cite{sanchez16,cao2014facewarehouse,xiongsupervised,zhu2015face,tzimiropoulos2015project}.
 
 The remainder of this section will focus on deep learning based
-approaches to face alignment. A CNN casecade is presented
-in~\cite{sun2013deep} to directly produce the landmark
+approaches to face alignment. Deep convolutional networks have proven
+to be an excellent choice for this kind of problem. One of the primary
+reasons for this is due to the way global and local context can be
+incorporated to provide both accuracy and precision. A CNN casecade is
+presented in~\cite{sun2013deep} to directly produce the landmark
 locations. Similarly in~\cite{bulat2016two}, the authors propose a
 method for 3D face alignment by first detecting the 2D landmarks using
 heatmap regression. If desired, the process can be stopped
 here. Optionally, this stack of heatmaps is passed through a second
 network, this time for regression, accompanied by the original input
-image. The output of this second stage is 68 $(x, y, z)$
-landmarks. A multitask approach is proposed in~\cite{zhang2014facial},
-regressing the location of the facial landmarks while performing
-facial attribute classification.
+image. The output of this second stage is 68 $(x, y, z)$ landmarks. A
+multitask approach is proposed in~\cite{zhang2014facial}, regressing
+the location of the facial landmarks while performing facial attribute
+classification.
 
 Many CNN based alignment methods estimate the facial landmarks by
 regressing a 2D Gaussian on top of each landmark
@@ -52,29 +61,39 @@ in~\cite{bulat2017far}, where the second regressor is replaced with a
 CNN producing a 3D heatmap representation. A similar heatmap based
 approach was used in a multi-stage approach described
 in~\cite{kowalski2017deep}, where the landmark detections are refined
-after each stage. Between each stage, the \textit{current} landmark
-prediction and some generated features are passed. At the beginning of
-each stage, the inputs are transformed using the landmarks to make the
-problem less challenging.
+after each stage. Between each stage, the current landmark prediction
+and some generated features are passed again through the network. At
+the beginning of each stage, the inputs are transformed using the
+landmarks to make the problem less challenging.
 
 An indirect approach is discussed in~\cite{zhu2016face}, where a 3DMM
 is first fitted, from which 3D landmarks are taken. This work is
 discussed in further detail in
-Section~\ref{chap:literature:sec:face_recon}. A similar idea is
-propsed in~\cite{jourabloo2016large}, where a dense 3D model is fit to
-the face first.
+Section~\ref{chap:literature:sec:face_recon} as it is performing 3D
+reconstruction, but for the purposes of face alignment. A similar idea
+is proposed in~\cite{jourabloo2016large}, where a dense 3D model is
+fit to the face first.
 
 \section{Face Reconstruction}
 \label{chap:literature:sec:face_recon}
 
-3D face reconstruction is the process of estimating the 3D geometry of
-a face. This is typically from one or more images, but methods relying
-on video, depth data, and landmarks also exist. Arguably the most
-popular approach to estimating the 3D geometry of the human face is
-using 3D Morphable Models (3DMM). These models consist of a small
-number of parameters which adjust facial properties such as shape,
-pose and expression. Such methods
-include~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint,tran2018extreme,jiang20183d,jiang2018pose}.
+% 3D face reconstruction is the process of estimating the 3D geometry of
+% a face. This is typically from one or more images, but methods relying
+% on video, depth data, and landmarks also exist. %% More of an
+% %% introduction required here.
+
+The literature on 3D face reconstruction typically falls into several
+categories. However, there is often also a lot of interaction or
+intersection between multiple techniques in an attempt to garner
+better results.
+
+%%%%%%%%%%%%%%% 3DMM
+\subsection{3D Morphable Models (3DMM)}
+Arguably the most popular approach to estimating the 3D geometry of
+the human face is using 3D Morphable Models (3DMM). These models use a
+small number of parameters to adjust facial properties such as shape,
+pose and expression. There are many methods based on this approach,
+including~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint,tran2018extreme,jiang20183d,jiang2018pose}.
 
 In particular,~\cite{jourabloo2016large} use a cascade of CNNs, which
 first regress the camera projection, followed by the pose, followed by
@@ -82,10 +101,10 @@ shape and expression. Additionally,~\cite{jourabloo2016large} extract
 features from their model fitting which can assist in facial landmark
 localisation. A method capable of working with models of different
 resolutions is proposed in~\cite{huber2016multiresolution}, along with
-several models of different resolution, ranging from roughly 30,000 to
-3500 vertices. This method does not use a CNN, instead regressing
-parameters for shape and pose from the landmarks only, by minimising a
-cost function which evaluates the fitting.
+several models of different resolution, ranging from roughly 3500 to
+30,000 vertices. This method does not use a CNN, instead regressing
+parameters for shape and pose using only the landmarks. This is done
+by iteratively minimising a cost function which evaluates the fitting.
 
 Constraining the pose, shape and (optionally) appearance into a small
 number of parameters has the undesirable side effect of being unable
@@ -94,24 +113,29 @@ bumps. In~\cite{tran2018extreme}, a CNN is used for 3DMM fitting,
 followed by a refinement step which iteratively improves the finer
 details. However, during this iterative refinement, the correspondence
 between vertices, as well as the scale and spatial location of the
-fitting is lost. Another iterative approach attempting to
+fitting is lost, which disregards one of the main advantages of 3DMM
+based approaches. Another iterative approach attempting to
 \textit{also} recover both the 3D geometry and facial landmarks is
 described in~\cite{liu2016joint}. For initialisation, the method
 passes the image and a mean set of facial landmarks. These landmarks
 are gradually refined while learning a 3D to 2D mapping, which updates
-the 3D face shape. Unlike the aforementioned methods, our own method
-(described in Chapter~\ref{chapter:face})~\cite{liu2016joint} does not
-estimate the facial pose, and as such always produces a frontal
-reconstruction.
+the 3D face shape. Unlike our own method (described in
+Chapter~\ref{chapter:face}),~\cite{liu2016joint} does not estimate the
+facial pose, and as such always produces a frontal
+reconstruction. In many cases, the pose is an important component, and
+as such, a separate method, likely based on the facial landmarks,
+would have to be used to find the transformation for the 3D model.
 
+%%%%%%%%%%%%%%% 3DMM + Synthetic
+\subsection{Synthetic Training Data for 3DMM}
 The data required for training 3D reconstruction methods typically
-consists of an image with a corresponding 3D scan and can be difficult
-to obtain. \cite{richardson20163d} avoid this issue by generating
-synthetic training data, comprising of renderings of randomly
-generated 3DMM with corresponding meshes. Faces are rendered under
-random lighting conditions and projected only the image plane. An
-incremental fitting method is then used during inferences. Synthetic
-data was also used for training a general purpose 3D reconstruction
+consists of an image with a corresponding 3D scan. Such pairs can be
+difficult to obtain. \cite{richardson20163d} alleviate this issue by
+generating synthetic training data, comprising of renderings of
+randomly generated 3DMM with the corresponding mesh. Faces are
+rendered under random lighting conditions and pose. An incremental
+fitting method is then used during inference. Synthetic data was also
+used for training a general purpose 3D reconstruction
 method~\cite{li2015joint}. Methods trained using synthetic training
 data often fail on real or ``in-the-wild'' images due to unrealistic
 renderings or constrained lighting.
@@ -127,9 +151,13 @@ extraction. This shape and pose representation can best be summarised
 as a depth map of the fitting generated by parameters from the
 previous iteration. The training data is augmented by artificially
 rotating faces between $\{-90, 90\}$ degrees using groundtruth
-parameters for a frontal fitting.
+parameters for a frontal fitting. One of the byproducts of this work
+is a large dataset consisting of large pose synthetically rotated
+faces, each with a corresponding 3D mesh.
 
-A method which performs 3D reconstruction from video is presented
+%%%%%%%%%%%%%%% Shape from Shading
+\subsection{Shape from Shading}
+A method which performs 3D face reconstruction from video is presented
 in~\cite{suwajanakorn2014total}, which can also work from a set of
 static images. The method combines their proposed 3D flow estimation
 algorithm with a Shape from Shading (SfS) method. The method first
@@ -143,6 +171,57 @@ using 2D landmark detections. This coarse model is then
 image. Finally, the shape from shading step refines the mesh and
 introduces finer details.
 
+%%%%%%%%%%%%%%% Multiview Approaches
+\subsection{Multiview Reconstruction and Structure from Motion}
+
+Several methods exist which rely on multiple images to reconstruct the
+3D geometry of the face. These again fall into two more
+categories. These are know as Multiview~\cite{mayo20093d,dou2018multi}
+or Structure from Motion
+(SfM)~\cite{dou2018multi,dai2018coarse,Piotraschke_2016_CVPR} based
+methods, although again, there is some intersection between the two.
+
+A keypoint based approach is presented in~\cite{mayo20093d}, where
+SIFT is first used to extract dense features from each image. These
+are then aligned using an Iterative Closest Point (ICP) algorithm to
+build a point cloud o a face, from which a surface could be extracted
+later. However, due to the simplicity of this approach, and the
+limitations of ICP, this method will not account for changes in facial
+expression between images. The work of~\cite{dou2018multi} proposes to
+first pass each image through a CNN to extract feature maps, which are
+then passed to a recurrent neural network (RNN) to regress parameters
+for a 3DMM. The result is altered with each frame, making it a
+suitable method for videos, where facial expression changes over time.
+
+A two stage (coarse to fine) approach is presented
+in~\cite{dai2018coarse}, where first a sparse set of landmarks are
+first estimated, which are then used to estimate pose to assist in
+fitting a dense set of points to the face to create a coarse
+reconstruction. During this coarse reconstruction step, 14 images from
+specific poses are extracted, which are used to refine the model and
+extract details. Finally, in~\cite{Piotraschke_2016_CVPR}, a method is
+proposed which reconstructs individual 3D shapes from multiple single
+images of a face. The quality of each shape is evaluated. The best of
+these shapes are them combined into a single 3D model. The aim of
+doing this is to better handle variations in pose, lighting,
+occlusions and facial expressions.
+
+\subsection{Depth Estimation}
+
+Finally, depth estimation - while typically applied to problems such
+as room reconstruction, there are a couple of methods which attempt to
+reconstruct the face by estimating the
+depth~\cite{sun2011depth,sun2013depth}. In~\cite{sun2011depth}, a
+constrained Independent Component Analysis (ICA) model is used to
+analyse multiple facial images of the same subject, from which the 3D
+geometry is obtained. An almost identical method is presented
+in~\cite{sun2013depth}, except instead of using an ICA model, a
+nonlinear Least-Squares model is used, offering a small performance
+improvement over~\cite{sun2011depth}.
+
+%%%%%%%%%%%%%%% Our Method
+\subsection{Where does our work fit in?}
+
 Our method for 3D face reconstruction, described in
 Chapter~\ref{chapter:face} is very different to the aforementioned
 methods. First, our method does not rely on a 3D shape model for
@@ -151,11 +230,10 @@ a volumetric representation. This avoids the requirement to find
 correspondence between vertices, which is a challenging problem in
 itself. Second, our method is direct, producing a volumetric
 representation of the facial geometry in just a single step. Third,
-unlike~\cite{tran2018extreme} we do not lose any pose or scale
-information, and show potential for detailed reconstruction,
-demonstrated in Chapter~\ref{chapter:human} on human bodies.
-
-
+unlike~\cite{tran2018extreme} and multiview approaches, we do not lose
+any pose or scale information, and show potential for detailed
+reconstruction, demonstrated in Chapter~\ref{chapter:human} on human
+bodies.
 
 \section{Human Pose Estimation}
 
@@ -198,7 +276,7 @@ The second approach to CNN based human pose estimation is to regress
 heatmaps, as done
 in~\cite{newell2016stacked,pfister2015flowing,zhou2016sparseness,pavlakos2017coarse,mehta2017vnect,zhao2018through}. In
 these methods, an intensity value is regressed for each pixel, giving
-a likely hood of the joint in that pixel.
+a likelyhood of the joint in that pixel.
 In~\cite{newell2016stacked}, a novel ``stacked hourglass'' network is
 proposed. This architecture gradually reduces and increases the
 spatial resolution while combining features from different
@@ -231,11 +309,10 @@ polarizations.
 
 \section{Human Body Reconstruction}
 
-
 Many human reconstruction methods estimate the geometry from one or
 more images. For
 example,~\cite{balan2007detailed,grest2005human,guan2009estimating}
-fit a model based on a single RGB or grey scale images. In particular,
+fit a model based on a single RGB or grey scale image. In particular,
 \cite{grest2005human} fit a skeleton model to the image by estimating
 the scale and pose of each body part
 separately. In~\cite{guan2009estimating}, they fit a shape model
@@ -247,7 +324,7 @@ optimisation step. A general shape fitting method for reconstruction
 is proposed in~\cite{chen2010inferring}, where two Gaussian models are
 used - one for shape and one for pose, by solving non-linear
 optimisation problems. The authors demonstrate this method on human
-bodies and sharks. In~\cite{jiang20103d}, a single image and
+bodies and sharks. In~\cite{jiang20103d}, a single image and its
 corresponding landmarks are used to lookup a similar human pose using
 a kd-tree, containing about 4 million examples. A method intended for
 multi-instance model fitting from a single image is described
@@ -257,8 +334,8 @@ Several methods aim to estimate the 3D geometry using only the
 landmarks extracted via human pose
 estimation~\cite{bogo2016smplify,ramakrishna2012reconstructing}. Particularly,
 SMPLify~\cite{bogo2016smplify} (which uses the SMPL
-model~\cite{loper2015smpl}), was extended to also include further
-guidance from an segmentation mask
+model~\cite{loper2015smpl}), which was extended to also include
+further guidance from an segmentation mask
 in~\cite{varol2017learning}. However, such an approach will never be
 able to capable of regressing finer details, unless information from
 the image is also captured.
@@ -343,8 +420,8 @@ input.
 
 In the past year or so, the Encoder-Decode network architecture has
 gained a great deal of popularity. This architecture reduces the
-spatial dimensionality of the feature as they are passed through the
-\textit{encoder}. These features are then upsampled again using a
+spatial dimensionality of the feature maps as they are passed through
+the \textit{encoder}. These features are then upsampled again using a
 \textit{decoder} part of the network, while being recombined with
 lower level information, much like in FCN~\cite{long2015fully}. This
 architecture has also been referred to as an hourglass network. This
@@ -401,7 +478,7 @@ face (such as eyes, lips, nose, etc) are assigned a pixel wise
 label. Deep learning based approaches to semantic segmentation,
 particularly the fully convolutional approach described in
 ~\cite{long2015fully}, have been heavily influential in our work on 3D
-reconstruction.
+reconstruction due to the spatial nature of our approach.
 
 % \begin{figure}
 %   \centering

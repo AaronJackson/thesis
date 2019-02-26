@@ -119,7 +119,7 @@ selected classes are background, skin, eyebrows, eyes, nose, upper
 lip, inner mouth and lower lip. While this results in straight edges
 between landmarks, the network can learn a mean boundary for each
 class. The output from the network will be actually smoother than the
-groundtruth. This process is illustrated in Fig.~\ref{fig:gtmasks}.
+groundtruth. This process is illustrated in Figure~\ref{fig:gtmasks}.
 
 \begin{figure}
 \centering
@@ -165,7 +165,7 @@ partial occlusion.
 \label{fig:proposed}
 \end{figure}
 
-We propose a CNN cascade (shown in Fig.~\ref{fig:proposed} and listed
+We propose a CNN cascade (shown in Figure~\ref{fig:proposed} and listed
 in Table~\ref{tab:archlist}) which performs landmark localisation
 followed by facial part segmentation. Our cascade was based on the
 VGG-FCN \cite{simonyan2014vgg,long2015fully} using Caffe
@@ -362,11 +362,11 @@ the proposed CNN cascade.
 To establish a baseline, an unguided fully convolutional network was
 firstly trained. This was done as described in the FCN paper
 \cite{long2015fully} and Section \ref{sec:proposed}. Some visual
-results can be seen in Fig.~\ref{fig:visual}. Additionally, a second
+results can be seen in Figure~\ref{fig:visual}. Additionally, a second
 baseline was obtained by simply connecting the landmarks of our facial
 landmark detection network also described in Section
 \ref{sec:proposed}. The performance of both baselines can be seen in
-Fig. \ref{fig:lan-vs-un}. We may observe that connecting the landmarks
+Figure~\ref{fig:lan-vs-un}. We may observe that connecting the landmarks
 appears to offer slightly better performance than FCN for part
 segmentation alone. Nevertheless, we need to emphasise that the
 groundtruth masks were obtained by connecting the landmarks and hence
@@ -389,7 +389,7 @@ network was trained to accept guidance from groundtruth landmarks. As
 described in Section~\ref{sec:proposed}, the guidance is provided in
 the form of landmarks encoded as 2D Gaussians. The performance
 difference between unguided and groundtruth guided part segmentation
-can be seen in Fig.~\ref{fig:gt-vs-un}. As we may observe the
+can be seen in Figure~\ref{fig:gt-vs-un}. As we may observe the
 difference in performance between the two methods is huge. These
 results are not surprising given that the groundtruth semantic masks
 are generated from the landmarks guiding the network. Furthermore,
@@ -431,8 +431,8 @@ Fig~\ref{fig:gt-vs-det}. Our main result is that performance of the
 guided by detected network is very close to the that of the guided by
 groundtruth illustrating that in practice accurate landmark
 localisation is not really required to guide segmentation. Some visual
-results can be seen in Fig.~\ref{fig:visual}. Also, performance over
-all components for all methods is given in Fig.~\ref{fig:all}.
+results can be seen in Figure~\ref{fig:visual}. Also, performance over
+all components for all methods is given in Figure~\ref{fig:all}.
 
 
 
