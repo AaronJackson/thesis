@@ -2,15 +2,15 @@
 \label{chapter:background}
 
 In this chapter, an introduction to deep learning the various 3D
-geometry representations. This chapter begins by giving an
-introduction to neural networks, including gradient descent and
-Convolutional Neural Networks (CNN). This is followed by some details
-about 3D volumes and their associated algorithms for voxelisation and
-surface extraction.
+geometry representations.  We begin by giving an introduction to
+deep learning, including gradient descent and Convolutional Neural
+Networks (CNN). This is followed by some details about 3D volumes and
+their associated algorithms for voxelisation and surface extraction.
 
 
-\section{Neural Networks}
+\section{Deep Learning}
 \label{sec:background:nn}
+
 
 \subsection{Gradient Descent}
 
@@ -84,22 +84,6 @@ may be added. As these networks have gradually increased in size, the
 term \textit{Deep Learning} has become popular. Networks of today may
 consist of several hundred convolutional layers, such as
 ResNet-152~\cite{he2015deep}.
-
-% \begin{tikzpicture}[scale=0.75]
-%     \draw[step=0.5,gray,thin,yslant=0.4] (0.5,0.5) grid (6,6);
-%     \node[above,yslant=0.4] at (3,7.2) {Input Image};
-%     \draw[step=1,red,thick,yslant=0.4,fill=orange]  (4,1) grid (7,4);
-%     \draw[yslant=0.4,dashed,red] (3,3.5) -- (4,4);
-%     \draw[yslant=0.4,dashed,red] (3,2) -- (4,1);
-%     \draw[yslant=0.4,dashed,red] (4.5,3.5) -- (7,4);
-%     \draw[yslant=0.4,dashed,red] (4.5,2) -- (7,1);
-
-%     \begin{scope}[shift={(8,0)}]
-%       \draw[step=0.5,gray,thin,yslant=0.4] (0.5,0.5) grid (6,6);
-%       \node[above,yslant=0.4] at (3,7.2) {Output Feature Map};
-%     \end{scope}
-
-%   \end{tikzpicture}
 
 \subsection{Batch Normalisation}
 
