@@ -4,25 +4,61 @@ The landscape of computer vision has shifted dramatically over the
 past decade. Prior to this, general purpose solutions to difficult
 problems had low success rates on unconstrained images. This is
 especially true for the primary focus of this thesis: 3D face
-reconstruction, which is to estimate the 3D geometry of a face from
-one or more images. The problem of 3D face reconstruction inherently
-demands reliability on ``in-the-wild'' images since, while there
-\textit{are} many applications, very few are able to accommodate such
-environmental constraints. These unconstrained images pose many
-difficult challenges, from large variations in pose and expression, to
-self occlusion and lighting variation.
+reconstruction. In this chapter...
 
-Applications of 3D face reconstruction span a wide range of areas. The
-more obvious examples being personalisation of computer games, or
-trying on accessories online, such as glasses. However, this area has
-many other applications, such as facial expression analysis for
-measuring emotional arousal, which can often be useful in
-psychological studies. Facial performance transfer is another
-potential application, widely used in creative industries, such as
-development of computer games and animated films where typically a
-large number facial point markers have to be attached to the actor's
-face. There are also medical applications, such as simulating the
-result of reconstructive surgery after an accident.
+% which is to estimate the 3D geometry of a face from
+% one or more images. The problem of 3D face reconstruction inherently
+% demands reliability on ``in-the-wild'' images since, while there
+% \textit{are} many applications, very few are able to accommodate such
+% environmental constraints. These unconstrained images pose many
+% difficult challenges, from large variations in pose and expression, to
+% self occlusion and lighting variation.
+
+% Applications of 3D face reconstruction span a wide range of areas. The
+% more obvious examples being personalisation of computer games, or
+% trying on accessories online, such as glasses. However, this area has
+% many other applications, such as facial expression analysis for
+% measuring emotional arousal, which can often be useful in
+% psychological studies. Facial performance transfer is another
+% potential application, widely used in creative industries, such as
+% development of computer games and animated films where typically a
+% large number facial point markers have to be attached to the actor's
+% face. There are also medical applications, such as simulating the
+% result of reconstructive surgery after an accident.
+
+\section{Problem}
+
+3D face reconstruction is the process of estimating the 3D geometry of
+a person's face, but what exactly do we even mean by geometry?
+Fundamentally, this geometry is a set of 3D vertices, connected by
+edges, which defines 3D surface. This is more generally referred to as
+a mesh. This mesh should capture the face's shape, expression and
+pose. In a perfect world, it should also capture finer details, such
+as facial hair, eye brows, eye lashes, wrinkles, spots, blemishes and
+anything else we as humans can see on person's face. Ideally, it
+should also capture facial accessories, such as glasses and jewellery.
+
+Well, even with the laser precision of commercial 3D scanners,
+satisfying all of these desires is currently impossible. What if, for
+example, the person is wearing glasses? The beam will become distorted
+or perhaps worse, blocked by the lenses, producing less than
+satisfactory results, where the glasses have become \textit{one} with
+the face. Despite this, 3D scanners are the go to solution when it
+comes to obtaining a high resolution facial scan. However, doing so
+comes with many limitations. Perhaps the worst limitation of all is
+that the person being scanned has to sit very still while the scan is
+being taken, surrounded by the machine that is taking the scan. This
+feels very similar to photography in the early 1800's. Mercury vapour
+aside - ``Stand still, please, there are five minutes to go until our
+photo is exposed!''
+
+
+% single image is the hardest kind.
+% what even is the geometry lol
+
+% occlusion, large pose, expression,
+
+\section{blah}
 
 In this introductory chapter, we will briefly discuss several general
 approaches to 3D face reconstruction, including their advantages and
