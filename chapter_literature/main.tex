@@ -2,6 +2,11 @@
 \label{chapter:literature}
 
 
+% TODO:
+% Joint 3d face reconstruction and dense alignment with position map regression network
+
+% Extreme 3D Face Reconstruction: Seeing Through Occlusions
+
 This section attempts to provide a comprehensive literature review of
 the works relevant to this thesis. This thesis focuses primarily on
 the 3D reconstruction of human faces, but includes an extension which
@@ -109,7 +114,7 @@ by iteratively minimising a cost function which evaluates the fitting.
 Constraining the pose, shape and (optionally) appearance into a small
 number of parameters has the undesirable side effect of being unable
 to capture finer details, such as wrinkles and
-bumps. In~\cite{tran2018extreme}, a CNN is used for 3DMM fitting,
+bumps. In~\cite{sela2017unrestricted}, a CNN is used for 3DMM fitting,
 followed by a refinement step which iteratively improves the finer
 details. However, during this iterative refinement, the correspondence
 between vertices, as well as the scale and spatial location of the
@@ -121,10 +126,10 @@ passes the image and a mean set of facial landmarks. These landmarks
 are gradually refined while learning a 3D to 2D mapping, which updates
 the 3D face shape. Unlike our own method (described in
 Chapter~\ref{chapter:face}),~\cite{liu2016joint} does not estimate the
-facial pose, and as such always produces a frontal
-reconstruction. In many cases, the pose is an important component, and
-as such, a separate method, likely based on the facial landmarks,
-would have to be used to find the transformation for the 3D model.
+facial pose, and as such always produces a frontal reconstruction. In
+many cases, the pose is an important component, and as such, a
+separate method, likely based on the facial landmarks, would have to
+be used to find the transformation for the 3D model.
 
 %%%%%%%%%%%%%%% 3DMM + Synthetic
 \subsection{Synthetic Training Data for 3DMM}
