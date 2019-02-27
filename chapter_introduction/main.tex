@@ -5,19 +5,27 @@ The landscape of computer vision has shifted dramatically over the
 past decade. Prior to this, general purpose solutions to difficult
 problems had low success rates on unconstrained images. This is
 especially true for the primary focus of this thesis: 3D face
-reconstruction. In this chapter...
+reconstruction. This chapter begins by giving an introduction to the
+problem of 3D face reconstruction. We attempt to justify the need for
+research into this area by highlighting many of the important
+applications, as well as the limitations of existing
+work. Additionally, this chapter attempts to explain where our own
+work on this problem fits into the area of 3D face
+reconstruction. Finally, we give an overview of the structure of this
+thesis.
 
 \section{Problem}
 
 3D face reconstruction is the process of estimating the 3D geometry of
 a person's face, but what exactly do we even mean by geometry?
 Fundamentally, this geometry is a set of 3D vertices, connected by
-edges, which defines a 3D surface. This is more generally referred to
-as a mesh. This mesh should capture the face's shape, expression and
-pose. In a perfect world, it should also capture finer details, such
-as facial hair, eye brows, eye lashes, wrinkles, spots, blemishes and
-anything else we as humans can see on person's face. Ideally, it
-should also capture facial accessories, such as glasses and jewellery.
+edges, which together defines a 3D surface. This is more generally
+referred to as a mesh. This mesh should capture the face's shape,
+expression and pose. In a perfect world, it should also capture finer
+details, such as facial hair, eye brows, eye lashes, wrinkles, spots,
+blemishes and anything else we as humans can see on person's
+face. Ideally, it should also capture facial accessories, such as
+glasses and jewellery.
 
 Well, even with the laser precision of commercial 3D scanners,
 satisfying all of these desires is currently impossible. What if, for
@@ -50,13 +58,14 @@ performance. There is also the potential for medical applications,
 such as simulating the result of reconstructive surgery after an
 accident.
 
-Inherently, these applications demand reliability under unconstrained
-environments. As such, there are a variety of approaches which attempt
-to perform 3D face reconstruction under more typical settings. The
-inputs to these methods vary widely, from sets of images in predefined
-poses and video, to reconstruction from a single unconstrained
-images. These classes of the reconstruction problem are explained in
-more detail in the following few paragraphs.
+Due to the nature of these applications, there is a clear demand for
+reliability under unconstrained environments, which regularly cannot
+be catered to by 3D scanning. As such, there are a variety of
+approaches which attempt to perform 3D face reconstruction under more
+typical settings. The inputs to these methods vary widely, from sets
+of images in predefined poses and video, to reconstruction from a
+single unconstrained images. These classes of the reconstruction
+problem are explained in more detail in the following few paragraphs.
 
 \begin{figure}
   \centering
@@ -69,21 +78,26 @@ more detail in the following few paragraphs.
 \end{figure}
 
 \paragraph{Reconstruction from video} is perhaps the most generous 3D
-face reconstruction problem when the abundance of data available to
-methods is considered. Under this setting, it is quite likely that any
-given method is using will exhibit a variety of poses, from which it
-can base its reconstruction upon. However, methods working with such
-data can still suffer from problems such as occlusion. A high
-performing method known as ``Total Moving Face
-Reconstruction''~\cite{suwajanakorn2014total} performs 3D face
-reconstruction from video. We shown an example of this method on a
-video in Figure~\ref{fig:total_moving}. In terms of detail, this
-method performs very well on a frame by frame basis. However, we can
-also see that this method does not \textit{actually} recover the full
-3D geometry, instead, focusing its attention solely on the frontal
-region of the face. While doing so, often cutting off the sides of the
-face - most notably on the average of the reconstruction, where a
-large part the chin is missing.
+face reconstruction problem due to the abundance of data available to
+methods. Under this setting, it is quite likely that any given method
+is using will exhibit a variety of poses, from which it can base its
+reconstruction upon. However, methods working with such data can still
+suffer from problems such as occlusion. A high performing method known
+as ``Total Moving Face Reconstruction''~\cite{suwajanakorn2014total}
+performs 3D face reconstruction from video. We shown an example of
+this method on a video in Figure~\ref{fig:total_moving}. In terms of
+detail, this method performs very well on a frame by frame
+basis. However, we can also see that this method does not
+\textit{actually} recover the full 3D geometry, instead, focusing its
+attention solely on the frontal region of the face. While doing so,
+often cutting off the sides of the face - most notably on the average
+of the reconstruction, where a large part the chin is
+missing. Finally, while the main goal really is to produce a high
+quality reconstruction on a per-frame basis, the method does not
+really produce a particularly refined result by combining the temporal
+information.
+
+
 
 \paragraph{Reconstruction from sets of images} has the potential to
 make the problem slightly more challenging than from a full video. One
@@ -95,7 +109,10 @@ case of reconstruction from multiple images though, only a single
 model is outputted, taking into account factors from the entire set of
 images. At first this may not sound like a big issue, but consider a
 set of images where only half the samples are exhibiting large smiles?
-Do you produce a smiling or neutral mesh?
+Do you produce a smiling or neutral mesh? Of course, many of the
+limitations of 3D scanners are shared by methods performing 3D face
+reconstruction from sets of images - obtaining a large collection of
+images can be just as disruptive as stepping into a 3D scanner.
 
 \begin{wrapfigure}{R}{0.35\textwidth}
   \includegraphics[width=0.3\textwidth,right]{img/unrestricted.png}
@@ -130,10 +147,13 @@ require correction from another method, or manual adjustment to bring
 the 3D geometry back into original space of the 2D image.
 
 Given the numerous applications of such a technology and the
-disadvantages of the preexisting methods, we feel there is a profound
-requirement for something more robust to the aforementioned challenges
-in this area, such as large pose, occlusion and large expressions. In
-this thesis we approach this problem using a single image.
+significant disadvantages of the preexisting methods, we feel there is
+a profound requirement for something more robust to the aforementioned
+challenges in this area. To summarise, these challenges include large
+pose (in many cases, even small pose), occlusion and expressions. In
+this thesis we approach this problem using a single image. We try to
+address how we fit into this challenging space in more detail in the
+next section.
 
 \section{Where do we fit in?}
 
@@ -245,8 +265,10 @@ The contributions of this thesis can be summarised as follows:
     such as wrinkles} in clothing.
 
 \item We release our code for 3D face reconstruction under the MIT
-  license, allowing our method to be used for both commercial and
-  personal purposes.
+  license, enabling our method to be used for both commercial and
+  personal purposes. In addition, we have provided a free online
+  service for automatic generation of 3D reconstructions from an
+  uploaded image.
 \end{itemize}
 
 \section{Outline}
