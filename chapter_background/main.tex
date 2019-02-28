@@ -1,3 +1,4 @@
+\graphicspath{{chapter_background/}}
 \chapter{Background}
 \label{chapter:background}
 
@@ -64,20 +65,40 @@ the averaging across several images.
 
 \subsection{Convolutional Neural Networks}
 
+\begin{figure}
+  \includegraphics[width=\linewidth]{img/convolution.pdf}
+  \caption[The 2D Convolution]{The output of a 2D convolution
+    operation on a $10 \times 10$ image with a $3 \times 3$ filter,
+    using zero padding of one pixel on the input to result in an
+    output of the same size.}
+  \label{fig:convolution}
+\end{figure}
+
+
 In the previous subsection, an overview of gradient descent was
 presented, where parameters $\theta$ were used to \textit{in some way}
-to apply a mapping from image to label. Such a function might be
+to apply a mapping from an input to a label. Such a function might be
 defined as simply as a linear function, $f(x;\theta) = \theta
-x$. Unfortunately, despite being appropriate in many areas, a linear
-function will struggle to map a non-linear problem, with is often the
-case with computer vision based applications. As such, convolutions
-are often used to both reduce the number of parameters, and to allow
-convenient and efficient stacking, allowing the network learn
-difficult mappings.
+x$. Unfortunately, despite being appropriate in many areas, a single
+linear function will struggle to map a non-linear problem, which is
+almost certainly the case with all computer vision based
+applications. As such, convolutions are often used to both reduce the
+number of parameters, and to allow convenient and efficient stacking,
+allowing the network to learn difficult mappings. These convolution
+operations perform a weighted sum of a window which moves across the
+input with a particular stride. We show a simple 2D convolution
+operation using a $3 \times 3$ filter in
+Figure~\ref{fig:convolution}. In this example, a one pixel padding has
+been added to the input to allow the size of the output to match the
+size of the input.
 
 Convolutional Neural Networks (CNNs) are constructed, typically, from
 stacks of convolutional filters, each followed by some form of
-transfer function. The tailing end of a CNN is often specific to each
+activation function. These activation functions discard unwanted
+information, making it easier for future layers to make use of the
+extracted features. A commonly used activation function is the
+Rectified Linear Unit (ReLU), which discards negative values, setting
+them to zero. The tailing end of a CNN is often specific to each
 application. For example, for a numerical regression task, linear
 layers may be added, and for segmentation, a $1\times 1$ convolution
 may be added. As these networks have gradually increased in size, the
