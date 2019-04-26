@@ -28,17 +28,21 @@ face. Ideally, it should also capture facial accessories, such as
 glasses and jewellery.
 
 Well, even with the laser precision of commercial 3D scanners,
-satisfying all of these desires is currently impossible. Despite this,
-3D scanners are the go to solution when it comes to obtaining a high
-resolution facial mesh. However, the use of such equipment comes with
-many limitations. Perhaps worst of all is that the person being
-scanned has to sit very still while the scan is being performed,
-surrounded by some large and intimidating machine. In fact, haven't we
-been here before? This all sounds very similar to photography in the
-early 1800's. Mercury vapour aside - ``Sir! Stand still, please! There
-is at least five more minutes until our photo has exposed!''
+satisfying all of these desires is currently impossible. What if, for
+example, the person is wearing glasses? The beam will become distorted
+or perhaps worse, blocked entirely by the lenses, producing less than
+satisfactory results or cases where the glasses appear to extrude from
+the face. Despite this, 3D scanners are the go to solution when it
+comes to obtaining a high resolution facial mesh. However, the use of
+such equipment comes with many limitations. Perhaps worst of all is
+that the person being scanned has to sit very still while the scan is
+being performed, surrounded by some large and intimidating machine. In
+fact, haven't we been here before? This all sounds very similar to
+photography in the early 1800's. Mercury vapour aside - ``Sir! Stand
+still, please! There is at least five more minutes until our photo has
+exposed!''
 
-Many applications of 3D face reconstruction cannot tolerate these
+Many tasks requiring such a mesh cannot tolerate these
 constraints. Such examples span a wide range of areas. The more
 obvious examples being personalisation of computer games, or trying on
 accessories online, such as glasses. However, this area has many other
@@ -60,94 +64,96 @@ be catered to by 3D scanning. As such, there are a variety of
 approaches which attempt to perform 3D face reconstruction under more
 typical settings. The inputs to these methods vary widely, from sets
 of images in predefined poses and video, to reconstruction from a
-single unconstrained image. Some of the difficulties which all 3D face
-reconstructions would \textit{like} to be able to address are
-discussed in detail the next paragraphs.
+single unconstrained images. These classes of the reconstruction
+problem are explained in more detail in the following few paragraphs.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{img/total_moving.png}
+  \caption[Example output from Total Moving Face Reconstruction
+  method]{Output from~\cite{suwajanakorn2014total}, ``Total Moving
+    Face Reconstruction'', on a frame by frame basis, with the average
+    of these reconstructions shown on the right.}
+  \label{fig:total_moving}
+\end{figure}
+
+\paragraph{Reconstruction from video} is perhaps the most generous 3D
+face reconstruction problem due to the abundance of data available to
+methods. Under this setting, it is quite likely that any given method
+is using will exhibit a variety of poses, from which it can base its
+reconstruction upon. However, methods working with such data can still
+suffer from problems such as occlusion. A high performing method known
+as ``Total Moving Face Reconstruction''~\cite{suwajanakorn2014total}
+performs 3D face reconstruction from video. We shown an example of
+this method on a video in Figure~\ref{fig:total_moving}. In terms of
+detail, this method performs very well on a frame by frame
+basis. However, we can also see that this method does not
+\textit{actually} recover the full 3D geometry, instead, focusing its
+attention solely on the frontal region of the face. While doing so,
+often cutting off the sides of the face - most notably on the average
+of the reconstruction, where a large part the chin is
+missing. Finally, while the main goal really is to produce a high
+quality reconstruction on a per-frame basis, the method does not
+really produce a particularly refined result by combining the temporal
+information.
 
 
-\paragraph{Occlusion.} In computer vision, occlusion refers to the
-visual obstruction of an object. In the case of faces, this could be
-due to any number of reasons, from nose scratching to accessory
-wearing and beyond. As humans, we can look past this occlusion. Faces
-do not suddenly stop being faces just because there's a hand in the
-way. We can also make assumptions about what the shape or appearance
-of a face might based on the information available with a high level
-of confidence. Unfortunately, this is much harder for a computer. We
-have to encode this information some how, and tie pieces together with
-knowledge, such as how faces are generally symmetric. An approach
-which deals with this problem quite well is to use a 3D Morphable
-Model (3DMM), which we'll discuss in much more detail later in this
-chapter.
 
-\paragraph{Large Pose} refers to any facial pose which defers too much
-from a frontal face, that is, a face which is looking directly at the
-camera. For many methods this is between $45^\circ - 90^\circ$, at
-which point a large portion of the face is self occluded. Many methods
-attempt to work around this problem by using multiple images from
-different views. This is referred to as multiview 3D face
-reconstruction and has its own set of problems which are discussed
-later in this section, other approaches are model based, and are
-therefore able to make a reliable assumption about the self occluded
-part of the face.
+\paragraph{Reconstruction from sets of images} has the potential to
+make the problem slightly more challenging than from a full video. One
+reason for this is that there is likely less variation in pose
+available. However, perhaps more importantly, with video, a 3D mesh
+can be provided on a per frame basis, in fact, this is expected from
+such a method. The facial expression can be refined over time. In the
+case of reconstruction from multiple images though, only a single
+model is outputted, taking into account factors from the entire set of
+images. At first this may not sound like a big issue, but consider a
+set of images where only half the samples are exhibiting large smiles?
+Do you produce a smiling or neutral mesh? Of course, many of the
+limitations of 3D scanners are shared by methods performing 3D face
+reconstruction from sets of images - obtaining a large collection of
+images can be just as disruptive as stepping into a 3D scanner.
 
-\paragraph{Illumination} can cause issues for many methods. For some
-methods, a perfectly illuminated face without any shadows is
-optimal. For other methods, such as those based on a
-Shape-from-Shading (SfS) approaches, having no shadows at all is
-equally as big a problem.
+\begin{wrapfigure}{R}{0.35\textwidth}
+  \includegraphics[width=0.3\textwidth,right]{img/unrestricted.png}
+  \caption[Example output from Unrestricted Facial Geometry
+  Reconstruction method]{An example of a reconstruction from a single,
+    frontal image generated by~\cite{sela2017unrestricted}.}
+  \label{fig:unrestricted}
+\end{wrapfigure}
 
-\paragraph{Facial Expression.} Some facial expressions are more
-challenging than others, a neutral expression typically being the
-easiest to model and often the most prevalent in facial scan
-datasets. Take smiling for instance, smiling result in large
-deformation of the 3D geometry around the mouth, but also to the sides
-of the nose and around the eyes. The extent of this deformation varies
-largely from person to person, making many facial expressions
-challenging and the relationship between areas of the face under
-different expressions difficult to model.
+\paragraph{Reconstruction from a single image} is the undoubtedly
+hardest of the three classes of 3D face reconstruction. This is due to
+the lack of information from multiple poses, requiring such approaches
+to hallucinate or guess a much larger amount of the face. We show in
+Figure~\ref{fig:unrestricted} an example result of 3D face
+reconstruction performed by~\cite{sela2017unrestricted}, a method
+which uses only a single image. This method is often considered state
+of the art. Clearly, the level of detail is good, but this is a
+completely frontal image with neutral expression. The authors
+of~\cite{sela2017unrestricted} state in their section titled
+``Limitations'' that images which deviate too much from what the
+method was trained on are challenging and result in errors in the
+reconstruction process. The authors also state that the method has
+difficulty handling cases of occlusion. These statements are supported
+by only frontal, non-occluded results being presented in the
+paper. Additionally, our own tests of this method have shown
+significant failure cases, to the point of the output not even
+resembling a face, under even very small pose variations. There is
+perhaps an even larger disadvantage of this method. During the detail
+extraction precedure of~\cite{sela2017unrestricted}, both pose, scale
+and position relative to the original image is discarded, which would
+require correction from another method, or manual adjustment to bring
+the 3D geometry back into original space of the 2D image.
 
-\paragraph{Detail} is difficult two main reasons. First, an approach
-which is capable of encoding a high level of detail is required. This
-is often challenging with model fitting based approaches because the
-input coefficients need to be constrained to a small number of input
-principal components which vary aspects such as shape, pose and
-rotation. This constraint usually leads to post-processing steps to
-extract the detail, which can correspondence between vertices which is
-usually present in a parametric model, as well as pose and scale
-information. Second, there needs to be some way to distinguish between
-what is actually \textit{detail}, such as wrinkles and spots which
-affect 3D shape versus what is noise, makeup (potentially tattoos),
-dirt or anything else affecting only textural information.
-
-\paragraph{Lab Conditions vs. In-the-Wild.} Due to the difficulties
-involved with using 3D scanning equipment, discussed earlier, facial
-scan datasets are always collected under lab conditions. This
-typically limits the amount of variation available across many
-aspects, for example lighting and illumination and background
-scenery. 3D face reconstruction methods which are then trained on such
-data may struggle to transfer their knowledge to what are known as
-``In-the-Wild'' images. Such images are very diverse compared to what
-may be available under constrained lab conditions.
-
-\paragraph{Single Image vs. Multiview or Video.} Methods capable of
-using or requiring multiple views or video often have a lot more
-information available to them. Parts of the face which are typically
-self occluded under the single image setting may be available to the
-method if multiple images are available. However, taking multiple
-images of fixed pose and expression is a problem in its own right, and
-it is therefore preferable use only a single image without having a
-detrimental effect on reconstruction performance.
-
-Our approach to 3D face reconstruction has proven resilient to many of
-the aforementioned challenges. We demonstrate good performance on
-occluded faces, show only a small reduction in performance for large
-poses and difficult facial expressions, work across challenging
-illumination on rendered datasets, and work on \textit{in-the-wild}
-images and use only a single image. In the case of detail, we
-demonstrate that our approach is capable of estimating the fine
-details in Chapter~\ref{chapter:human}, in which we demonstrate our
-method also working on human body reconstruction with high levels of
-detail.
+Given the numerous applications of such a technology and the
+significant disadvantages of the preexisting methods, we feel there is
+a profound requirement for something more robust to the aforementioned
+challenges in this area. To summarise, these challenges include large
+pose (in many cases, even small pose), occlusion and expressions. In
+this thesis we approach this problem using a single image. We try to
+address how we fit into this challenging space in more detail in the
+next section.
 
 \section{Where do we fit in?}
 
@@ -159,27 +165,26 @@ our own work fits in, along with why we feel this is important.
 
 % 3D Morphable Models
 \paragraph{3D Morphable Models (3DMM)} are perhaps the most popular
-approach to estimating facial 3D geometry. These methods use a vector
-of parameters for a pre-computed face
+approach to estimating facial 3D geometry. These methods regress
+parameters for a pre-computed face
 model~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint},
 which varies the shape, expression, pose and optionally textural
-information. We discuss 3DMM in more detail in
-Chapter~\ref{chapter:literature}. These methods are increasingly using
-Convolutional Neural Networks as a means to regress the parameters,
-and in general, work very reliably on \textit{normal} faces. However,
-3DMM based approaches gradually perform worse as factors such as pose
-and expression increase. We show in
-Section~\ref{chapter:face:sec:ablation} that our method has a very
-uniform and low error over all expressions, with only a small increase
-in error on large poses (such as around 80 degrees). Another
-disadvantage of 3DMM based approaches is that the 3DMM must be
-generated - this requires finding the dense correspondence between all
-vertices of all samples, which also becomes difficult as pose and
-expression changes. Finally, since these methods are model based, they
-are unable to directly produce finer details, such as wrinkles. In an
-extension to our own work, we show in Chapter~\ref{chapter:human}
-(where we perform 3D reconstruction of humans), that our method is
-able to directly regress fine details in clothing.
+information. These methods are increasingly using Convolutional Neural
+Networks as a means to regress the parameters, and in general, work
+very reliably on \textit{normal} faces. However, 3DMM based approaches
+gradually perform worse as factors such as pose and expression
+increase. We show in Section~\ref{chapter:face:sec:ablation} that our
+method has a very uniform and low error over all expressions, with
+only a small increase in error on large poses (such as around 80
+degrees). Another disadvantage of 3DMM based approaches is that the
+3DMM must be generated - this requires finding the dense
+correspondence between all vertices of all samples, which also becomes
+difficult as pose and expression changes. Finally, since these methods
+are modelled, they are unable to directly produce finer details, such
+as wrinkles. In an extension to our own work, we show
+in Chapter~\ref{chapter:human} (where we perform 3D reconstruction of humans),
+that our method is able to directly regress fine details in clothing.
+
 
 \paragraph{Multiview and Photogrammetry} based methods require
 multiple images from many different angles in order to estimate the 3D
@@ -197,16 +202,17 @@ method uses only a single RGB image, without any additional depth data
 \paragraph{Shape-from-Shading (SfS)} methods attempt to recover the 3D
 geometry by analysing the shading and reflectance of a face relative
 to a \textit{albedo} (mean) face. Similarly to 3DMM based methods, SfS
-methods often rely on a 3D model, inheriting many of the same
+methods also tend to rely on a 3D model, inheriting many of the same
 problems, such as finding a dense
 correspondence~\cite{suwajanakorn2014total,jiang20183d}. Additionally,
 many of these methods also require more than one image, which means
 SfS methods often also inherit the problems associated with multiview
 methods. Finally, more so than other methods, SfS methods struggle
-with lighting - over or under illuminated faces may produce poor
-results when compared to other methods. Our approach to 3D face
-reconstruction works under almost all kinds of lighting, and we show
-this on a challenging synthetic dataset.
+with lighting - in general, there \textit{has} to be shadows, so over
+or under illuminated faces may produce poor results when compared to
+other methods. Our approach to 3D face reconstruction works under
+almost all kinds of lighting, and we show this on a challenging
+synthetic dataset.
 
 \paragraph{Depth Estimation} is arguable more popular among problems
 such as room reconstruction, however, there are several methods which
@@ -217,30 +223,20 @@ biggest flaw of depth estimation based approaches is that only the
 visible parts can be reconstructed, unless other methods are employed
 afterwards (such as 3DMM, again, inheriting many of the aforementioned
 problems). While also working from a single image, our method is able
-to hallucinate the non-visible parts of the face, including, to a
+to hallucinate the non-visible parts of the face, including, to an a
 certain extent, those which have been self occluded without having to
 handle this cases on an individual basis.
 
-Given the numerous applications of such a technology and the
-significant disadvantages of the preexisting methods, we feel there is
-a profound requirement for something more robust to the aforementioned
-challenges in this area. In this thesis we approach the problem using
-a single image, and propose a new non-parametric approach to 3D face
-reconstruction which attempts to account for as many of these
-challenges as possible.
+Our method is unique - it doesn't fit into any of these categories. We
+present a new approach to 3D face reconstruction which attempts to
+account for as many of the challenges in 3D face reconstruction as
+possible.
 
 \section{Contributions}
 
 The contributions of this thesis can be summarised as follows:
 
 \begin{itemize}
-\item %
-  We propose an alternative representation for the 3D geometry which,
-  unlike $X, Y, Z$ vertices, can be directly regressed using a
-  Convolutional Neural Network (CNN). Our method is non-parametric and
-  does not use a shape model. This offers the advantage of being able
-  to regress detail without further post processing steps.
-
 \item % 3D face reconstruction
   We present a deeply learnt method for 3D face reconstruction, which
   can be trained directly in an end-to-end fashion. Our method
@@ -278,9 +274,13 @@ The contributions of this thesis can be summarised as follows:
 \section{Outline}
 
 In \textbf{Chapter~\ref{chapter:background}}, an introduction to the
-background material is provided, discussing volumetric representations
-and algorithms, such as voxelisation, surface extraction and some of
-the difficulties associated with volumetric representations.
+background material is provided. This includes a brief introduction to
+gradient descent based optimisation, an overview of Convolutional
+Neural Networks (CNNs) the problems batch normalisation attempts to
+solve. This background discussion then moves onto volumetric
+representations and algorithms, such as voxelisation, surface
+extraction and some of the difficulties associated with volumetric
+representations.
 
 \textbf{Chapter~\ref{chapter:literature}} gives an overview of related
 literature, starting with face alignment, which is often a
