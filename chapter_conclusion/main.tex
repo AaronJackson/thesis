@@ -91,6 +91,23 @@ to our method would be to optionally accept features from several
 previous frames. This would allow some temporal consistency to be
 established, hopefully constraining the face shape over time.
 
+\subsection{Performance and Speed}
+
+The performance of our 3D reconstruction method is limited by what
+makes it an effective method, the volumetric
+representation. Unfortunately, 3D volumes are generally quite
+large. The drawback of this is that it takes time to read and write
+them to disk, as well as apply transformations for data
+augmentation. However, there are perhaps several optimisations which
+could be made to improve this. Examples might include a network
+configuration which is using half precision floats, which would also
+allow the models to be saved in half precision floats, instead of
+converting them from bytes (which also takes time). There is plenty of
+room for performance improvements towards the way they are stored on
+disk - Run Length Encoding (RLE) could certainly be employed to
+compact the contiguous blocks of ones or zeros into something
+significantly faster to read.
+
 
 %%% Local Variables:
 %%% TeX-master: "../thesis"

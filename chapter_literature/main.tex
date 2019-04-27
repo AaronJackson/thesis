@@ -1,12 +1,6 @@
 \chapter{Literature Review}
 \label{chapter:literature}
 
-
-% TODO:
-% Joint 3d face reconstruction and dense alignment with position map regression network
-
-% Extreme 3D Face Reconstruction: Seeing Through Occlusions
-
 This section attempts to provide a comprehensive literature review of
 the works relevant to this thesis. This thesis focuses primarily on
 the 3D reconstruction of human faces, but includes an extension which
@@ -15,69 +9,8 @@ reconstruction of the face and body often depend on methods for first
 extracting landmarks. As such, an overview of literature relating to
 face alignment and human pose estimation is given in this literature
 review, providing some context for the works relating to 3D face and
-human body reconstruction. Additionally, some initial work on facial
-part segmentation turned out to be highly influential in our approach
-to the problem of face reconstruction. Hence, towards the end of this
-chapter, an overview of work relating to semantic segmentation and
-semantic part segmentation is provided.
+human body reconstruction.
 
-\section{Face Alignment}
-
-Face alignment the process of detecting or aligning a set of facial
-points to a facial image. Face alignment is a prerequisite to many 3D
-face reconstruction methods - in fact, methods such
-as~\cite{huber2016multiresolution} depend only on facial landmarks,
-discarding the image entirely. Our own methods optionally makes use of
-these landmarks to assist in the 3D reconstruction process. These are
-discussed in detail in Chapters~\ref{chapter:face} and~\ref{chapter:seg}.
-
-Until recently, the highest performing methods for face alignment were
-based on a cascaded regression approach. These methods estimate the
-location of facial landmarks by applying a sequence of
-regressors. Provided to these regressors is typically
-SIFT~\cite{lowe2004distinctive} and other hand selected
-features. These regressors are applied in a cascaded fashion where the
-input to regressor $k$ is the estimate from regressor $k-1$. More
-details of such approaches to face alignment can be found
-in~\cite{sanchez16,cao2014facewarehouse,xiongsupervised,zhu2015face,tzimiropoulos2015project}.
-
-The remainder of this section will focus on deep learning based
-approaches to face alignment. Deep convolutional networks have proven
-to be an excellent choice for this kind of problem. One of the primary
-reasons for this is due to the way global and local context can be
-incorporated to provide both accuracy and precision. A CNN casecade is
-presented in~\cite{sun2013deep} to directly produce the landmark
-locations. Similarly in~\cite{bulat2016two}, the authors propose a
-method for 3D face alignment by first detecting the 2D landmarks using
-heatmap regression. If desired, the process can be stopped
-here. Optionally, this stack of heatmaps is passed through a second
-network, this time for regression, accompanied by the original input
-image. The output of this second stage is 68 $(x, y, z)$ landmarks. A
-multitask approach is proposed in~\cite{zhang2014facial}, regressing
-the location of the facial landmarks while performing facial attribute
-classification.
-
-Many CNN based alignment methods estimate the facial landmarks by
-regressing a 2D Gaussian on top of each landmark
-location~\cite{bulat2016two,bulat2017far,mahpod2018facial,kowalski2017deep,merget2018robust}.
-This spatial approach is commonly referred to as heatmap
-regression. One such example is the extension to~\cite{bulat2016two}
-in~\cite{bulat2017far}, where the second regressor is replaced with a
-CNN producing a 3D heatmap representation. A similar heatmap based
-approach was used in a multi-stage approach described
-in~\cite{kowalski2017deep}, where the landmark detections are refined
-after each stage. Between each stage, the current landmark prediction
-and some generated features are passed again through the network. At
-the beginning of each stage, the inputs are transformed using the
-landmarks to make the problem less challenging.
-
-An indirect approach is discussed in~\cite{zhu2016face}, where a 3DMM
-is first fitted, from which 3D landmarks are taken. This work is
-discussed in further detail in
-Section~\ref{chap:literature:sec:face_recon} as it is performing 3D
-reconstruction, but for the purposes of face alignment. A similar idea
-is proposed in~\cite{jourabloo2016large}, where a dense 3D model is
-fit to the face first.
 
 \section{Face Reconstruction}
 \label{chap:literature:sec:face_recon}
@@ -131,20 +64,6 @@ many cases, the pose is an important component, and as such, a
 separate method, likely based on the facial landmarks, would have to
 be used to find the transformation for the 3D model.
 
-%%%%%%%%%%%%%%% 3DMM + Synthetic
-\subsection{Synthetic Training Data for 3DMM}
-The data required for training 3D reconstruction methods typically
-consists of an image with a corresponding 3D scan. Such pairs can be
-difficult to obtain. \cite{richardson20163d} alleviate this issue by
-generating synthetic training data, comprising of renderings of
-randomly generated 3DMM with the corresponding mesh. Faces are
-rendered under random lighting conditions and pose. An incremental
-fitting method is then used during inference. Synthetic data was also
-used for training a general purpose 3D reconstruction
-method~\cite{li2015joint}. Methods trained using synthetic training
-data often fail on real or ``in-the-wild'' images due to unrealistic
-renderings or constrained lighting.
-
 A partially synthetic approach to 3D face reconstruction (indirectly
 for face alignment) is proposed in~\cite{zhu2016face}. The method used
 a single CNN that is iteratively applied to estimate the model
@@ -159,6 +78,22 @@ rotating faces between $\{-90, 90\}$ degrees using groundtruth
 parameters for a frontal fitting. One of the byproducts of this work
 is a large dataset consisting of large pose synthetically rotated
 faces, each with a corresponding 3D mesh.
+
+%%%%%%%%%%%%%%% 3DMM + Synthetic
+\subsection{Synthetic Training Data for 3DMM}
+The data required for training 3D reconstruction methods typically
+consists of an image with a corresponding 3D scan. Such pairs can be
+difficult to obtain. \cite{richardson20163d} alleviate this issue by
+generating synthetic training data, comprising of renderings of
+randomly generated 3DMM with the corresponding mesh. Faces are
+rendered under random lighting conditions and pose. An incremental
+fitting method is then used during inference. Synthetic data was also
+used for training a general purpose 3D reconstruction
+method~\cite{li2015joint}. Methods trained using synthetic training
+data often fail on real or ``in-the-wild'' images due to unrealistic
+renderings or constrained lighting.
+
+
 
 %%%%%%%%%%%%%%% Shape from Shading
 \subsection{Shape from Shading}
@@ -227,7 +162,9 @@ improvement over~\cite{sun2011depth}.
 %%%%%%%%%%%%%%% Our Method
 \subsection{Where does our work fit in?}
 
-Our method for 3D face reconstruction, described in
+In this section on 3D face reconstruction we have discussed several
+different general approaches to reconstructing the shape of a person's
+face. However, our method for 3D face reconstruction, described in
 Chapter~\ref{chapter:face} is very different to the aforementioned
 methods. First, our method does not rely on a 3D shape model for
 either the pre-processing or ``fitting'' procedure, instead we rely on
@@ -240,75 +177,6 @@ any pose or scale information, and show potential for detailed
 reconstruction, demonstrated in Chapter~\ref{chapter:human} on human
 bodies.
 
-\section{Human Pose Estimation}
-
-While this thesis does not focus on pose estimation, in
-Chapter~\ref{chapter:human}, we present our method for 3D human body
-reconstruction as an extension to our 3D face reconstruction
-work. Human pose estimation is optionally used as guidance for this
-method in a similar fashion to face alignment being used as guidance
-to 3D face reconstruction.
-
-Modern approaches to estimating human pose are based on methods
-employing CNNs. These methods generally fall into one of two
-categories. The first is to directly regress the coordinates of the
-joints using an L2 (or similar) loss, see for
-example~\cite{li20143d,park20163d,tekin2016structured,tekin2016direct,zhou2016deep,chen2016synthesizing,ghezelghieh2016learning,toshev2014deeppose,tompson2014joint}. In
-particular,~\cite{park20163d} estimates the 3D pose by combining the
-2D predictions with image features. An autoencoder is employed
-in~\cite{tekin2016structured} to constrain pose to something
-plausible. Similarly,~\cite{zhou2016deep} have the same goal but
-achieve this by using a kinematic model. Synthetic training data is
-used for the full training procedure in~\cite{chen2016synthesizing},
-to ensure that the network is trained with accurate data. However,
-in~\cite{ghezelghieh2016learning}, they only augment their existing
-training set with synthetic data. ~\cite{toshev2014deeppose} propose
-an iterative method, in which images are first passed through an
-initalisation CNN. The output from this is then combined again with
-the input image and passed through a second CNN multiple times
-iteratively.  In~\cite{tompson2014joint}, a multi-resolution CNN is
-trained jointly with a Markov Random Field, helping to refine the
-prediction from the CNN by constraining pose. An iterative method is
-presented in~\cite{carreira2016human}. However,
-unlike~\cite{toshev2014deeppose}, which directly outputs the locations
-of the joints after each iteration,~\cite{carreira2016human} outputs a
-displacement vector for each joint. The displacement is applied and
-the points are \textit{rendered} to heatmaps, which fed into the
-network again for the next iteration. For the first iteration, a mean
-pose is provided to the network.
-
-The second approach to CNN based human pose estimation is to regress
-heatmaps, as done
-in~\cite{newell2016stacked,pfister2015flowing,zhou2016sparseness,pavlakos2017coarse,mehta2017vnect,zhao2018through}. In
-these methods, an intensity value is regressed for each pixel, giving
-a likelyhood of the joint in that pixel.
-In~\cite{newell2016stacked}, a novel ``stacked hourglass'' network is
-proposed. This architecture gradually reduces and increases the
-spatial resolution while combining features from different
-scales. Combining these features from different scales allows the
-network to produce better predictions as both global and local context
-is available to the last few layers of the network. A loss function is
-used between each hourglass, which allows the network to refine and
-reevaluate the pose as it passes through the network (similar to idea
-of iterative methods,
-e.g.~\cite{toshev2014deeppose,carreira2016human}). This architecture
-in particular, despite intended for human pose estimation, has
-strongly influenced our work on 3D reconstruction, discussed further
-in Chapters~\ref{chapter:face} and~\ref{chapter:human}. A 3D heatmap
-is regressed in~\cite{pavlakos2017coarse}, which is a similar idea to
-our own 3D reconstruction, but for pose, not geometry. A part based
-heatmap regression method is presented in~\cite{mehta2017vnect}.
-
-In~\cite{pfister2015flowing}, video is used
-instead of a single image. The method accepts an arbitrary number of
-neighbouring frames for each time $t$. Features between frames are
-combined using what they call ``Spatial Fusion Layers''. For each
-frame at time $t$, a pose heatmap. Optical flow is used from the
-neighbouring frames to time $t$ to refine the prediction at. Finally,
-in~\cite{zhao2018through}, the authors present their method for
-\textit{seeing through walls}, by using a standard CNN trained on 2D
-radio frequency heatmaps, for both horizontal and vertical
-polarizations.
 
 
 
@@ -364,195 +232,159 @@ directly regress the 3D structure using spatial convolutions using a
 CNN, via a volumetric representation from which the full 3D geometry
 can be recovered.
 
+\section{Landmark Detection}
 
-\section{Semantic Segmentation}
+Both face alignment and human pose estimation can be considered
+special cases of landmark detection. The work presented in this thesis
+optionally uses landmarks to guide our 3D reconstruction method, which
+offers a slight performance improvement, although really shows its
+effectiveness on difficult poses.
 
-Semantic segmentation is the process by which pixels of an image are
-labelled by the objects contained in the image. For example, all dogs
-may be labelled as red, while cats may be labelled as green. In order
-for this to work, context is required, both locally and
-globally. Global context tells us what is in the image and roughly
-where a particular object may be located. Local context then refines
-this global information, defining boundaries between classes with
-greater precision.
+\subsection{Face Alignment}
 
-Classical approaches to semantic segmentation involved first
-segmenting the image using statistical models, followed by
-individually classifying the segmented objects. See for
-example~\cite{arbelaez2012semantic,carreira2012semantic}, which use a
-Conditional Random Field (CRF) to separate the image. However, these
-methods generally struggle to adequately incorporate high and low
-level feature descriptors necessary for accurate segmentation and
-labelling.
+Face alignment the process of detecting a set of facial points to a
+facial image. Face alignment is a prerequisite to many 3D face
+reconstruction methods - in fact, methods such
+as~\cite{huber2016multiresolution} depend only on facial landmarks,
+discarding the image entirely. Our own methods optionally makes use of
+these landmarks to assist in the 3D reconstruction process. These are
+discussed in detail in Chapters~\ref{chapter:face}
+and~\ref{chapter:seg}.
 
-CNNs drastically changed the landscape of semantic segmentation. The
-first work producing satisfactory semantic segmentation was the Fully
-Convolutional Network (FCN) described in~\cite{long2015fully}, which
-is based on VGG-16~\cite{simonyan2014vgg}. In this work, information
-is forked from different layers throughout the network. Each fork is
-used to produce an intensity map for all known class (initially 59,
-targeted at the PASCAL VOC 2010
-dataset~\cite{everingham2010pascal}). Forks earlier on in the network
-provide very detailed but noisy predictions about the location of
-classes, where as the latter forks are have very little noise, but can
-only approximate the location of a class. A diagram of the structure
-of FCN is shown in Figure~\ref{fig:fcn}. FCN was not intended to be
-trained from scratch. Instead, training was initialised from the
-parameters of VGG-16, once the network had been trained on the
-ImageNet dataset~\cite{krizhevsky2012imagenet} for the task of
-classification. The parameters in the last few layers of the network
-were reshaped from linear layers into a $1\times 1$ convolution. An
-interesting side effect of which, is the ability for the network to
-accept inputs of arbitrary sizes. The size of the input no longer
-dictates the number of parameters in the linear layers. Due to its
-simplicity and (at the time) state of the art results, it is no
-surprise the ideas behind FCN have become the standard for modern
-semantic segmentation methods.
+Until recently, the highest performing methods for face alignment were
+based on a cascaded regression approach. These methods estimate the
+location of facial landmarks by applying a sequence of
+regressors. Provided to these regressors is typically
+SIFT~\cite{lowe2004distinctive} and other hand selected
+features. These regressors are applied in a cascaded fashion where the
+input to regressor $k$ is the estimate from regressor $k-1$. More
+details of such approaches to face alignment can be found
+in~\cite{sanchez16,cao2014facewarehouse,xiongsupervised,zhu2015face,tzimiropoulos2015project}.
 
-Still, one of the limitations of FCN is that the resolution of its
-predictions are quite low. As such, several methods have proposed
-extensions to FCN to compensate for this limitation. The most common
-addition has been to add a CRF to the output of the network, to
-provide further refinement. The work of \cite{chen2015semantic}
-first upsamples the predicted scores using bilinear interpolation
-and then refines the output by applying a dense CRF. The method of
-\cite{zheng2015conditional} performs recurrent end-to-end training of
-the FCN and the dense CRF. Finally, the work in \cite{noh2015learning}
-employs learnt deconvolution layers, as opposed to fixing the
-parameters with an interpolation filter (as in FCN). These filters
-learn to reconstruct the object's mask, in addition to upsampling its
-input.
+The remainder of this section will focus on deep learning based
+approaches to face alignment. Deep convolutional networks have proven
+to be an excellent choice for this kind of problem. One of the primary
+reasons for this is due to the way global and local context can be
+incorporated to provide both accuracy and precision. A CNN casecade is
+presented in~\cite{sun2013deep} to directly produce the landmark
+locations. Similarly in~\cite{bulat2016two}, the authors propose a
+method for 3D face alignment by first detecting the 2D landmarks using
+heatmap regression. If desired, the process can be stopped
+here. Optionally, this stack of heatmaps is passed through a second
+network, this time for regression, accompanied by the original input
+image. The output of this second stage is 68 $(x, y, z)$ landmarks. A
+multitask approach is proposed in~\cite{zhang2014facial}, regressing
+the location of the facial landmarks while performing facial attribute
+classification.
 
-In the past year or so, the Encoder-Decode network architecture has
-gained a great deal of popularity. This architecture reduces the
-spatial dimensionality of the feature maps as they are passed through
-the \textit{encoder}. These features are then upsampled again using a
-\textit{decoder} part of the network, while being recombined with
-lower level information, much like in FCN~\cite{long2015fully}. This
-architecture has also been referred to as an hourglass network. This
-name was first used in~\cite{newell2016stacked}, and performed human
-pose estimation with great precision. This level of precision is due
-to the being suited to combining features from the high and low parts
-of the network efficiently (i.e. combining both global and local
-context). As such, similar architectures have been used for semantic
-segmentation problems. For example,
-SegNet~\cite{badrinarayanan2017segnet} uses an Encoder-Decoder
-architecture to perform semantic segmentation on 11 classes for
-autonomous driving in real time.
+Many CNN based alignment methods estimate the facial landmarks by
+regressing a 2D Gaussian on top of each landmark
+location~\cite{bulat2016two,bulat2017far,mahpod2018facial,kowalski2017deep,merget2018robust}.
+This spatial approach is commonly referred to as heatmap
+regression. One such example is the extension to~\cite{bulat2016two}
+in~\cite{bulat2017far}, where the second regressor is replaced with a
+CNN producing a 3D heatmap representation. A similar heatmap based
+approach was used in a multi-stage approach described
+in~\cite{kowalski2017deep}, where the landmark detections are refined
+after each stage. Between each stage, the current landmark prediction
+and some generated features are passed again through the network. At
+the beginning of each stage, the inputs are transformed using the
+landmarks to make the problem less challenging.
 
-Architectures aside, a main drawback of this supervised approach to
-semantic segmentation is producing large quantities of detailed
-groundtruth semantic masks. There are several large datasets already
-available, such as PASCAL VOC~\cite{everingham2010pascal}, Microsoft
-COCO~\cite{lin2014microsoft} and
-Cityscapes~\cite{cordts2016cityscapes}. All of these datasets are
-fairly constrained in terms of the number of known
-classes. Respectively, these datasets have 59, 183 and 30 known
-classes. This is problematic when it comes to making semantic
-segmentation a viable tool for general semantic segmentation
-\textit{in-the-wild}. As such, numerous approaches have been devised
-to train these models in ways requiring less human
-intervention. In~\cite{richter2016playing}, hooks are added to
-visually detailed computer games, to allow automatic generation of
-instance aware semantic segmentation masks. A drawback of this is that
-most games are far from realistic enough to work on real images. As
-such, models trained on this data will also require domain adaptation
-- which is an entire research area in itself. In~\cite{bearman2016s},
-a weakly supervised approach is presented, where groundtruth semantic
-segmentation masks are avoided entirely. Instead, the method learns
-the semantic segmentation task from just a single point on each
-object.
+An indirect approach is discussed in~\cite{zhu2016face}, where a 3DMM
+is first fitted, from which 3D landmarks are taken. This work is
+discussed in further detail in
+Section~\ref{chap:literature:sec:face_recon} as it is performing 3D
+reconstruction, but for the purposes of face alignment. A similar idea
+is proposed in~\cite{jourabloo2016large}, where a dense 3D model is
+fit to the face first.
 
-Another approach is described in~\cite{hu2018learning}, where the
-training set is formed of images where all classes are annotated with
-bounding boxes. However, only some classes have groundtruth masks. The
-network is trained to produce both bounding boxes and semantic
-segmentation masks simultaneously by learning a mapping between the
-visual embedding from the bounding box feature extractors, to the
-semantic segmentation feature extractors. They refer to this approach
-as \textit{partially} supervised, as some groundtruth data is
-required. Additionally, the method has been shown to be able to
-segment up to 3000 classes - far higher than~\cite{long2015fully},
-which was trained on the 59 classes from VOC PASCAL
-2010~\cite{everingham2010pascal}.
+\subsection{Human Pose Estimation}
 
-The primary focus of this thesis is not semantic
-segmentation. However, in Chapter~\ref{chapter:seg}, we describe our
-method for facial part segmentation, in which each component of the
-face (such as eyes, lips, nose, etc) are assigned a pixel wise
-label. Deep learning based approaches to semantic segmentation,
-particularly the fully convolutional approach described in
-~\cite{long2015fully}, have been heavily influential in our work on 3D
-reconstruction due to the spatial nature of our approach.
+While this thesis does not focus on pose estimation, in
+Chapter~\ref{chapter:human}, we present our method for 3D human body
+reconstruction as an extension to our 3D face reconstruction
+work. Human pose estimation is optionally used as guidance for this
+method in a similar fashion to face alignment being used as guidance
+to 3D face reconstruction.
 
-% \begin{figure}
-%   \centering
-%   \begin{tikzpicture}[scale=0.9]
-%   \networkLayer{3.0}{0.48}{0}{0.0}{color=green!30}{96}
-%   \networkLayer{1.5}{1.28}{0.48}{0.0}{color=green!30}{256}
-%   \networkLayer{0.75}{1.92}{1.76}{0.0}{color=green!30}{384}
-%   \networkLayer{0.75}{1.92}{3.68}{0.0}{color=green!30}{384}
-%   \networkLayer{0.75}{1.28}{5.60}{0.0}{color=green!30}{256}
-%   \networkLayer{0.37}{2.05}{6.88}{0.0}{color=green!30}{4096}
-%   \networkLayer{0.37}{2.05}{8.93}{0.0}{color=green!30}{4096}
-%   \networkLayer{0.37}{0.5}{10.98}{0.0}{color=green!30}{1000}
-
-%   \networkLayer{0.75}{0.5}{12}{0.0}{color=red!30}{$\times 2$}
-%   \networkLayer{1.5}{0.5}{13}{0.0}{color=red!30}{$\times 2$}
-%   \networkLayer{3}{0.5}{14.5}{0.0}{color=red!30}{$\times 2$}
-
-%   \draw [>->] (1.92,1.75) -- (1.92,2.5) -- (13.5,2.5);
-%   \draw [>->] (6.88,1) -- (6.88,1.25) -- (12.5,1.25);
-
-%   \draw (13.5,3) circle [radius=0.3] node {$+$};
-%   \draw (12.5,1.75) circle [radius=0.3] node {$+$};
-% \end{tikzpicture}
-% \caption[The VGG-16 network]{Basic VGG-16~\cite{simonyan2014vgg}
-%   network with modifications added from
-%   FCN~\cite{long2015fully}. Information from lower levels of the
-%   network summed to upsampled output of the tailing end of the
-%   network. The number of features is shown below each convolution.}
-% \label{fig:background:fcn}
-% \end{figure}
-
-\subsection{Part Segmentation}
-
-There have been also a few works that
-extend semantic segmentation to part segmentation with perhaps the
-most well-known being the Shape Boltzman Machine
-\cite{eslami2012generative,eslami2014shape}. This work has been
-recently extended to incorporate CNN refined by CRF features (as in
-\cite{chen2015semantic}) in \cite{tsogkas2015deep}. Note that this
-work aims to refine the CNN output by applying a Restricted Boltzmann
-Machine on top of it and does not make use of pose information as
-provided by landmarks. In contrast, we propose an enhanced CNN
-architecture which is landmark-guided, can be trained end-to-end and
-yields large performance improvement without the need of further
-refinement.
+Modern approaches to estimating human pose are based on methods
+employing CNNs. These methods generally fall into one of two
+categories. The first is to directly regress the coordinates of the
+joints using an L2 (or similar) loss, see for
+example~\cite{li20143d,park20163d,tekin2016structured,tekin2016direct,zhou2016deep,chen2016synthesizing,ghezelghieh2016learning,toshev2014deeppose,tompson2014joint}. In
+particular,~\cite{park20163d} estimates the 3D pose by combining the
+2D predictions with image features. An autoencoder is employed
+in~\cite{tekin2016structured} to constrain pose to something
+plausible. Similarly,~\cite{zhou2016deep} have the same goal but
+achieve this by using a kinematic model. Synthetic training data is
+used for the full training procedure in~\cite{chen2016synthesizing},
+to ensure that the network is trained with accurate data. However,
+in~\cite{ghezelghieh2016learning}, they only augment their existing
+training set with synthetic data. ~\cite{toshev2014deeppose} propose
+an iterative method, in which images are first passed through an
+initalisation CNN. The output from this is then combined again with
+the input image and passed through a second CNN multiple times
+iteratively.  In~\cite{tompson2014joint}, a multi-resolution CNN is
+trained jointly with a Markov Random Field, helping to refine the
+prediction from the CNN by constraining pose. An iterative method is
+presented in~\cite{carreira2016human}. However,
+unlike~\cite{toshev2014deeppose}, which directly outputs the locations
+of the joints after each iteration,~\cite{carreira2016human} outputs a
+displacement vector for each joint. The displacement is applied and
+the points are \textit{rendered} to heatmaps, which fed into the
+network again for the next iteration. For the first iteration, a mean
+pose is provided to the network.
 
 
-\subsection{Facial Part Segmentation}
+The second approach to CNN based human pose estimation is to regress
+heatmaps, as done
+in~\cite{newell2016stacked,pfister2015flowing,zhou2016sparseness,pavlakos2017coarse,mehta2017vnect,zhao2018through}. In
+these methods, an intensity value is regressed for each pixel, giving
+a likelyhood of the joint in that pixel.  In~\cite{newell2016stacked},
+a novel ``Stacked Hourglass'' network is proposed.  This architecture
+in particular, despite being intended for human pose estimation, has
+strongly influenced our work on 3D reconstruction, which is discussed
+further in Chapters~\ref{chapter:face} and~\ref{chapter:human}, as
+such the remainder of this paragraph will be dedicated solely to this
+idea. Ignoring the stacking aspect for just a moment, the
+``hourglass'' architecture, also called an Encoder-Decoder network,
+gradually reduces and increases the spatial resolution while combining
+features from different scales. Combining these features from
+different scales allows the network to produce better predictions as
+both global and local context is available to the last few layers of
+the network. Stacking these hourglass modules together with a loss
+function between each one allows the network to refine and reevaluate
+the pose as it passes through the network. This is a similar idea to
+the iterative methods described in
+~\cite{toshev2014deeppose,carreira2016human}. In the case
+of~\cite{newell2016stacked}, the loss function used for human pose
+estimation is Mean Squared Error (MSE):
+  \begin{equation} \text{MSE} = \frac{1}{n} \sum^n_{i=1} (Y_i -
+\hat{Y}_i)^2,
+  \end{equation} which as the name suggests takes the mean of the
+squared error between elements of $Y$ and $\hat{Y}$. For their
+experiments, performance is measured for several configurations of
+stacking, 2, 4 or 8 hourglasses. In each case reducing the number of
+residual modules to compensate for parameter count. The performance
+between each configuration after the last layer is fairly close, but
+the 8 hourglass configuration beats the 4 hourglass configuration,
+which incidentally also beats the two hourglass configuration.
 
-One of the first face segmentation methods
-prior to deep learning is known as LabelFaces
-\cite{warrell2009labelfaces} which is based on patch classification
-and further refinement via a hierarchical face model. Another
-hierarchical approach to face segmentation based on Restricted
-Boltzmann Machines was proposed in \cite{luo2012hierarchical}. More
-recently, a multi-objective CNN has been shown to perform well for the
-task of face segmentation in \cite{liu2015multi}. The method is based
-on a CRF the unary and pairwise potentials of which are learnt via a
-CNN. Softmax loss is used for the segmentation masks, and a logistic
-loss is used to learn the edges. Additionally, the network makes use
-of a non-parametric segmentation prior which is obtained as follows:
-first facial landmarks on the test image are detected and then all
-training images with most similar shapes are used to calculate an
-average segmentation mask. This mask is finally used to augment
-RGB. This segmentation mask might be blurry, does not encode pose
-information and results in little performance improvement.
 
-
-
+A 3D heatmap is regressed in~\cite{pavlakos2017coarse}, which is a
+similar idea to our own 3D reconstruction, but for pose, not
+geometry. A part based heatmap regression method is presented
+in~\cite{mehta2017vnect}. In~\cite{pfister2015flowing}, video is used
+instead of a single image. The method accepts an arbitrary number of
+neighbouring frames for each time $t$. Features between frames are
+combined using what they call ``Spatial Fusion Layers''. For each
+frame at time $t$, a pose heatmap. Optical flow is used from the
+neighbouring frames to time $t$ to refine the prediction at. Finally,
+in~\cite{zhao2018through}, the authors present their method for
+\textit{seeing through walls}, by using a standard CNN trained on 2D
+radio frequency heatmaps, for both horizontal and vertical
+polarizations.
 
 
 

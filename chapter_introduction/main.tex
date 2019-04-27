@@ -106,18 +106,19 @@ largely from person to person, making many facial expressions
 challenging and the relationship between areas of the face under
 different expressions difficult to model.
 
-\paragraph{Detail} is difficult two main reasons. First, an approach
-which is capable of encoding a high level of detail is required. This
-is often challenging with model fitting based approaches because the
-input coefficients need to be constrained to a small number of input
-principal components which vary aspects such as shape, pose and
-rotation. This constraint usually leads to post-processing steps to
-extract the detail, which can correspondence between vertices which is
-usually present in a parametric model, as well as pose and scale
-information. Second, there needs to be some way to distinguish between
-what is actually \textit{detail}, such as wrinkles and spots which
-affect 3D shape versus what is noise, makeup (potentially tattoos),
-dirt or anything else affecting only textural information.
+\paragraph{Detail} is difficult for two main reasons. First, an
+approach which is capable of encoding a high level of detail is
+required. This is often challenging with model fitting based
+approaches because the input coefficients need to be constrained to a
+small number of input principal components which vary aspects such as
+shape, pose and rotation. This constraint usually leads to
+post-processing steps to extract the detail, which can correspondence
+between vertices which is usually present in a parametric model, as
+well as pose and scale information. Second, there needs to be some way
+to distinguish between what is actually \textit{detail}, such as
+wrinkles and spots which affect 3D shape versus what is noise, makeup
+(potentially tattoos), dirt or anything else affecting only textural
+information.
 
 \paragraph{Lab Conditions vs. In-the-Wild.} Due to the difficulties
 involved with using 3D scanning equipment, discussed earlier, facial
@@ -289,14 +290,6 @@ discussion of the various existing 3D face reconstruction is
 given. The remainder of this chapter gives an overview of human pose
 estimation, human body reconstruction and semantic part segmentation.
 
-Our first work, focusing on landmark guided semantic part segmentation
-of the human face is described in
-\textbf{Chapter~\ref{chapter:seg}}. It is important to mention here
-that this thesis does not focus on semantic segmentation, but this
-work \textit{heavily} influenced our approach to the problem of 3D
-reconstruction, since our method shifts the 3D reconstruction problem
-into a volumetric segmentation problem.
-
 \textbf{Chapter~\ref{chapter:face}} is the primary focus of our
 thesis. This chapter describes our approach to 3D face reconstruction,
 which includes details about the datasets uses, the volumetric
@@ -311,6 +304,14 @@ An extension to our work on 3D face reconstruction is described in
 can be applied to on another category of deformable objects: the full
 human body. We carry out experiments on two datasets, showing that our
 approach can handle both difficult poses and finer details.
+
+Our first work, focusing on landmark guided semantic part segmentation
+of the human face is described in
+\textbf{Chapter~\ref{chapter:seg}}. It is important to mention here
+that this thesis does not focus on semantic segmentation, but this
+work \textit{heavily} influenced our approach to the problem of 3D
+reconstruction, since our method shifts the 3D reconstruction problem
+into a volumetric segmentation problem.
 
 Finally, we conclude with a reflection and discussion of our work,
 what impact it may have had and the numerous areas worthy of attention
