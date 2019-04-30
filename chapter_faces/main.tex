@@ -64,10 +64,10 @@ and facial expressions.
 \section{Introduction}
 3D face reconstruction is the problem of recovering the 3D facial
 geometry from 2D images. Despite many years of research, it is still
-an open problem in Vision and Graphics research. Depending on the
-setting and the assumptions made, there are many variations of it as
-well as a multitude of approaches to solve it. This work is on 3D face
-reconstruction using only a single image. Under this setting, the
+an open problem in Computer Vision and Graphics research. Depending on
+the setting and the assumptions made, there are many variations of it,
+as well as a multitude of approaches to solve it. This work is on 3D
+face reconstruction using only a single image. Under this setting, the
 problem is considered far from being solved. In this chapter, we
 propose to approach it, for the first time to the best of our
 knowledge, by directly learning a mapping from pixels to 3D
@@ -75,13 +75,13 @@ coordinates using a Convolutional Neural Network (CNN). Besides its
 simplicity, our approach works with totally unconstrained images
 downloaded from the web, including facial images of arbitrary poses,
 facial expressions and occlusions, as shown in
-Figure~\ref{c:face:fig:preview}. \newline \textbf{Motivation.} No matter what
-the underlying assumptions are, what the input(s) and output(s) to the
-algorithm are, 3D face reconstruction requires in general complex
-pipelines and solving non-convex difficult optimization problems for
-both model building (during training) and model fitting (during
-testing). In the following paragraph, we provide examples from 5
-predominant approaches:
+Figure~\ref{c:face:fig:preview}. \newline \textbf{Motivation.} No
+matter what the underlying assumptions are, what the input(s) and
+output(s) to the algorithm are, 3D face reconstruction requires in
+general complex pipelines and solving non-convex difficult
+optimization problems for both model building (during training) and
+model fitting (during testing). In the following paragraphs, we provide
+examples from 5 predominant approaches:
 
 \begin{enumerate}
 \item In the 3D Morphable Model (3DMM) \cite{blanz1999morphable,
@@ -207,7 +207,7 @@ method~\cite{zhu2016face} in Section~\ref{S:Results}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.7\linewidth]{img/discretisation.pdf}
+  \includegraphics[width=0.9\linewidth]{img/discretisation.pdf}
   \caption[Dataset voxelisation procedure]{The voxelisation process
     creates a volumetric representation of the 3D face mesh, aligned
     with the 2D image.}
@@ -243,7 +243,7 @@ described in the next subsection.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.75\linewidth]{curves/voxerror.eps}
+  \includegraphics[width=0.9\linewidth]{curves/voxerror.eps}
   \caption[Error due to voxelisation]{The error introduced due to
     voxelisation, shown as a function of volume density.}
   \label{fig:voxerror}
@@ -389,12 +389,12 @@ applied in-plane rotation $r\in[-45^{\circ}, ..., 45^{\circ}]$,
 translation $t_z,t_y\in[-15,...,15]$ and scale $s\in [0.85,...,1.15]$
 jitter. In 20\% of cases, the input and target were flipped
 horizontally. Finally, the input samples were adjusted with some
-colour scaling on each RGB channel. % selected uniformly
+colour scaling on each RGB channel selected uniformly
 $c_r,c_g,c_b \in \{0.6,...,1.4\}$.
 
 In the case of the \textit{VRN - Guided}, the landmark detection
 module was trained to regress Gaussians with standard deviation of
-approximately 3 pixels ($\sigma = 1$). %We noticed near negligible
+approximately 3 pixels ($\sigma = 1$). We noticed near negligible
 reduction in 3D reconstruction performance when training with
 different standard deviations.
 
@@ -421,7 +421,9 @@ different standard deviations.
   \caption[NME performance on AFLW2000-3D images]{NME-based
     performance on in-the-wild ALFW2000-3D dataset. The proposed
     \textit{Volumetric Regression Networks}, and EOS and 3DDFA are
-    compared.}
+    compared. Please note that ``VRN - without allignment'' refers to
+    a VRN where a frontal face is always regressed, regardless of
+    input pose, discussed in Section~\ref{sec:spatialimportance}.}
   \label{roc:aflw2000}
 \end{figure}
 
@@ -478,15 +480,26 @@ two state-of-the-art methods, namely 3DDFA \cite{zhu2016face} and EOS
 \cite{huber2016multiresolution}. Both methods perform 3DMM
 fitting (3DDFA uses a CNN), a process completely bypassed by \textit{VRN}.
 
+% Don't really think this figure demonstrates what we want it to.
+% \begin{figure}
+%   \centering
+%   \begin{tabular}{m{3cm}m{11cm}}
+%     Image        & \includegraphics[width=11cm]{img/comparison_r1.png} \\
+%     VRN          & \includegraphics[width=11cm]{img/comparison_r3.png} \\
+%     VRN - Guided & \includegraphics[width=11cm]{img/comparison_r3.png} \\
+%   \end{tabular}
+% \end{figure}
 
 Our results can be found in Table~\ref{tab:overview} and
 Figures~\ref{roc:aflw2000},~\ref{roc:bu4dfe} and~\ref{roc:florence}.
 Visual results of the proposed \textit{VRN - Guided} on some very
 challenging images from AFLW2000-3D can be seen in
-Figure~\ref{fig:aflw2000res}. Examples of failure cases along with a
-visual comparison between \textit{VRN} and \textit{VRN - Guided} can
-be found in the supplementary material. From these results, we can
-conclude the following:
+Figure~\ref{fig:aflw2000res}. We show some failure cases in
+Figure~\ref{fig:facefailure} where the images are very different to
+what has been seen during training time. Finally, we show some example
+results from some frames in the 300-VW~\cite{sagonas2013300} video
+dataset in Figure~\ref{fig:face300vw}. From all of these results, we
+can conclude the following:
 \begin{enumerate}
 \item Volumetric Regression Networks largely outperform 3DDFA and EOS
   on all datasets, verifying that directly regressing the 3D facial
@@ -507,6 +520,34 @@ conclude the following:
 
 \noindent Details about our experiments are given in the proceeding subsections.
 
+\begin{figure}
+  \centering
+\includegraphics[width=3.4cm]{img/failures/image00400_img.png}
+\includegraphics[width=3.4cm]{img/failures/image00400_vol.png} \hspace{2mm}
+\includegraphics[width=3.4cm]{img/failures/image00782_img.png}
+\includegraphics[width=3.4cm]{img/failures/image00782_vol.png}  \\ [0.5mm]
+\includegraphics[width=3.4cm]{img/failures/image00795_img.png}
+\includegraphics[width=3.4cm]{img/failures/image00795_vol.png} \hspace{2mm}
+\includegraphics[width=3.4cm]{img/failures/image01038_img.png}
+\includegraphics[width=3.4cm]{img/failures/image01038_vol.png}  \\ [0.5mm]
+\includegraphics[width=3.4cm]{img/failures/image01624_img.png}
+\includegraphics[width=3.4cm]{img/failures/image01624_vol.png} \hspace{2mm}
+\includegraphics[width=3.4cm]{img/failures/image02026_img.png}
+\includegraphics[width=3.4cm]{img/failures/image02026_vol.png}
+\caption[Some very difficult failure cases]{Some failure cases on
+  AFLW2000 from our \textit{VRN - Guided} network. In general, these
+  images are poses which are not seen in the training set.}
+\label{fig:facefailure}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\linewidth]{img/300vw.png}
+  \caption[Visual results on the 300VW dataset]{Some example results
+    from frames of the 300VW dataset.}
+  \label{fig:face300vw}
+\end{figure}
+
 \subsection{Datasets}
 
 We used three different datasets for quantifying the performance of
@@ -522,13 +563,14 @@ experiments on the AFLW2000-3D~\cite{zhu2016face} dataset which
 contains 3D facial meshes for the first 2000 images from AFLW
 \cite{aflw2011}.
 
-\paragraph{(b) BU-4DFE} We also conducted experiments
-on rendered images from BU-4DFE~\cite{yin2008high}. We rendered each
-participant for both Happy and Surprised expressions with three
-different pitch rotations between $-20$ and $20$ degrees. For each
-pitch, seven roll rotations from $-80$ to $80$ degrees were also
-rendered. Large variations in lighting direction and colour were added
-randomly to make the images more challenging.
+\paragraph{(b) BU-4DFE} We also conducted experiments on rendered
+images from BU-4DFE~\cite{yin2008high}. We rendered each participant
+for both Happy and Surprised expressions with three different pitch
+rotations between $-20$ and $20$ degrees. For each pitch, seven roll
+rotations from $-80$ to $80$ degrees were also rendered. Large
+variations in lighting direction and colour were added randomly to
+make the images more challenging. We show some example renderings in
+the first row (a) of Figure~\ref{fig:example_renderings}.
 
 \paragraph{(c) Florence}
 Finally, we conducted experiments on rendered images from the
@@ -536,7 +578,16 @@ Florence~\cite{masi2d3dFaceData} dataset. Facial images were rendered
 in a similar fashion to the ones of BU-4DFE but for slightly different
 parameters: Each face is rendered in 20 difference poses, using a
 pitch of -15, 20 or 25 degrees and each of the five evenly spaced
-rotations between -80 and 80.
+rotations between -80 and 80. We show some example renderings in the
+second (b) row of Figure~\ref{fig:example_renderings}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\linewidth]{img/rendering_examples.pdf}
+  \caption[Example BU-4DFE and Florence renderings]{Example renderings
+    from the BU-4DFE \textbf{(a)} and Florence \textbf{(b)}.}
+  \label{fig:example_renderings}
+\end{figure}
 
 \subsubsection{Error metric} To measure the accuracy of reconstruction for
 each face, we used the Normalised Mean Error (NME) defined as the
@@ -556,7 +607,7 @@ establish the correspondence, i.e. the rigid alignment was not
 used. If the rigid alignment is used, we found that, for all methods,
 the error decreases but it turns out that the relative difference in
 performance remains the same. For completeness, we included these
-results in the supplementary material.
+results in Section~\ref{sec:faceicpres}.
 
 \subsubsection{Comparison with state-of-the-art}
 We compared against state-of-the-art 3D reconstruction methods for
@@ -570,28 +621,101 @@ landmark detection was trained for this purpose. Our tests were
 performed using v0.12 of EOS.
 
 
+\subsection{Results with ICP Alignment}
+\label{sec:faceicpres}
+
+We present results where ICP has been used not only to find the
+correspondence between the groundtruth and predicted vertices, but
+also to remove the rigid transformation between them. We find that
+this offers a marginal improvement to all methods. However, the
+relative performance remains mostly the same between each
+method. Results on AFLW2000~\cite{zhu2016face},
+BU4DFE~\cite{yin2008high} and Florence~\cite{masi2d3dFaceData} can be
+seen in Figs.~\ref{roc:aflw2000icp},~\ref{roc:bu4dfeicp}
+and~\ref{roc:florenceicp} respectively. Numeric results can be found
+in Table~\ref{tab:overviewicp}.
+
+\begin{table}
+  \caption[Numerical performance of 3D face reconstruction with
+  ICP]{Reconstruction accuracy on AFLW2000-3D, BU4DFE and Florence in
+    terms of NME where ICP has been used to remove the rigid
+    transformation. Lower is better. }
+  \label{tab:overviewicp}
+  \centering\vspace{1mm}
+  \small
+\begin{tabular}{|l||c|c|c|}
+  \hline
+  \textbf{Method}   & \textbf{AFLW2000} & \textbf{BU4DFE} & \textbf{Florence} \\
+  \hline\hline
+  VRN               & 0.0605 & 0.0514 & 0.0470   \\
+  VRN - Multitask   &   0.0625    & 0.0533     & 0.0439        \\
+  VRN - Guided      & \textbf{0.0543} & \textbf{0.0471} & \textbf{0.0429}   \\
+
+\hline
+  3DDFA~\cite{zhu2016face}             & 0.1012 & 0.1144 & 0.0784   \\
+  EOS~\cite{huber2016multiresolution}  & 0.0890 & 0.1456 & 0.1200   \\
+  \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{curves-icp/aflw.eps}
+  \caption[NME performance on AFLW2000-3D with ICP
+  Alignment]{NME-based performance on the in-the-wild AFLW2000-3D
+    dataset, where ICP has been used to remove the rigid
+    transformation. The proposed \textit{Volumetric Regression
+      Networks}, and EOS and 3DDFA are compared.}
+  \label{roc:aflw2000icp}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{curves-icp/bu4dfe.eps}
+  \caption[NME performance on BU4DFE with ICP Alignment]{NME-based
+    performance on our large pose and expression renderings of the
+    BU4DFE dataset, where ICP has been used to remove the rigid
+    transformation. The proposed \textit{Volumetric Regression
+      Networks}, and EOS and 3DDFA are compared.}
+  \label{roc:bu4dfeicp}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{curves-icp/florence.eps}
+  \caption[NME performance on Florence with ICP Alignment]{NME-based
+    performance on our large pose renderings of the Florence dataset,
+    where ICP has been used to remove the rigid transformation. The
+    proposed \textit{Volumetric Regression Networks}, and EOS and
+    3DDFA are compared.}
+  \label{roc:florenceicp}
+\end{figure}
+
+
 \section{Importance of spatial alignment}
 \label{sec:spatialimportance}
 
 The 3D reconstruction method described in~\cite{choy20163d} regresses
 a 3D volume of fixed orientation from one or more images using an
 LSTM. This is different to our approach of taking a single image and
-regressing a spatially aligned volume, which we believe is easier to
-learn. To explore what the repercussions of ignoring spatial alignment
-are, we trained a variant of \textit{VRN} which regresses a frontal
-version of the face, i.e. a face of fixed orientation as in
-~\cite{choy20163d}. We also attempted to train a network using the
-code from~\cite{choy20163d} on downsampled versions of our own
+regressing a spatially aligned volume, which we believe is easier
+mapping to learn. To explore what the repercussions of ignoring
+spatial alignment are, we trained a variant of \textit{VRN} which
+regresses a frontal version of the face, i.e. a face of fixed
+orientation, regardless of input pose, as in ~\cite{choy20163d}. We
+also attempted to train a network using the code
+from~\cite{choy20163d} on downsampled versions of our own
 volumes. Unfortunately, we were unable to get the network to learn
 anything.
 
-Although this network produces a reasonable face, it can only capture
-diminished expression, and the shape for all faces appears to remain
-almost identical. This is very noticeable in
-Figure~\ref{fig:frontal_visual}. Numeric comparison is shown in
-Figure~\ref{roc:aflw2000}, as \textit{VRN without alignment}. We
-believe that this further confirms that spatial alignment is of
-paramount importance when performing 3D reconstruction in this way.
+Although \textit{VRN - without alignment} produces a reasonable face,
+it captures only a diminished expression. The shape for all faces
+appears to remain almost identical across all images. This is very
+noticeable in Figure~\ref{fig:frontal_visual}. Numeric comparison is
+shown in Figure~\ref{roc:aflw2000}, as \textit{VRN - without
+  alignment}. We believe that this further confirms that
+\textbf{spatial alignment is of paramount importance} when performing
+3D reconstruction in this way.
 
 \begin{figure}
   \centering
@@ -618,28 +742,38 @@ Figure~\ref{fig:effect_pose}, the performance of our method decreases as
 the pose increases. This is to be expected, due to less of the face
 being visible which makes evaluation for the invisible part
 difficult. We believe that our error is still very low considering
-these poses.
+the magnitude of these poses.
 
 
 \subsection{Effect of expression} Certain expressions are usually
-considered harder to accurately reproduce in 3D face
-reconstruction. To measure the effect of facial expressions on
-performance, we rendered frontal images in difference expressions from
-BU-4DFE (since Florence only exhibits a neutral expression) and
-measured the performance for each expression. This kind of extreme
-acted facial expressions generally do not occur in the training set,
-yet as shown in Figure~\ref{fig:effect_expression}, the performance
-variation across different expressions is quite minor.
+considered harder to accurately reproduce in 3D face reconstruction.
+To measure the effect of facial expressions on performance, we
+rendered frontal images in difference expressions from BU-4DFE (since
+Florence only exhibits a neutral expression) and measured the
+performance for each expression. We show the six acted facial
+expressions which are available in BU-4DFE in
+Figure~\ref{fig:bu4dfe_expressions}. This kind of extreme acted facial
+expressions generally do not occur in the training set, yet as shown
+in Figure~\ref{fig:effect_expression}, the performance variation
+across different expressions is quite minor.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.5\linewidth]{curves/ablation_pose.eps}
+  \includegraphics[width=0.6\linewidth]{curves/ablation_pose.eps}
   \caption[Effect of pose]{The effect of pose on reconstruction
     accuracy in terms of NME on the Florence dataset. The \textit{VRN
       - Guided} network was used.}
   \label{fig:effect_pose}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{img/bu4dfe_expressions.pdf}
+  \caption[The six facial expressions available in the BU-4DFE
+  dataset]{The six facial expressions available in the BU-4DFE
+    dataset~\cite{yin2008high}, rendered for the same participant.}
+  \label{fig:bu4dfe_expressions}
+\end{figure}
 
 \begin{figure}
   \centering
@@ -657,6 +791,194 @@ Gaussians ($\sigma = 2$ as opposed to the normal $\sigma = 1$). The
 performance of the 3D reconstruction dropped by a negligible amount,
 suggesting that as long as the Gaussians are of a sensible size,
 guidance will always help.
+
+\section{Architectural Experiments}
+\label{sec:arcexp}
+
+In this section we explore several variations and modifications to the
+\textit{VRN - Guided} method, which may improve or impede
+performance. We provide an overview of experiments along with NME in
+Table~\ref{tab:arcexpoverview}.
+
+\begin{table*}
+  \caption[Overview of architectural experiments]{An overview of the
+    architectural experiments conducted. \textbf{Feats} refers to the
+    number of features per convolution layer. Similarly,
+    \textbf{VFeats} refers to the number of volumetric features per
+    volumetric convolution (in most cases this has no value as the
+    majority of the networks used in our experiments are 2D
+    only). \textbf{Mod} refers to the number of Residual modules used
+    sequentially in any one place of the hourglass. \textbf{Stack}
+    refers to the number of hourglass networks in a single stack. The
+    right most column points to the relevant section of the
+    chapter. We also show the mean Normalised Mean Error (NME) for all
+    images of the AFLW2000 dataset in column \textbf{nNME}.}
+  \label{tab:arcexpoverview}
+  \centering
+  \small
+  \begin{tabular}{|r|| c|c|c|c || c || c|l|}
+    \hline
+    \textbf{Name} & \textbf{Feats} & \textbf{VFeats} & \textbf{Mod} & \textbf{Stack} &  \textbf{Para} & \textbf{mNME} & \textbf{Sec.} \\
+    \hline\hline
+    VRN - Guided             & 256    & ---     & 4        & 2  & $2.5\times 10^7$    & 0.0637 &   \\
+    \hline
+    Intermediate Supervis.   & 256    & ---     & 4        & 2  & $2.5\times 10^7$    & 0.0630 & \ref{sec:arc_intersup}  \\
+    \hline
+    Hourglass                & 256    & ---     & 8        & 1  & $2.5\times 10^7$    & 0.0621 &   \\
+    Three Hourglass          & 256    & ---     & 3        & 3  & $2.8\times 10^7$    & 0.0632 & \ref{sec:arc_secvsmod}  \\
+    Four Hourglass           & 256    & ---     & 2        & 4  & $2.7\times 10^7$    & 0.0639 &   \\
+    \hline
+    Hourglass Heavy          & 384    & ---     & 8        & 1  & $5.3\times 10^7$    & 0.0627 &   \\
+    Hourglass Light          & 128    & ---     & 8        & 1  & $6.3\times 10^6$    & 0.0633 & \ref{sec:arc_params}  \\
+    Hourglass Lighter        & 64     & ---     & 8        & 1  & $1.8\times 10^6$    & 0.0661 &   \\
+    \hline
+    Volumetric VRN           & 128    & 32      & 2        & 2  & $7.7\times 10^5$    & 0.0697 & \ref{sec:arc_volumetric} \\
+    \hline
+  \end{tabular}
+\end{table*}
+
+\subsection{On intermediate supervision}
+\label{sec:arc_intersup}
+
+As described in the original stacked hourglass
+paper~\cite{newell2016stacked}, intermediate supervision is typically
+used providing significant boost in performance. However, it was not
+implemented for the basic \textit{VRN} or \textit{VRN - Guided}
+networks. As an attempt to boost performance, we have trained an
+identical network to \textit{VRN - Guided}, except with a supervising
+loss after the first hourglass network. A very minor performance
+improvement can be observed, as shown in
+Table~\ref{tab:arcexpoverview}. Additionally, the corresponding curve
+can be seen in Figure~\ref{fig:additionalexp}. We conclude that
+intermediate supervision is not necessary to achieve high performance
+for our 3D reconstruction experiment.
+
+%It is possible that in
+%\cite{newell2016stacked}, higher performance were observed by using
+%intermediate supervision, simply because there were many more
+%hourglasses in a stack.
+
+
+\subsection{On increasing the number of stacks vs the number of modules}
+\label{sec:arc_secvsmod}
+
+Given a fixed computational budget one has two options when
+implementing a Volumetric Regression Network: to increase the number
+of stacks while decreasing the number of modules or vice versa.  An
+interesting question which we have not seen answered yet is whether it
+is better to have more stacked hourglasses or more modules per
+hourglass. In this section, we attempt to quantify any performance
+variation, at least for the task of 3D face reconstruction using
+volumetric regression while keeping the number of parameters
+approximately the same.
+
+We evaluate three additional networks, each with different number of
+hourglasses and modules, such that the total number of parameters
+remains very similar. These results are shown in detail in
+Table~\ref{tab:arcexpoverview} as One, Three or Four Hourglass. The
+first of these additional networks consists of only one hourglass
+network and eight modules. Interestingly, this performs the best out
+of the three, suggesting that for this particular problem, perhaps it
+is more optimal to increase the number of modules over the number of
+hourglasses. However, it can also be observed that the performance
+difference between all three networks is very minor, suggesting that
+for our experiment as long as the number of parameters remains roughly
+fixed good performance can be achieved independently of the exact
+configuration of the hourglass network.
+%Perhaps our performance bottleneck is not the network but the dataset
+%from which we are learning, which may be the case if there exists any
+%noise.
+
+
+\subsection{On varying the network parameters}
+\label{sec:arc_params}
+
+Having investigated the importance of network configuration in the
+previous section, in this section we keep the architecture fixed and
+instead vary the number of network parameters to quantify the the
+performance impact. Hence, in this section we explore the influence of
+number of parameters, and whether the performance will continue to
+increase with the number of parameters, or the same performance can be
+achieved with fewer parameters. If performance saturation has
+occurred, the dataset has likely become the limiting factor, likely
+due to variance in the training set, suggesting that it may be
+possible to achieve a similar level of performance with fewer
+parameters.
+
+We explore 3 variants of the VRN, corresponding to different number of
+parameters, namely \textit{Heavy}, \textit{Light} and
+\textit{Lighter}. Their exact number of parameters and performance is
+shown in Table~\ref{tab:arcexpoverview}. It can be observed that the
+performance difference between \textit{Heavy} and \textit{Light} are
+very minor. However, \textit{Lighter} resulted in a significant drop
+in performance. With this information we can hypothesise that the
+optimal number of parameters is the one corresponding to the
+\textit{Light} network. We show a visual comparison between these
+three networks in Figure~\ref{fig:heavy-light-lighter}: the visual
+performance of the \textit{Lighter} network is clearly worse - the
+surface is not as smooth and the facial expression is not captured as
+clearly as in both \textit{Heavy} and \textit{Light}.
+
+\subsection{A Volumetric \textit{Volumetric Regression Network}}
+\label{sec:arc_volumetric}
+
+One of the main contributions of this chapter is to show that good
+performance for 3D face reconstruction can be achieved even when 2D
+spatial convolutions are used.  However, one might wonder why we
+decided to use 2D convolutions for a 3D (volumetric) regression
+task. The short answer is that training a 3D CNN is difficult and
+highly resource intensive. Firstly, the activations are much larger,
+consuming more memory leaving less space for parameters. Secondly, the
+complexity of volumetric convolution is much higher than that of
+standard spatial convolution, hence the time required to train such a
+network is far greater, despite the potential for fewer parameters.
+
+For completeness, we have trained a fully volumetric version of VRN
+where we attempt to match this time the complexity in theoretical
+floating point operations (FLOPS) for a single forward pass (as
+opposed to matching the number of parameters) with that of a standard
+VRN. We use theoretical FLOPS, as opposed to actual or raw number of
+FLOPS, as frameworks such as CuDNN make numerous optimisations, which
+often result in fewer operations. Unfortunately, this resulted in
+having only 32 features per volumetric convolution.
+
+Despite containing far fewer parameters than the standard VRN, the
+training took over 10 days on two Titan X GPUs and had to be performed
+with a batch size of 2. This is significantly slower than training the
+standard VRN, which takes approximately 2 days on the same
+hardware. We show the NME for this network in
+Table~\ref{tab:arcexpoverview}, along with a curve in
+Figure~\ref{fig:additionalexp}. Unsurprisingly, the performance of
+this method is quite poor, further illustrating the difficulty in
+training 3D CNNs despite the problem being a volumetric one.
+
+\subsection{Architectural Conclusions}
+As we have seen from the past few experiments, performance in general
+remains very similar despite architectural changes. Only after
+reducing the number of parameters significantly were we able observe
+any significant change. We conclude that with the guidance from
+detected landmarks only, we are almost able to attain the best performance on
+these datasets.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{curves2/aflw.eps}
+  \caption[NME performance from architectural experiments]{Results
+    from architectural experiments described in
+    Section~\ref{sec:arcexp} on the AFLW2000 dataset, showing that in
+    the majority of cases the performance is almost the same.}
+  \label{fig:additionalexp}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{img/heavy-light-lighter.png}
+  \caption[Visual comparison of number of parameters]{A visual
+    comparison between the \textit{Heavy}, \textit{Light} and
+    \textit{Lighter} methods described in Section~\ref{sec:arc_params}
+    on three images from the AFLW2000 dataset.}
+  \label{fig:heavy-light-lighter}
+\end{figure}
 
 
 

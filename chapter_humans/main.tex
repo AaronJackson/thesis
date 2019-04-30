@@ -21,7 +21,7 @@
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.8\linewidth]{img/demo.png}
+  \includegraphics[width=\linewidth]{img/demo.png}
   \caption[Example reconstructions]{Some example results using our
     method when trained with a high quality detailed training set.}
   \label{fig:topdemo}
@@ -34,14 +34,14 @@
 3D reconstruction is the process of estimating the 3D geometry from
 one or more 2D images. In this work, we focus on reconstruction of the
 human body from a single image, including the non-visible parts which
-have been self-occluded. Our method builds upon that
-of~\cite{jackson2017vrn} where a 3D face is directly regressed from a
-single image, using what they refer to as a ``Volumetric Regression
-Network'' (VRN). In this chapter, we show that the same idea can be
-applied to other deformable objects, in particular, the human
-body. This poses an array of challenges which are not present when
-reconstructing the face. While we are still only reconstructing an
-object of a single class, the body has many more axes of rotation
+have been self-occluded. Our method builds the work in
+Chapter~\ref{chapter:face}, where a 3D face is directly regressed from
+a single image, using we have already referred to as a ``Volumetric
+Regression Network'' (VRN). In this chapter, we show that the same
+idea can be applied to other deformable objects, in particular, the
+human body. This poses an array of challenges which are not present
+when reconstructing the face. While we are still only reconstructing
+an object of a single class, the body has many more axes of rotation
 compared to a face. As such, human body reconstruction is often
 considered to be a very difficult problem.
 
@@ -68,17 +68,16 @@ Cubes~\cite{lorensen1987marching}. In summary, our main contributions
 in this work are as follows:
 
 \begin{enumerate}
-
-\item We are the first to apply volumetric regression
-  networks~\cite{jackson2017vrn} to the problem to human body
-  reconstruction, not just human faces.
+\item We show that volumetric regression networks can also work very
+  well on objects other than the human face, in this case, the full
+  human body.
 
 \item We propose several improvements to the network architecture
-  described in~\cite{jackson2017vrn}, which show significant
+  described in Chapter~\ref{chapter:face}, which show significant
   performance improvements. These include introducing intermediate
-  supervision, using more advanced residual modules and altering the network
-  structure by increasing the number of hourglass modules by reducing
-  the number of residual modules.
+  supervision, using more advanced residual modules and altering the
+  network structure by increasing the number of hourglass modules by
+  reducing the number of residual modules.
 
 \item We show that VRN is capable of reconstructing complex poses when
   trained on a suitable dataset.
@@ -228,16 +227,16 @@ domain, using a standard convolutional neural network. Our approach
 can be thought of as a type of image segmentation where the output is
 a set of slices capturing the 3D geometry. Hence architecturally one
 can use standard architectures for (say, semantic)
-segmentation. Following the work of~\cite{jackson2017vrn} on human
-faces, we do this by encoding the geometry of the body in a volumetric
-representation. In this representation, the 3D space has been
-discretised with a fixed dimensionality. Space which is
-\textit{inside} the object is encoded as a voxel with value equal to
-one. All other space (i.e. background or unknown object classes) are
-encoded with a voxel with a value equal to zero. For this particular
-application, the dimensionality of our volumes are
-$128\times 128\times 128$, which given the level of detail in our
-training set, is more than adequate (although we show in
+segmentation. Following on from the work in
+Chapter~\ref{chapter:face}, on human faces, we do this by encoding the
+geometry of the body in a volumetric representation. In this
+representation, the 3D space has been discretised with a fixed
+dimensionality. Space which is \textit{inside} the object is encoded
+as a voxel with value equal to one. All other space (i.e. background
+or unknown object classes) are encoded with a voxel with a value equal
+to zero. For this particular application, the dimensionality of our
+volumes are $128\times 128\times 128$, which given the level of detail
+in our training set, is more than adequate (although we show in
 Section~\ref{sec:detailed} results with much greater detail, and only
 a slightly larger volume). One of the main advantages of this
 representation is that it allows the non-visible (self-occluded or
@@ -311,13 +310,13 @@ random horizontal flipping.
 \section{Architecture}
 
 In the following subsections, we introduce the several architectural
-options we have explored as extensions to~\cite{jackson2017vrn}. Our
-first network is the same as the one used in~\cite{jackson2017vrn}, referred
-to as \textit{VRN - Guided}, which establishes our baseline. This
-network employs two Encoder-Decoder (``hourglass'') networks in a
-stack. We follow a similar design, aside for the changes described in
-this section. All of our architectures were trained with the same loss
-function as in~\cite{jackson2017vrn}:
+options we have explored as extensions to the original architecture
+described in Chapter~\ref{chapter:face}. Our first network is the same
+as the one used for faces, referred to as \textit{VRN - Guided}, which
+establishes our baseline. This network employs two Encoder-Decoder
+(``hourglass'') networks in a stack. We follow a similar design, aside
+for the changes described in this section. All of our architectures
+were trained with the same loss function as used for faces:
 
 \begin{equation}
   l_{1} = \sum\limits_{w=1}^{W} \sum\limits_{h=1}^{H}\sum\limits_{d=1}^{D}[V_{whd}\log \widehat{V}_{whd}+(1-V_{whd})\log(1-\widehat{V}
@@ -362,7 +361,7 @@ information from the images. With this network, we try to measure the
 impact of training with just images, while keeping the architecture
 identical. We call this network \textit{Ours - Image Only}. We expect
 that the performance of this network be significantly lower than when
-guidance from the human pose is also provided. 
+guidance from the human pose is also provided.
 
 \subsection{\textit{Ours - Landmarks Only}} % vrn-noimg
 
@@ -422,23 +421,22 @@ parameters (which also allows the network to fit into memory).
 
 \begin{figure}
   \centering
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00002__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00004__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00005__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00007__max200_pad25_jpg.png} \\
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00002__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00004__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00005__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00007__max200_pad25_jpg.png} \\ [0.5em]
-
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00011__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00020__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00026__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00031__max200_pad25_jpg.png} \\
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00011__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00020__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00026__max200_pad25_jpg.png}
-\includegraphics[width=0.2\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00031__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00002__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00004__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00005__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00007__max200_pad25_jpg.png} \\
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00002__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00004__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00005__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00007__max200_pad25_jpg.png} \\ [0.5em]
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00011__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00020__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00026__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/vrn-mutistack/S11WalkTogether_1_60457274_mp4_frame00031__max200_pad25_jpg.png} \\
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00011__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00020__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00026__max200_pad25_jpg.png}
+\includegraphics[width=0.23\linewidth]{img/results/multistack-textured/S11WalkTogether_1_60457274_mp4_frame00031__max200_pad25_jpg.png}
 \caption[Visual results from our main architecture]{Visual results
   from our main network, \textit{Ours - Multistack}, on a test split
   of Human3.6m~\cite{h36m_pami}. These results demonstrate VRN's
@@ -524,33 +522,33 @@ days.
 
 \begin{figure}
   \centering
-\includegraphics[width=0.15\linewidth]{img/detailed/44_1488643_8930.jpg}
-\includegraphics[width=0.15\linewidth]{img/detailed/44444_1488643_8966.jpg}
-\includegraphics[width=0.15\linewidth]{img/detailed/bj6rhebgv.jpg}
-\includegraphics[width=0.15\linewidth]{img/detailed/dfgdfgsgs.jpg}
-\includegraphics[width=0.15\linewidth]{img/detailed/gergeg.jpg}
-\includegraphics[width=0.15\linewidth]{img/detailed/sdfdsfs.jpg}
+\includegraphics[width=0.16\linewidth]{img/detailed/44_1488643_8930.jpg}
+\includegraphics[width=0.16\linewidth]{img/detailed/44444_1488643_8966.jpg}
+\includegraphics[width=0.16\linewidth]{img/detailed/bj6rhebgv.jpg}
+\includegraphics[width=0.16\linewidth]{img/detailed/dfgdfgsgs.jpg}
+\includegraphics[width=0.16\linewidth]{img/detailed/gergeg.jpg}
+\includegraphics[width=0.16\linewidth]{img/detailed/sdfdsfs.jpg}
     \\ [0.2em]
-\includegraphics[width=0.15\linewidth]{img/detailed/44_1488643_8930.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/44444_1488643_8966.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/bj6rhebgv.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/dfgdfgsgs.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/gergeg.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/sdfdsfs.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/44_1488643_8930.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/44444_1488643_8966.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/bj6rhebgv.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/dfgdfgsgs.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/gergeg.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/sdfdsfs.png}
     \\ [0.2em]
-\includegraphics[width=0.15\linewidth]{img/detailed/44_1488643_8930_back.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/44444_1488643_8966_back.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/bj6rhebgv_back.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/dfgdfgsgs_back.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/gergeg_back.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/sdfdsfs_back.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/44_1488643_8930_back.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/44444_1488643_8966_back.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/bj6rhebgv_back.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/dfgdfgsgs_back.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/gergeg_back.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/sdfdsfs_back.png}
     \\ [0.2em]
-\includegraphics[width=0.15\linewidth]{img/detailed/44_1488643_8930_t.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/44444_1488643_8966_t.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/bj6rhebgv_t.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/dfgdfgsgs_t.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/gergeg_t.png}
-\includegraphics[width=0.15\linewidth]{img/detailed/sdfdsfs_t.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/44_1488643_8930_t.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/44444_1488643_8966_t.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/bj6rhebgv_t.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/dfgdfgsgs_t.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/gergeg_t.png}
+\includegraphics[width=0.16\linewidth]{img/detailed/sdfdsfs_t.png}
 \caption[Visual results when trained on high quality data]{Example 3D
   reconstructions from the web (Creative Commons) using our method
   trained with high quality training data. The first row shows the
@@ -596,8 +594,8 @@ higher than the reconstructions in our previous experiment. This is
 likely due to the better spatial alignment between the training images
 and target. Additionally, we show qualitative results on real-world
 images taken from the web~\footnote{These images are licensed under
-  Creative Commons. Attribution, where required, will be provided on
-  our website.}. These reconstructions can be found in
+  Creative Commons. Attribution, where required, has been provided our
+  website.}. These reconstructions can be found in
 Figure~\ref{fig:detailed}. We show the backsides of these
 reconstructions, which demonstrate the networks ability to reconstruct
 the self-occluded body parts. Finer details can be seen in the

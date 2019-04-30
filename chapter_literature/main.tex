@@ -27,13 +27,45 @@ better results.
 
 %%%%%%%%%%%%%%% 3DMM
 \subsection{3D Morphable Models (3DMM)}
-Arguably the most popular approach to estimating the 3D geometry of
-the human face is using 3D Morphable Models (3DMM). These models use a
-small number of parameters to adjust facial properties such as shape,
-pose and expression. There are many methods based on this approach,
-including~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint,tran2018extreme,jiang20183d,jiang2018pose}.
+% Arguably the most popular approach to estimating the 3D geometry of
+% the human face is using 3D Morphable Models (3DMM). These models use a
+% small number of parameters to adjust facial properties such as shape,
+% pose and expression. There are many methods based on this approach,
+% including~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint,tran2018extreme,jiang20183d,jiang2018pose}.
 
-In particular,~\cite{jourabloo2016large} use a cascade of CNNs, which
+Arguably the most popular approach to estimating the 3D geometry of
+the human face is using 3D Morphable Models (3DMM). A model $s$
+consist of a 3D mesh of $N$ vertices, defined as a $3N$ vector:
+%
+\begin{equation}
+  s = [x_1, y_1, z_1, \dots, x_N, y_N, z_N]
+\end{equation}
+%
+This model is constructed by finding the dense correspondence between
+all vertices. This ensures that any particular vertex (e.g. the tip of
+the nose) has the same index in all meshes. Additionally, it ensures
+that all meshes have the same number of vertices. These meshes must
+then be brought into a shape space, which ensures that the meshes are
+aligned \textit{somewhere} against an unknown mean shape and is
+performed by applying Generalised Procrustes Analysis. Principal
+Component Analysis (PCA) is then performed which results in
+$\{\boldsymbol{\overline{s}}_{id}, \boldsymbol{U}_{id},
+\Sigma_{id}\}$, where $\boldsymbol{\overline{s}}_{id}$ is a vector
+containing a mean shape, $\boldsymbol{U}_{id}$ is the first $n$
+principal components for each vertex, and hence has the shape
+$3N \times n$. Finally, $\Sigma_{id}$ is a diagonal matrix containing
+the standard deviations of each principal component. Finally, there
+are the shape parameters $\boldsymbol{p} = [p_1, \dots, p_n]$, which
+can be used to generate a new face $\mathcal{S}$~\cite{booth20183d}:
+%
+\begin{equation}
+  \mathcal{S}(\boldsymbol{p}) = \boldsymbol{\overline{s}}_{id}
+  + \boldsymbol{U}_{id}\Sigma_{id}\boldsymbol{p}
+\end{equation}
+%
+There are many methods based on this approach,
+including~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint,tran2018extreme,jiang20183d,jiang2018pose}. In
+particular,~\cite{jourabloo2016large} use a cascade of CNNs, which
 first regress the camera projection, followed by the pose, followed by
 shape and expression. Additionally,~\cite{jourabloo2016large} extract
 features from their model fitting which can assist in facial landmark
@@ -46,8 +78,11 @@ by iteratively minimising a cost function which evaluates the fitting.
 
 Constraining the pose, shape and (optionally) appearance into a small
 number of parameters has the undesirable side effect of being unable
-to capture finer details, such as wrinkles and
-bumps. In~\cite{sela2017unrestricted}, a CNN is used for 3DMM fitting,
+to capture finer details, such as wrinkles and bumps. This is due to
+the small number of parameters used and can be seen in many methods,
+for example~\cite{richardson2016learning}, where the 3DMM fitting
+stage is only used to extract a coarse
+shape. In~\cite{sela2017unrestricted}, a CNN is used for 3DMM fitting,
 followed by a refinement step which iteratively improves the finer
 details. However, during this iterative refinement, the correspondence
 between vertices, as well as the scale and spatial location of the
@@ -59,10 +94,10 @@ passes the image and a mean set of facial landmarks. These landmarks
 are gradually refined while learning a 3D to 2D mapping, which updates
 the 3D face shape. Unlike our own method (described in
 Chapter~\ref{chapter:face}),~\cite{liu2016joint} does not estimate the
-facial pose, and as such always produces a frontal reconstruction. In
-many cases, the pose is an important component, and as such, a
-separate method, likely based on the facial landmarks, would have to
-be used to find the transformation for the 3D model.
+facial pose, and so always produces a frontal reconstruction. In many
+cases, the pose is an important component, and as such, a separate
+method, likely based on the facial landmarks, would have to be used to
+find the transformation for the 3D model.
 
 A partially synthetic approach to 3D face reconstruction (indirectly
 for face alignment) is proposed in~\cite{zhu2016face}. The method used
@@ -124,7 +159,7 @@ methods, although again, there is some intersection between the two.
 A keypoint based approach is presented in~\cite{mayo20093d}, where
 SIFT is first used to extract dense features from each image. These
 are then aligned using an Iterative Closest Point (ICP) algorithm to
-build a point cloud o a face, from which a surface could be extracted
+build a point cloud of a face, from which a surface could be extracted
 later. However, due to the simplicity of this approach, and the
 limitations of ICP, this method will not account for changes in facial
 expression between images. The work of~\cite{dou2018multi} proposes to
@@ -168,7 +203,7 @@ face. However, our method for 3D face reconstruction, described in
 Chapter~\ref{chapter:face} is very different to the aforementioned
 methods. First, our method does not rely on a 3D shape model for
 either the pre-processing or ``fitting'' procedure, instead we rely on
-a volumetric representation. This avoids the requirement to find
+a volumetric representation. This avoids the requirement estimate
 correspondence between vertices, which is a challenging problem in
 itself. Second, our method is direct, producing a volumetric
 representation of the facial geometry in just a single step. Third,
@@ -242,14 +277,15 @@ effectiveness on difficult poses.
 
 \subsection{Face Alignment}
 
-Face alignment the process of detecting a set of facial points to a
+Face alignment is the process of detecting a set of facial points to a
 facial image. Face alignment is a prerequisite to many 3D face
 reconstruction methods - in fact, methods such
 as~\cite{huber2016multiresolution} depend only on facial landmarks,
-discarding the image entirely. Our own methods optionally makes use of
-these landmarks to assist in the 3D reconstruction process. These are
-discussed in detail in Chapters~\ref{chapter:face}
-and~\ref{chapter:seg}.
+discarding the image entirely.
+
+% Our own methods optionally makes use of these landmarks to assist in
+% the 3D reconstruction process. These are discussed in detail in
+% Chapters~\ref{chapter:face} and~\ref{chapter:seg}.
 
 Until recently, the highest performing methods for face alignment were
 based on a cascaded regression approach. These methods estimate the
@@ -259,32 +295,40 @@ SIFT~\cite{lowe2004distinctive} and other hand selected
 features. These regressors are applied in a cascaded fashion where the
 input to regressor $k$ is the estimate from regressor $k-1$. More
 details of such approaches to face alignment can be found
-in~\cite{sanchez16,cao2014facewarehouse,xiongsupervised,zhu2015face,tzimiropoulos2015project}.
+in~\cite{dollar2010cascaded,sanchez16,cao2014facewarehouse,xiongsupervised,zhu2015face,tzimiropoulos2015project}.
 
 The remainder of this section will focus on deep learning based
 approaches to face alignment. Deep convolutional networks have proven
 to be an excellent choice for this kind of problem. One of the primary
 reasons for this is due to the way global and local context can be
-incorporated to provide both accuracy and precision. A CNN casecade is
-presented in~\cite{sun2013deep} to directly produce the landmark
-locations. Similarly in~\cite{bulat2016two}, the authors propose a
-method for 3D face alignment by first detecting the 2D landmarks using
-heatmap regression. If desired, the process can be stopped
-here. Optionally, this stack of heatmaps is passed through a second
-network, this time for regression, accompanied by the original input
-image. The output of this second stage is 68 $(x, y, z)$ landmarks. A
-multitask approach is proposed in~\cite{zhang2014facial}, regressing
-the location of the facial landmarks while performing facial attribute
+incorporated to provide both accuracy and precision.
+
+% Similarly in~\cite{bulat2016two}, the location
+% of landmarks in 3D are regressed and then optionally encoded as
+% intensity heatmaps . If desired, the process can be
+% stopped here. Optionally, this stack of heatmaps is passed through a
+% second network, this time for regression, accompanied by the original
+% input image. 
+
+Several approaches directly regress the locations of the landmarks
+using a tail of linear layers. For example, a CNN cascade is presented
+in~\cite{sun2013deep} to directly produce the landmark locations. The
+output of this second stage is 68 $(x, y, z)$ landmarks. A multitask
+approach is proposed in~\cite{zhang2014facial}, regressing the
+location of the facial landmarks while performing facial attribute
 classification.
 
 Many CNN based alignment methods estimate the facial landmarks by
-regressing a 2D Gaussian on top of each landmark
+regressing a 2D Gaussian located at each landmark
 location~\cite{bulat2016two,bulat2017far,mahpod2018facial,kowalski2017deep,merget2018robust}.
 This spatial approach is commonly referred to as heatmap
-regression. One such example is the extension to~\cite{bulat2016two}
-in~\cite{bulat2017far}, where the second regressor is replaced with a
-CNN producing a 3D heatmap representation. A similar heatmap based
-approach was used in a multi-stage approach described
+regression. One transitioning approach for 3D face alignment is
+described in~\cite{bulat2016two}, where 2D landmarks are regressed as
+heatmaps. These heatmaps are then passed through a second network,
+performing regression to obtain 3D $x,y,z$ landmarks. This was
+extended in~\cite{bulat2017far}, where the second regressor is
+replaced with a CNN producing a 3D heatmap representation. A similar
+heatmap based approach was used in a multi-stage approach described
 in~\cite{kowalski2017deep}, where the landmark detections are refined
 after each stage. Between each stage, the current landmark prediction
 and some generated features are passed again through the network. At
@@ -301,12 +345,12 @@ fit to the face first.
 
 \subsection{Human Pose Estimation}
 
-While this thesis does not focus on pose estimation, in
-Chapter~\ref{chapter:human}, we present our method for 3D human body
-reconstruction as an extension to our 3D face reconstruction
-work. Human pose estimation is optionally used as guidance for this
-method in a similar fashion to face alignment being used as guidance
-to 3D face reconstruction.
+% While this thesis does not focus on pose estimation, in
+% Chapter~\ref{chapter:human}, we present our method for 3D human body
+% reconstruction as an extension to our 3D face reconstruction
+% work. Human pose estimation is optionally used as guidance for this
+% method in a similar fashion to face alignment being used as guidance
+% to 3D face reconstruction.
 
 Modern approaches to estimating human pose are based on methods
 employing CNNs. These methods generally fall into one of two
@@ -346,30 +390,35 @@ a novel ``Stacked Hourglass'' network is proposed.  This architecture
 in particular, despite being intended for human pose estimation, has
 strongly influenced our work on 3D reconstruction, which is discussed
 further in Chapters~\ref{chapter:face} and~\ref{chapter:human}, as
-such the remainder of this paragraph will be dedicated solely to this
-idea. Ignoring the stacking aspect for just a moment, the
+such the remainder of this paragraph will serve to explain the general
+idea of this work. Ignoring the stacking aspect for just a moment, the
 ``hourglass'' architecture, also called an Encoder-Decoder network,
 gradually reduces and increases the spatial resolution while combining
 features from different scales. Combining these features from
-different scales allows the network to produce better predictions as
-both global and local context is available to the last few layers of
-the network. Stacking these hourglass modules together with a loss
+different scales allows the network to produce better predictions, as
+both global (e.g. \textit{What's the main object in this image?}) and
+local context (e.g. \textit{Where is the boundary between these two
+  objects?}) is available to the last few layers of the
+network. Stacking these hourglass modules together with a loss
 function between each one allows the network to refine and reevaluate
 the pose as it passes through the network. This is a similar idea to
 the iterative methods described in
 ~\cite{toshev2014deeppose,carreira2016human}. In the case
 of~\cite{newell2016stacked}, the loss function used for human pose
 estimation is Mean Squared Error (MSE):
-  \begin{equation} \text{MSE} = \frac{1}{n} \sum^n_{i=1} (Y_i -
-\hat{Y}_i)^2,
-  \end{equation} which as the name suggests takes the mean of the
+%
+\begin{equation}
+  \text{MSE} = \frac{1}{n} \sum^n_{i=1} (Y_i - \hat{Y}_i)^2,
+\end{equation}
+%
+which as the name suggests takes the mean of the
 squared error between elements of $Y$ and $\hat{Y}$. For their
 experiments, performance is measured for several configurations of
-stacking, 2, 4 or 8 hourglasses. In each case reducing the number of
+stacking, 2, 4 or 8 hourglasses. In each case, reducing the number of
 residual modules to compensate for parameter count. The performance
 between each configuration after the last layer is fairly close, but
 the 8 hourglass configuration beats the 4 hourglass configuration,
-which incidentally also beats the two hourglass configuration.
+which also beats the two hourglass configuration.
 
 
 A 3D heatmap is regressed in~\cite{pavlakos2017coarse}, which is a

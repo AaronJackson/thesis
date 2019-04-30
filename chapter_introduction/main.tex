@@ -7,7 +7,7 @@ problems had low success rates on unconstrained images. This is
 especially true for the primary focus of this thesis: 3D face
 reconstruction. This chapter begins by giving an introduction to the
 problem of 3D face reconstruction. We attempt to justify the need for
-research into this area by highlighting many of the important
+research in this area by highlighting many of the important
 applications, as well as the limitations of existing
 work. Additionally, this chapter attempts to explain where our own
 work on this problem fits into the area of 3D face
@@ -20,10 +20,10 @@ thesis.
 a person's face, but what exactly do we even mean by geometry?
 Fundamentally, this geometry is a set of 3D vertices, connected by
 edges, which together defines a 3D surface. This is more generally
-referred to as a mesh. This mesh should capture the face's shape,
-expression and pose. In a perfect world, it should also capture finer
+referred to as a mesh. This mesh should capture the shape, expression
+and pose of the face. In a perfect world, it should also capture finer
 details, such as facial hair, eye brows, eye lashes, wrinkles, spots,
-blemishes and anything else we as humans can see on person's
+blemishes and anything else we as humans can see on a person's
 face. Ideally, it should also capture facial accessories, such as
 glasses and jewellery.
 
@@ -40,7 +40,7 @@ is at least five more minutes until our photo has exposed!''
 
 Many applications of 3D face reconstruction cannot tolerate these
 constraints. Such examples span a wide range of areas. The more
-obvious examples being personalisation of computer games, or trying on
+obvious being personalisation of computer games, or trying on
 accessories online, such as glasses. However, this area has many other
 applications, such as facial expression analysis for measuring
 emotional arousal, where 3D face reconstruction can be a useful tool
@@ -62,7 +62,22 @@ typical settings. The inputs to these methods vary widely, from sets
 of images in predefined poses and video, to reconstruction from a
 single unconstrained image. Some of the difficulties which all 3D face
 reconstructions would \textit{like} to be able to address are
-discussed in detail the next paragraphs.
+displayed in Figure~\ref{fig:faceproblems}, and discussed in detail
+the next few paragraphs.
+
+\begin{figure}
+  \begin{tabular}{cccc}
+    \includegraphics[width=0.22\linewidth]{img/afw/occlusion.jpg} &
+    \includegraphics[width=0.22\linewidth]{img/afw/pose.jpg} &
+    \includegraphics[width=0.22\linewidth]{img/afw/illumination.jpg} &
+    \includegraphics[width=0.22\linewidth]{img/afw/expression.jpg} \\
+    Occlusion & Large Pose & Illumination & Expression
+  \end{tabular}
+  \caption[Visual examples of challenging images]{Some visual examples
+    of common problems which 3D Face Reconstruction methods have to be
+    able to tolerate, taken from the AFW dataset~\cite{zhu2012face}.}
+  \label{fig:faceproblems}
+\end{figure}
 
 
 \paragraph{Occlusion.} In computer vision, occlusion refers to the
@@ -71,13 +86,13 @@ due to any number of reasons, from nose scratching to accessory
 wearing and beyond. As humans, we can look past this occlusion. Faces
 do not suddenly stop being faces just because there's a hand in the
 way. We can also make assumptions about what the shape or appearance
-of a face might based on the information available with a high level
-of confidence. Unfortunately, this is much harder for a computer. We
-have to encode this information some how, and tie pieces together with
-knowledge, such as how faces are generally symmetric. An approach
-which deals with this problem quite well is to use a 3D Morphable
-Model (3DMM), which we'll discuss in much more detail later in this
-chapter.
+of a face might be based on the information available with a high
+level of confidence. Unfortunately, this is much harder for a
+computer. We have to encode this information some how, and tie pieces
+together with knowledge, such as how faces are generally symmetric. An
+approach which deals with this problem quite well is to use a 3D
+Morphable Model (3DMM), which we'll discuss in much more detail later
+in this chapter.
 
 \paragraph{Large Pose} refers to any facial pose which defers too much
 from a frontal face, that is, a face which is looking directly at the
@@ -109,16 +124,15 @@ different expressions difficult to model.
 \paragraph{Detail} is difficult for two main reasons. First, an
 approach which is capable of encoding a high level of detail is
 required. This is often challenging with model fitting based
-approaches because the input coefficients need to be constrained to a
-small number of input principal components which vary aspects such as
-shape, pose and rotation. This constraint usually leads to
-post-processing steps to extract the detail, which can correspondence
-between vertices which is usually present in a parametric model, as
-well as pose and scale information. Second, there needs to be some way
-to distinguish between what is actually \textit{detail}, such as
-wrinkles and spots which affect 3D shape versus what is noise, makeup
-(potentially tattoos), dirt or anything else affecting only textural
-information.
+approaches because the inputs need to be constrained to a small number
+of principal components which vary aspects such as shape, pose and
+rotation. This constraint usually leads to post-processing steps to
+extract the detail, which can destroy correspondence between vertices
+usually present in a parametric model, as well as pose and scale
+information. Second, there needs to be some way to distinguish between
+what is actually \textit{detail}, such as wrinkles and spots which
+affect 3D shape versus what is noise, makeup (potentially tattoos),
+dirt or anything else affecting only textural information.
 
 \paragraph{Lab Conditions vs. In-the-Wild.} Due to the difficulties
 involved with using 3D scanning equipment, discussed earlier, facial
@@ -224,9 +238,9 @@ handle this cases on an individual basis.
 
 Given the numerous applications of such a technology and the
 significant disadvantages of the preexisting methods, we feel there is
-a profound requirement for something more robust to the aforementioned
-challenges in this area. In this thesis we approach the problem using
-a single image, and propose a new non-parametric approach to 3D face
+a profound requirement for something more robust to the challenges in
+this area. In this thesis we approach the problem using a single
+image, and propose a new non-parametric approach to 3D face
 reconstruction which attempts to account for as many of these
 challenges as possible.
 
@@ -288,16 +302,19 @@ literature, starting with face alignment, which is often a
 prerequisite to 3D face reconstruction methods. Continuing on, a
 discussion of the various existing 3D face reconstruction is
 given. The remainder of this chapter gives an overview of human pose
-estimation, human body reconstruction and semantic part segmentation.
+estimation and human body reconstruction.
 
-\textbf{Chapter~\ref{chapter:face}} is the primary focus of our
+\textbf{Chapter~\ref{chapter:face}} is the primary focus of this
 thesis. This chapter describes our approach to 3D face reconstruction,
-which includes details about the datasets uses, the volumetric
+which includes details about the datasets used, the volumetric
 representation and the (small) amount of error it introduces, along
 with our approach and network architectures. This chapter also
 describes the numerous experiments carried out on the various
 datasets, comparisons with other methods, and ablation studies on
-pose, expression and influence of parameters used for guidance.
+pose, expression and influence of parameters used for
+guidance. Finally, we explore some of the architectural options
+available for this method, which result in performance degradation or
+boosts.
 
 An extension to our work on 3D face reconstruction is described in
 \textbf{Chapter~\ref{chapter:human}}, in which we show how our method
