@@ -325,7 +325,7 @@ _{whd})],
 where $\widehat{V}_{whd}$ is the corresponding sigmoid output at voxel
 $\{w,h,d\}$.
 
-\subsection{\textit{Ours - Multistack}}
+\subsection{Multistack}
 
 \begin{figure}
   \includegraphics[width=\linewidth]{img/multistack.pdf}
@@ -353,7 +353,7 @@ benefit to adding more than four hourglass networks as the performance
 just fluctuates as more are added. This network is depicted in
 Figure~\ref{fig:multistack}.
 
-\subsection{\textit{Ours - Image Only}} % multistack-nolandmarks
+\subsection{Image Only} % multistack-nolandmarks
 
 Our standard network (\textit{Ours - Multistack}) is trained to
 receive guidance from the landmarks, while also using useful
@@ -363,7 +363,7 @@ identical. We call this network \textit{Ours - Image Only}. We expect
 that the performance of this network be significantly lower than when
 guidance from the human pose is also provided.
 
-\subsection{\textit{Ours - Landmarks Only}} % vrn-noimg
+\subsection{Landmarks Only} % vrn-noimg
 
 Many methods, such
 as~\cite{bogo2016smplify,ramakrishna2012reconstructing}, use only the
@@ -376,7 +376,7 @@ high quality training data is available, our method can regress these
 fine details and match the body shape when also provided with the
 image.
 
-\subsection{\textit{Ours - Mask Only}}
+\subsection{Mask Only}
 
 Our method does not rely on a segmentation mask, as is the case
 in~\cite{sigal2008combined}. However, there is no reason why our
@@ -390,7 +390,7 @@ layer receiving a different number of inputs. We expect this network
 to perform quite well since the segmentation mask we are providing to
 the network is the projection of the target volume.
 
-\subsection{\textit{Ours - 3D Convolution}}
+\subsection{3D Convolution}
 
 \begin{figure}
   \centering

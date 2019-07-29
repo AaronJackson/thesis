@@ -187,16 +187,21 @@ occlusions and facial expressions.
 
 \subsection{Depth Estimation}
 
-Finally, depth estimation - while typically applied to problems such
-as room reconstruction, there are a couple of methods which attempt to
-reconstruct the face by estimating the
-depth~\cite{sun2011depth,sun2013depth}. In~\cite{sun2011depth}, a
+Depth estimation refers to the problem of estimating how far away each
+pixel of an image would be, either relative to the other objects in
+the image, or from the camera (i.e. real world space). Depth
+estimation is typically applied to problems such as room
+reconstruction, where only distances are required and not the full
+geometry of every object in the room. Despite this, there are a couple
+of methods which attempt to reconstruct the face by estimating the
+depth from an image~\cite{sun2011depth,sun2013depth}. In~\cite{sun2011depth}, a
 constrained Independent Component Analysis (ICA) model is used to
 analyse multiple facial images of the same subject, from which the 3D
 geometry is obtained. An almost identical method is presented
 in~\cite{sun2013depth}, except instead of using an ICA model, a
 nonlinear Least-Squares model is used, offering a small performance
 improvement over~\cite{sun2011depth}.
+
 
 %%%%%%%%%%%%%%% Our Method
 \subsection{Where does our work fit in?}

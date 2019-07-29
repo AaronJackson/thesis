@@ -88,9 +88,10 @@ examples from 5 predominant approaches:
     romdhani2005estimating}, the most popular approach for estimating
   the full 3D facial structure from a single image (among others),
   training includes an iterative flow procedure for dense image
-  correspondence which is prone to failure. Additionally, testing requires a
-  careful initialisation for solving a difficult highly non-convex
-  optimization problem, which is slow.
+  correspondence which is prone to failure. Additionally, testing
+  requires a careful initialisation for solving a difficult highly
+  non-convex optimization problem in order to estimate the pose and
+  shape parameters, which is slow.
 \item The work of \cite{kemelmacher20113d}, a popular approach for
   2.5D reconstruction from a single image, formulates and solves a
   carefully initialised (for frontal images only) non-convex
@@ -180,11 +181,15 @@ approach of \cite{romdhani2005estimating}, careful initialisation and
 by constraining the solution using a sparse set of landmarks. Face
 profiling is then used to render each image to 10-15 different poses
 resulting in a large scale dataset (more than 60,000 2D facial images
-and 3D meshes) called 300W-LP. Note that because each mesh is
-produced by a 3DMM, the vertices of all produced meshes are in dense
-correspondence; however this is not a prerequisite for our method and
-unregistered raw facial scans could be also used if available
-(e.g. the BU-4DFE dataset~\cite{yin2008high}).
+and 3D meshes) called 300W-LP. Each mesh consists of approximately
+53000 vertices, enclosing the face entirely. However, no vertices
+exist around the mouth, base of neck and eyes, and as such, this mesh
+is not watertight. All images are $450 \times 450$, although these are
+downsampled to $386 \times 386$ during training. Note that because
+each mesh is produced by a 3DMM, the vertices of all produced meshes
+are in dense correspondence; however this is not a prerequisite for
+our method and unregistered raw facial scans could be also used if
+available (e.g. the BU-4DFE dataset~\cite{yin2008high}).
 
 \subsection{Proposed volumetric representation}
 
@@ -208,6 +213,7 @@ method~\cite{zhu2016face} in Section~\ref{S:Results}.
 \begin{figure}
   \centering
   \includegraphics[width=0.9\linewidth]{img/discretisation.pdf}
+
   \caption[Dataset voxelisation procedure]{The voxelisation process
     creates a volumetric representation of the 3D face mesh, aligned
     with the 2D image.}
@@ -224,15 +230,23 @@ by the 3D facial scan, and 0 otherwise. That is to say $ V_{whd}$ is
 the ground truth for voxel $\{w,h,d\}$ and is equal to 1, if voxel
 $\{w,h,d\}$ belongs to the 3D volumetric representation of the face
 and 0 otherwise (i.e. it belongs to the background). The conversion is
-shown in Figure~\ref{fig:discretisation}. Notice that the process
-creates a volume fully aligned with the 2D image. The importance of
-spatial alignment is analysed in more detail in
-Section~\ref{sec:spatialimportance}. The error caused by
-discretization for a randomly picked facial scan as a function of the
-volume size is shown in Figure~\ref{fig:voxerror}. Given that the error
-of state-of-the-art methods \cite{roth2016adaptive,liu2016joint} is of
-the order of a few mms, we conclude that discretization by
-$192\times 192\times 200$ produces negligible error.
+shown in Figure~\ref{fig:discretisation}. Contrary to standard
+approaches, this data was voxelised by rotating to frontal and
+estimating a depth map is estimated using bilinear interpolation. from
+which the volume is filled back to a fixed point. This results in the
+mouth becoming filled. Notice that the process creates a volume fully
+aligned with the 2D image. The importance of spatial alignment is
+analysed in more detail in Section~\ref{sec:spatialimportance}. The
+error caused by discretization for a randomly picked facial scan as a
+function of the volume size is shown in
+Figure~\ref{fig:voxerror}. Given that the error of state-of-the-art
+methods \cite{roth2016adaptive,liu2016joint} is of the order of a few
+mms, we conclude that discretization by $192\times 192\times 200$
+produces negligible error. Such a spatial resolution is ideal for the
+type of architecture we have chosen to use as it can be reduced by
+half many times. The depth, 200, was chosen to capture as much depth
+information as possible without sacrificing the spatial resolution or
+increasing the memory requirements too much.
 
 Given our volumetric facial representation, the problem of regressing
 the 3D coordinates of all vertices of a facial scan is reduced to one
@@ -291,6 +305,16 @@ output, and has an identical structure to that of the first one.
     \label{fig:cnnbaseline}
   \end{subfigure}
   ~
+  \begin{subfigure}[t]{1\textwidth}
+    \centering
+    \includegraphics[width=0.6\linewidth]{img/multitask.pdf}
+    \caption[Multitask reconstruction architecture]{The proposed
+      \textit{VRN - Multitask} architecture regresses both the 3D facial
+      volume and a set of sparse facial landmarks.}
+    \label{fig:cnnmultitask}
+    \vspace{-2mm}
+  \end{subfigure}
+  ~
   \begin{subfigure}[t]{0.98\textwidth}
     \centering
     \includegraphics[width=\linewidth]{img/guided.pdf}
@@ -302,19 +326,10 @@ output, and has an identical structure to that of the first one.
     \label{fig:guidednet}
   \end{subfigure}
   ~
-  \begin{subfigure}[t]{1\textwidth}
-    \centering
-    \includegraphics[width=0.6\linewidth]{img/multitask.pdf}
-    \caption[Multitask reconstruction architecture]{The proposed
-      \textit{VRN - Multitask} architecture regresses both the 3D facial
-      volume and a set of sparse facial landmarks.}
-    \label{fig:cnnmultitask}
-    \vspace{-2mm}
-  \end{subfigure}
   \caption[Overview of proposed architectures]{An overview of the
     proposed three architectures for Volumetric Regression:
     \textit{Volumetric Regression Network (VRN)}, \textit{VRN -
-      Guided} and \textit{VRN - Multitask}.}
+      Multitask} and \textit{VRN - Guided}.}
   \label{fig:cnnall}
   \vspace{-5mm}
 \end{figure*}
@@ -325,7 +340,14 @@ entropy loss function:
   \sum\limits_{h=1}^{H}\sum\limits_{d=1}^{D}[V_{whd}\log
   \widehat{V}_{whd}+(1-V_{whd})\log(1-\widehat{V}_{whd})],
 \end{equation} where $\widehat{V}_{whd}$ is the corresponding Sigmoid
-output at voxel $\{w,h,d\}$ of the regressed volume.
+output at voxel $\{w,h,d\}$ of the regressed volume. In the case of
+\textit{VRN - Multitask}, the same loss is applied to both tails of
+the network with even weightings. Similarly, in \textit{VRN - Guided},
+the loss is also applied to the heatmap regression and hence the loss
+is summed during backpropagation.
+
+Each residual module of all three of our architectures consists of 256
+feature spatial convolutions.
 
 At test time, and given an input 2D image, the network regresses a 3D
 volume from which the outer 3D facial mesh is recovered. Rather than
@@ -383,11 +405,17 @@ this network \textit{VRN - Guided}.
 % Trained with RMSProp
 Each of our architectures was trained end-to-end using RMSProp with an
 initial learning rate of $10^{-4}$, which was lowered after 40 epochs
-to $10^{-5}$. During training, random augmentation was applied to each
-input sample (face image) and its corresponding target (3D volume): we
-applied in-plane rotation $r\in[-45^{\circ}, ..., 45^{\circ}]$,
-translation $t_z,t_y\in[-15,...,15]$ and scale $s\in [0.85,...,1.15]$
-jitter. In 20\% of cases, the input and target were flipped
+to $10^{-5}$. This training protocol remained fixed for all
+architectures to avoid bias. The number of epochs were chosen based on
+the rate at which the learning rate fell during training of
+\textit{VRN} and some tests using the testing set of the
+HELEN~\cite{le2012interactive} images from
+300W~\cite{sagonas2013semi} as validation. During training,
+random augmentation was applied to each input sample (face image) and
+its corresponding target (3D volume): we applied in-plane rotation
+$r\in[-45^{\circ}, ..., 45^{\circ}]$, translation
+$t_z,t_y\in[-15,...,15]$ and scale $s\in [0.85,...,1.15]$ jitter. In
+20\% of cases, the input and target were flipped
 horizontally. Finally, the input samples were adjusted with some
 colour scaling on each RGB channel selected uniformly
 $c_r,c_g,c_b \in \{0.6,...,1.4\}$.
@@ -405,15 +433,6 @@ different standard deviations.
 
 \section{Results} \label{S:Results}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.7\linewidth]{img/aflw2000res.pdf}
-  \caption[Visual results on AFLW2000-3D dataset]{Some visual results
-    from the AFLW2000-3D dataset generated using our \textit{VRN -
-      Guided} method.}
-  \label{fig:aflw2000res}
-  \vspace{-4mm}
-\end{figure}
 
 \begin{figure}
   \centering
@@ -471,6 +490,16 @@ different standard deviations.
   \vspace{-4mm}
 \end{table}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\linewidth]{img/aflw2000res.pdf}
+  \caption[Visual results on AFLW2000-3D dataset]{Some visual results
+    from the AFLW2000-3D dataset generated using our \textit{VRN -
+      Guided} method.}
+  \label{fig:aflw2000res}
+  \vspace{-4mm}
+\end{figure}
+
 
 We performed cross-database experiments only, on 3 different
 databases, namely AFLW2000-3D, BU-4DFE, and Florence reporting the
@@ -502,8 +531,10 @@ dataset in Figure~\ref{fig:face300vw}. From all of these results, we
 can conclude the following:
 \begin{enumerate}
 \item Volumetric Regression Networks largely outperform 3DDFA and EOS
-  on all datasets, verifying that directly regressing the 3D facial
-  structure is a much easier problem for CNN learning.
+  on all datasets used for evaluation, statistically significant in
+  all cases ($p < 0.01$, paired $t$-test). This verifies that directly
+  regressing the 3D facial structure using the volumetric
+  representation, is a much easier problem for CNN learning.
 \item All VRNs perform well across the whole spectrum of facial poses,
   expressions and occlusions. Also, there are no significant performance
   discrepancies across different datasets (ALFW2000-3D seems to be
@@ -512,9 +543,10 @@ can conclude the following:
   (\textit{VRN - Guided}), however at the cost of higher computational
   complexity: \textit{VRN - Guided} uses another stacked hourglass
   network for landmark localization.
-\item \textit{VRN - Multitask} does not always perform particularly
-  better than the plain VRN (in fact on BU-4DFE it performs worse), not
-  justifying the increase of network complexity. It seems that it might
+\item \textit{VRN - Multitask} does not always perform better than the
+  plain VRN (in fact on BU-4DFE it performs worse), not justifying the
+  increase of network complexity. The results are not significant on
+  any dataset ($p > 0.10$, paired $t$-test).  It seems that it might
   be preferable to train a network to focus on the task in hand.
 \end{enumerate}
 
@@ -598,12 +630,15 @@ truth reconstruction normalised by the outer 3D interocular distance:
   \textrm{NME} = \frac{1}{N} \sum_{k=1}^{N} \frac{||\mathbf{x}_k-\mathbf{y}_{k} ||_{2} }{d}, \label{eq:err}
 \end{equation}
 where $N$ is the number of vertices per facial mesh, $d$ is the 3D
-interocular distance and $\mathbf{x}_k$,$\mathbf{y}_k$ are vertices of
-the grouthtruth and predicted meshes. The error is calculated on the
-face region only on approximately 19,000 vertices per facial
-mesh. Notice that when there is no point correspondence between the
-ground truth and the estimated mesh, ICP was used but only to
-establish the correspondence, i.e. the rigid alignment was not
+outer interocular distance and $\mathbf{x}_k$,$\mathbf{y}_k$ are
+vertices of the grouthtruth and predicted meshes. This outer
+interocular distance is the distance between the two lateral canthus,
+which is the most outer part of the eye. As this is in 3D, the
+distance remains fixed even when the face is rotated. The error is
+calculated on the face region only on approximately 19,000 vertices
+per facial mesh. Notice that when there is no point correspondence
+between the ground truth and the estimated mesh, ICP was used but only
+to establish the correspondence, i.e. the rigid alignment was not
 used. If the rigid alignment is used, we found that, for all methods,
 the error decreases but it turns out that the relative difference in
 performance remains the same. For completeness, we included these
@@ -626,7 +661,8 @@ performed using v0.12 of EOS.
 
 We present results where ICP has been used not only to find the
 correspondence between the groundtruth and predicted vertices, but
-also to remove the rigid transformation between them. We find that
+also to remove the rigid transformation between them. ICP was applied
+after the surface extraction was used to create the mesh. We find that
 this offers a marginal improvement to all methods. However, the
 relative performance remains mostly the same between each
 method. Results on AFLW2000~\cite{zhu2016face},
@@ -752,10 +788,11 @@ rendered frontal images in difference expressions from BU-4DFE (since
 Florence only exhibits a neutral expression) and measured the
 performance for each expression. We show the six acted facial
 expressions which are available in BU-4DFE in
-Figure~\ref{fig:bu4dfe_expressions}. This kind of extreme acted facial
-expressions generally do not occur in the training set, yet as shown
-in Figure~\ref{fig:effect_expression}, the performance variation
-across different expressions is quite minor.
+Figure~\ref{fig:bu4dfe_expressions}. These expressions are available
+for all participants, of which there are 102. This kind of extreme
+acted facial expressions generally do not occur in the training set,
+yet as shown in Figure~\ref{fig:effect_expression}, the performance
+variation across different expressions is quite minor.
 
 \begin{figure}
   \centering
@@ -919,7 +956,7 @@ performance of the \textit{Lighter} network is clearly worse - the
 surface is not as smooth and the facial expression is not captured as
 clearly as in both \textit{Heavy} and \textit{Light}.
 
-\subsection{A Volumetric \textit{Volumetric Regression Network}}
+\subsection{A Volumetric Implementation}
 \label{sec:arc_volumetric}
 
 One of the main contributions of this chapter is to show that good

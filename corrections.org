@@ -1,79 +1,165 @@
 List of Corrections
 
+
 - [X] Title: 3D human face and body reconstruction.
+
 - [ ] Figure description of 3DMM is expected in the introduction
+
 - [X] Page 13, clarify last sentence of first paragraph
+
 - [X] Page 14, define X, Y, Z directions
+
 - [X] Page 14, better clarify the process of “counting of line
   intersections”
+
 - [ ] Page 16, if not in great detail, it is still desirable to
   describe a bit of history of deep learning methods and general
   architectures of CNN in section 2.2.
+
 - [X] Page 20, clarify “mean shape of facial landmark”.
+
 - [X] Page 21, define the term of incremental fitting.
+
 - [X] Page 21, medium scale features
-- [ ] Page 23, improve clarity of section 3.1.5
+
+- [X] Page 23, improve clarity of section 3.1.5
+  - I've given a bit more background to depth estimation.
+
 - [X] Page 24, a gentle introduction for human body reconstruction.
+
 - [X] Page 25, clarify the sentence: “provided to these….”
-- [ ] Page 32, be clear on the highly difficult.
-- [ ] Page 34, more details of dataset (e.g vertices, image size,
+
+- [X] Page 32, be clear on the highly difficult.
+
+- [X] Page 34, more details of dataset (e.g vertices, image size,
   etc.) and
+  - Added some explanation about both the number of vertices and the
+    image size. I already feel that we explain the artificially warped
+    faces fairly well in this section.
+
 - [ ] Page 34, suggest to move the dataset description to a section
   later and combine with other datasets. Explicitly describe which one
   is for training and which one is for testing.
-- [ ] Page 35, details about volumetric representation. How to fill
+  - I'm not really sure how I can structure this better. The subsection
+    we it would be merged with is under Results, and I feel like this
+    makes a lot of sense.  The training datasets are described in a
+    section under Method. Perhaps changing the titles to "Training
+    Datasets" and "Evaluation Datasets" would suffice?
+
+- [X] Page 35, details about volumetric representation. How to fill
   holes in mouth?
-- [ ] Page 36, justify why using 192x192x200
-- [ ] Page 38, IMPORTANT: details of hourglass (number of feature
+  - I have added some explanation about how our voxelisation was
+    performed, contrary to the "standard approaches", and why this
+    results in the mouth being filled in.
+
+- [X] Page 36, justify why using 192x192x200
+  - I have explained the choice in 192x192, and also why the depth is 200.
+
+- [X] Page 38, IMPORTANT: details of hourglass (number of feature
   channels, layers), and loss function for landmarks.
-- [ ] Page 38-39: order of VRN-multitask and VRN-guided on page 39 is
+  - I have covered this with the stuff for "Page 39 add more details
+    for Multitask and guided method"
+
+- [X] Page 38-39: order of VRN-multitask and VRN-guided on page 39 is
   not consistent with figure 4.4.
-- [ ] Page 39, add more details for Multitask and guided
+  - I have corrected the ordering of the subfigures.
+
+- [X] Page 39, add more details for Multitask and guided
   methods. (e.g.  Loss function, backpropagation, etc.)
-- [ ] Page 40, justification of number of Epoch. Used validation
+  - I have explained that the loss is summed in both of these cases,
+    and stated that the same loss is used for both volumetric
+    regression and landmark localisation.
+
+- [X] Page 40, justification of number of Epoch. Used validation
   dataset?
+  - Explained the training protocol remained fixed for all
+    experiments. The number of epochs for each stage was decided upon
+    from the beginning by training (the unguided) VRN and monitoring
+    the loss, in addition to some validation experiments on the
+    testing section of HELEN images.
+
 - [ ] Page 40, section 4.3, highly recommend moving the result section
   to a section after all the experiments and evaluation metrics are
   properly described. The audience currently need to go back and forth
   to follow the complete story.
+
 - [ ] Page 43, add statistical tests of results to demonstrate
   statistical significance and report computational time for training
   and testing.
-- [ ] Page 43, figure 4.6 need to be reference first before figure
+  - I have included p-values for a paired t-test, showing whether the
+    tests were significant for conclusions 1 (comparing with other
+    methods) and 4 (comparing guided to multitask).
+  - TODO computational time
+
+- [X] Page 43, figure 4.6 need to be reference first before figure
   4.7.
-- [ ] Page 45, figure 4.11, wrong order of first two images in row 1.
-- [ ] Page 46, define 3D interocular distance.
-- [ ] Page 47, details of the sequence of applying ICP and marching
+  - I have corrected the ordering of these. 4.6 became 4.9
+
+- [X] Page 45, figure 4.11, wrong order of first two images in row 1.
+  - Wow, oops. Corrected this.
+
+- [X] Page 46, define 3D interocular distance.
+  - I have explained what this is and also stated that it remains
+    fixed as the face is rotated.
+
+- [X] Page 47, details of the sequence of applying ICP and marching
   cube
+
 - [ ] Page 48, mention metrics employed in the caption of table.
+  - Not sure I understand. The caption says normalized mean error is
+    used.
+
 - [ ] Page 50, rewrite section 4.4 to improve clarity.
+
 - [ ] Page 50, details of dataset (e.g. how many images/subjects per
   angle?)
-- [ ] Page 51, how many subjects for each expression?
+
+- [X] Page 51, how many subjects for each expression?
+
 - [ ] Page 52, compare with other methods in large pose/ expression
   experiments
+
 - [ ] Page 52, list results in a table for the ablation tests.
+
 - [ ] Page 54, add computational time to table 4.3 and some comments
   regarding time.
+
 - [ ] Page 55, justify why 1 stack Hourglass performed better but
   still use 2 stacked one?
-- [ ] Page 56, rephase the title of 4.6.4
+
+- [X] Page 56, rephase the title of 4.6.4
+  - I have changed this to "A Volumetric Implementation"
+
 - [ ] Page 62, be more specific regarding optimisation methods (second
   paragraph)
+
 - [ ] Page 65, define Z direction, add details of SMPLify.
+
 - [ ] Page 66, define Z direction, head-foot direction?
+
 - [ ] Page 66, section 5.2.3 how many images for training
-- [ ] Page 67-69, don’t use “ours” in the title.
+
+- [X] Page 67-69, don’t use “ours” in the title.
+
 - [ ] Page 67, add details of multi-scale residual module and
+
 - [ ] Page 68, how four losses are combined and optimised.
+
 - [ ] Page 72, statistical test and how many testing images.
+
 - [ ] Page 84, how many training images for each dataset
+
 - [ ] Page 86-87, label equations, explain 32 stride.
+
 - [ ] Page 88, move table 6.1 that close to Figure 6.4.
+
 - [ ] Page 90, please clarify “huge”
+
 - [ ] Page 92, more comments on connected landmark and guided by
   detected.
+
 - [ ] Page 94, move figure 6.9 to page 92.
+
 - [ ] Reference, use uniform style.
 
 
