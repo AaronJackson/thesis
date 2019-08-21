@@ -12,9 +12,11 @@ List of Corrections
 - [X] Page 14, better clarify the process of “counting of line
   intersections”
 
-- [ ] Page 16, if not in great detail, it is still desirable to
+- [X] Page 16, if not in great detail, it is still desirable to
   describe a bit of history of deep learning methods and general
   architectures of CNN in section 2.2.
+  - I have given a gentle introduction to deep learning, convolutions
+    and batch norm as the first section of the background chapter.
 
 - [X] Page 20, clarify “mean shape of facial landmark”.
 
@@ -37,14 +39,15 @@ List of Corrections
     image size. I already feel that we explain the artificially warped
     faces fairly well in this section.
 
-- [ ] Page 34, suggest to move the dataset description to a section
+- [X] Page 34, suggest to move the dataset description to a section
   later and combine with other datasets. Explicitly describe which one
   is for training and which one is for testing.
-  - I'm not really sure how I can structure this better. The subsection
-    we it would be merged with is under Results, and I feel like this
-    makes a lot of sense.  The training datasets are described in a
-    section under Method. Perhaps changing the titles to "Training
-    Datasets" and "Evaluation Datasets" would suffice?
+  - I'm not really sure how I can structure this better. The
+    subsection we it would be merged with is under Results, and I feel
+    like this makes a lot of sense.  The training datasets are
+    described in a section under Method. I've changed the titles to
+    "Training Datasets" and "Evaluation Datasets". Perhaps this is
+    less confusing?
 
 - [X] Page 35, details about volumetric representation. How to fill
   holes in mouth?
@@ -78,25 +81,26 @@ List of Corrections
     the loss, in addition to some validation experiments on the
     testing section of HELEN images.
 
-- [ ] Page 40, section 4.3, highly recommend moving the result section
+- [X] Page 40, section 4.3, highly recommend moving the result section
   to a section after all the experiments and evaluation metrics are
   properly described. The audience currently need to go back and forth
   to follow the complete story.
+  - I have updated this and believe it is now easier to follow.
 
-- [ ] Page 43, add statistical tests of results to demonstrate
+- [-] Page 43, add statistical tests of results to demonstrate
   statistical significance and report computational time for training
   and testing.
-  - I have included p-values for a paired t-test, showing whether the
-    tests were significant for conclusions 1 (comparing with other
+  - [X] I have included p-values for a paired t-test, showing whether
+    the tests were significant for conclusions 1 (comparing with other
     methods) and 4 (comparing guided to multitask).
-  - TODO computational time
+  - [ ] TODO computational time
 
 - [X] Page 43, figure 4.6 need to be reference first before figure
   4.7.
   - I have corrected the ordering of these. 4.6 became 4.9
 
 - [X] Page 45, figure 4.11, wrong order of first two images in row 1.
-  - Wow, oops. Corrected this.
+  - I have corrected this.
 
 - [X] Page 46, define 3D interocular distance.
   - I have explained what this is and also stated that it remains
@@ -105,70 +109,83 @@ List of Corrections
 - [X] Page 47, details of the sequence of applying ICP and marching
   cube
 
-- [ ] Page 48, mention metrics employed in the caption of table.
-  - Not sure I understand. The caption says normalized mean error is
-    used.
+- [X] Page 48, mention metrics employed in the caption of table.
+  - Not sure I understand. The caption already gives the metric
+    normalized mean error (NME) is used. I have referenced the NME
+    equation in each case.
 
-- [ ] Page 50, rewrite section 4.4 to improve clarity.
+- [X] Page 50, rewrite section 4.4 to improve clarity.
 
-- [ ] Page 50, details of dataset (e.g. how many images/subjects per
+- [X] Page 50, details of dataset (e.g. how many images/subjects per
   angle?)
+  - I have listed the pitches and yaws used, plus stated the number of
+    subjects in Florence.
 
 - [X] Page 51, how many subjects for each expression?
 
-- [ ] Page 52, compare with other methods in large pose/ expression
+- [ ]  Page 52, compare with other methods in large pose/ expression
   experiments
+  - As discussed, this will require a significant investment in time.
 
 - [ ] Page 52, list results in a table for the ablation tests.
 
 - [ ] Page 54, add computational time to table 4.3 and some comments
   regarding time.
 
-- [ ] Page 55, justify why 1 stack Hourglass performed better but
+- [X] Page 55, justify why 1 stack Hourglass performed better but
   still use 2 stacked one?
+  - I have explained that this may further support that increasing the
+    number of modules is more optimal than increasing the number of
+    stacked hourglasses. I've also updated the text to make it clear
+    that the performance difference between all architectures is quite
+    small.
 
 - [X] Page 56, rephase the title of 4.6.4
   - I have changed this to "A Volumetric Implementation"
 
-- [ ] Page 62, be more specific regarding optimisation methods (second
+- [X] Page 62, be more specific regarding optimisation methods (second
   paragraph)
 
-- [ ] Page 65, define Z direction, add details of SMPLify.
+- [X] Page 65, define Z direction, add details of SMPLify.
 
-- [ ] Page 66, define Z direction, head-foot direction?
+- [X] Page 66, define Z direction, head-foot direction?
+  - I have explained that the width and height match up with the X & Y
+    of the volume respectively. The new dimensions Z is introduced as
+    we are going from 2D -> 3D.
 
-- [ ] Page 66, section 5.2.3 how many images for training
+- [X] Page 66, section 5.2.3 how many images for training
 
 - [X] Page 67-69, don’t use “ours” in the title.
 
-- [ ] Page 67, add details of multi-scale residual module and
+- [X] Page 67, add details of multi-scale residual module and
 
-- [ ] Page 68, how four losses are combined and optimised.
+- [X] Page 68, how four losses are combined and optimised.
 
-- [ ] Page 72, statistical test and how many testing images.
+- [X] Page 72, statistical test and how many testing images.
 
-- [ ] Page 84, how many training images for each dataset
+- [X] Page 84, how many training images for each dataset
 
-- [ ] Page 86-87, label equations, explain 32 stride.
+- [X] Page 86-87, label equations, explain 32 stride.
 
-- [ ] Page 88, move table 6.1 that close to Figure 6.4.
+- [X] Page 88, move table 6.1 that close to Figure 6.4.
 
-- [ ] Page 90, please clarify “huge”
+- [X] Page 90, please clarify “huge”
 
-- [ ] Page 92, more comments on connected landmark and guided by
+- [X] Page 92, more comments on connected landmark and guided by
   detected.
 
-- [ ] Page 94, move figure 6.9 to page 92.
+- [X] Page 94, move figure 6.9 to page 92.
 
 - [ ] Reference, use uniform style.
 
 
-All minor typographic error and missing references are annotated in
-the thesis with a green or pencil cross. Please avoid repetition of
-certain sentences (e.g. page 31 last paragraph).
+- [ ] All minor typographic error and missing references are annotated
+  in the thesis with a green or pencil cross. Please avoid repetition
+  of certain sentences (e.g. page 31 last paragraph).
 
-Generally, it is not a good practice to use reference as part of the
-sentence (e.g. [10] suggests…). Instead you may use the author names
-(e.g. Jackson et al. [10] suggest…).
+- [X] Generally, it is not a good practice to use reference as part of
+  the sentence (e.g. [10] suggests…). Instead you may use the author
+  names (e.g. Jackson et al. [10] suggest…).
+  - I have corrected the cases I can find.
 
-Generally, keep figures and tables close to the relevant texts.
+

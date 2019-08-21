@@ -433,73 +433,73 @@ different standard deviations.
 
 \section{Results} \label{S:Results}
 
+\subsection{Evaluation Datasets}
+
+We used three different datasets for quantifying the performance of
+our method. The dataset AFLW2000-3D allows for unbiased and fair
+comparison with other methods. The remaining two, BU-4DFE and
+Florence, have to be rendered, but allows us to quantify performance
+across pose and expression with greater accuracy. These three datasets
+are discussed in more detail below.
+
+\paragraph{(a) AFLW2000-3D} As our target was to test
+our network on totally unconstrained images, we firstly conducted
+experiments on the AFLW2000-3D~\cite{zhu2016face} dataset which
+contains 3D facial meshes for the first 2000 images from AFLW
+\cite{aflw2011}.
+
+\paragraph{(b) BU-4DFE} We also conducted experiments on rendered
+images from BU-4DFE~\cite{yin2008high}. We rendered each participant
+for both Happy and Surprised expressions with three different pitch
+rotations between $-20$ and $20$ degrees. For each pitch, seven roll
+rotations from $-80$ to $80$ degrees were also rendered. Large
+variations in lighting direction and colour were added randomly to
+make the images more challenging. We show some example renderings in
+the first row (a) of Figure~\ref{fig:example_renderings}.
+
+\paragraph{(c) Florence}
+Finally, we conducted experiments on rendered images from the
+Florence~\cite{masi2d3dFaceData} dataset. Facial images were rendered
+in a similar fashion to the ones of BU-4DFE but for slightly different
+parameters: Each face is rendered in 20 difference poses, using a
+pitch of -15, 20 or 25 degrees and each of the five evenly spaced
+rotations between -80 and 80. We show some example renderings in the
+second (b) row of Figure~\ref{fig:example_renderings}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.75\linewidth]{curves/aflw.eps}
-  \caption[NME performance on AFLW2000-3D images]{NME-based
-    performance on in-the-wild ALFW2000-3D dataset. The proposed
-    \textit{Volumetric Regression Networks}, and EOS and 3DDFA are
-    compared. Please note that ``VRN - without allignment'' refers to
-    a VRN where a frontal face is always regressed, regardless of
-    input pose, discussed in Section~\ref{sec:spatialimportance}.}
-  \label{roc:aflw2000}
+  \includegraphics[width=0.9\linewidth]{img/rendering_examples.pdf}
+  \caption[Example BU-4DFE and Florence renderings]{Example renderings
+    from the BU-4DFE \textbf{(a)} and Florence \textbf{(b)}.}
+  \label{fig:example_renderings}
 \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.75\linewidth]{curves/bu4dfe.eps}
-  \caption[NME performance on BU-4DFE renderings]{NME-based
-    performance on renderings from BU-4DFE. The proposed
-    \textit{Volumetric Regression Networks}, and EOS and 3DDFA are
-    compared.}
-  \label{roc:bu4dfe}
-\end{figure}
+\subsection{Evaluation metric} To measure the accuracy of reconstruction for
+each face, we used the Normalised Mean Error (NME) defined as the
+average per vertex Euclidean distance between the estimated and ground
+truth reconstruction normalised by the outer 3D interocular distance:
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.75\linewidth]{curves/florence.eps}
-  \caption[NME performance on Florence renderings]{NME-based
-    performance on our large pose renderings of the Florence
-    dataset. The proposed \textit{Volumetric Regression Networks}, and
-    EOS and 3DDFA are compared.}
-  \label{roc:florence}
-\end{figure}
+\begin{equation}
+  \textrm{NME} = \frac{1}{N} \sum_{k=1}^{N} \frac{||\mathbf{x}_k-\mathbf{y}_{k} ||_{2} }{d}, \label{eq:err}
+\end{equation}
+\label{eq:3d_nme}
+where $N$ is the number of vertices per facial mesh, $d$ is the 3D
+outer interocular distance and $\mathbf{x}_k$,$\mathbf{y}_k$ are
+vertices of the grouthtruth and predicted meshes. This outer
+interocular distance is the distance between the two lateral canthus,
+which is the most outer part of the eye. As this is in 3D, the
+distance remains fixed even when the face is rotated. The error is
+calculated on the face region only on approximately 19,000 vertices
+per facial mesh. Notice that when there is no point correspondence
+between the ground truth and the estimated mesh, ICP was used but only
+to establish the correspondence, i.e. the rigid alignment was not
+used. If the rigid alignment is used, we found that, for all methods,
+the error decreases but it turns out that the relative difference in
+performance remains the same. For completeness, we included these
+results in Section~\ref{sec:faceicpres}.
 
 
-
-\begin{table}
-  \caption[Numerical performance of 3D face
-  reconstruction]{Reconstruction accuracy on AFLW2000-3D, BU-4DFE and
-    Florence in terms of NME. Lower is better.}
-  \label{tab:overview}
-  \centering
-  \small
-  \begin{tabular}{|l||c|c|c|}
-    \hline
-    \textbf{Method}   & \textbf{AFLW2000-3D} & \textbf{BU-4DFE} & \textbf{Florence} \\
-    \hline\hline
-    VRN & 0.0676   & 0.0600 & 0.0568   \\
-    VRN - Multitask   & 0.0698        & 0.0625     & 0.0542        \\
-    VRN - Guided    & \textbf{0.0637}   & \textbf{0.0555} & \textbf{0.0509}   \\
-    \hline
-    3DDFA~\cite{zhu2016face}             & 0.1012   & 0.1227 & 0.0975   \\
-    EOS~\cite{huber2016multiresolution}  & 0.0971   & 0.1560 & 0.1253   \\
-    \hline
-  \end{tabular}
-  \vspace{-4mm}
-\end{table}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.7\linewidth]{img/aflw2000res.pdf}
-  \caption[Visual results on AFLW2000-3D dataset]{Some visual results
-    from the AFLW2000-3D dataset generated using our \textit{VRN -
-      Guided} method.}
-  \label{fig:aflw2000res}
-  \vspace{-4mm}
-\end{figure}
-
+\subsection{Evaluation}
 
 We performed cross-database experiments only, on 3 different
 databases, namely AFLW2000-3D, BU-4DFE, and Florence reporting the
@@ -508,6 +508,7 @@ performance of all the proposed networks (\textit{VRN}, \textit{VRN -
 two state-of-the-art methods, namely 3DDFA \cite{zhu2016face} and EOS
 \cite{huber2016multiresolution}. Both methods perform 3DMM
 fitting (3DDFA uses a CNN), a process completely bypassed by \textit{VRN}.
+
 
 % Don't really think this figure demonstrates what we want it to.
 % \begin{figure}
@@ -552,6 +553,56 @@ can conclude the following:
 
 \noindent Details about our experiments are given in the proceeding subsections.
 
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{curves/aflw.eps}
+  \caption[NME performance on AFLW2000-3D images]{NME-based
+    (Equation~\ref{eq:3d_nme}) performance on in-the-wild ALFW2000-3D
+    dataset. The proposed \textit{Volumetric Regression Networks}, and
+    EOS and 3DDFA are compared. Please note that ``VRN - without
+    allignment'' refers to a VRN where a frontal face is always
+    regressed, regardless of input pose, discussed in
+    Section~\ref{sec:spatialimportance}.}
+  \label{roc:aflw2000}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{curves/bu4dfe.eps}
+  \caption[NME performance on BU-4DFE renderings]{NME-based
+    (Equation~\ref{eq:3d_nme}) performance on renderings from
+    BU-4DFE. The proposed \textit{Volumetric Regression Networks}, and
+    EOS and 3DDFA are compared.}
+  \label{roc:bu4dfe}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{curves/florence.eps}
+  \caption[NME performance on Florence renderings]{NME-based
+    (Equation~\ref{eq:3d_nme}) performance on our large pose
+    renderings of the Florence dataset. The proposed
+    \textit{Volumetric Regression Networks}, and EOS and 3DDFA are
+    compared.}
+  \label{roc:florence}
+\end{figure}
+
+
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\linewidth]{img/aflw2000res.pdf}
+  \caption[Visual results on AFLW2000-3D dataset]{Some visual results
+    from the AFLW2000-3D dataset generated using our \textit{VRN -
+      Guided} method.}
+  \label{fig:aflw2000res}
+  \vspace{-4mm}
+\end{figure}
+
+
 \begin{figure}
   \centering
 \includegraphics[width=3.4cm]{img/failures/image00400_img.png}
@@ -580,69 +631,6 @@ can conclude the following:
   \label{fig:face300vw}
 \end{figure}
 
-\subsection{Datasets}
-
-We used three different datasets for quantifying the performance of
-our method. The dataset AFLW2000-3D allows for unbiased and fair
-comparison with other methods. The remaining two, BU-4DFE and
-Florence, have to be rendered, but allows us to quantify performance
-across pose and expression with greater accuracy. These three datasets
-are discussed in more detail below.
-
-\paragraph{(a) AFLW2000-3D} As our target was to test
-our network on totally unconstrained images, we firstly conducted
-experiments on the AFLW2000-3D~\cite{zhu2016face} dataset which
-contains 3D facial meshes for the first 2000 images from AFLW
-\cite{aflw2011}.
-
-\paragraph{(b) BU-4DFE} We also conducted experiments on rendered
-images from BU-4DFE~\cite{yin2008high}. We rendered each participant
-for both Happy and Surprised expressions with three different pitch
-rotations between $-20$ and $20$ degrees. For each pitch, seven roll
-rotations from $-80$ to $80$ degrees were also rendered. Large
-variations in lighting direction and colour were added randomly to
-make the images more challenging. We show some example renderings in
-the first row (a) of Figure~\ref{fig:example_renderings}.
-
-\paragraph{(c) Florence}
-Finally, we conducted experiments on rendered images from the
-Florence~\cite{masi2d3dFaceData} dataset. Facial images were rendered
-in a similar fashion to the ones of BU-4DFE but for slightly different
-parameters: Each face is rendered in 20 difference poses, using a
-pitch of -15, 20 or 25 degrees and each of the five evenly spaced
-rotations between -80 and 80. We show some example renderings in the
-second (b) row of Figure~\ref{fig:example_renderings}.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.9\linewidth]{img/rendering_examples.pdf}
-  \caption[Example BU-4DFE and Florence renderings]{Example renderings
-    from the BU-4DFE \textbf{(a)} and Florence \textbf{(b)}.}
-  \label{fig:example_renderings}
-\end{figure}
-
-\subsubsection{Error metric} To measure the accuracy of reconstruction for
-each face, we used the Normalised Mean Error (NME) defined as the
-average per vertex Euclidean distance between the estimated and ground
-truth reconstruction normalised by the outer 3D interocular distance:
-
-\begin{equation}
-  \textrm{NME} = \frac{1}{N} \sum_{k=1}^{N} \frac{||\mathbf{x}_k-\mathbf{y}_{k} ||_{2} }{d}, \label{eq:err}
-\end{equation}
-where $N$ is the number of vertices per facial mesh, $d$ is the 3D
-outer interocular distance and $\mathbf{x}_k$,$\mathbf{y}_k$ are
-vertices of the grouthtruth and predicted meshes. This outer
-interocular distance is the distance between the two lateral canthus,
-which is the most outer part of the eye. As this is in 3D, the
-distance remains fixed even when the face is rotated. The error is
-calculated on the face region only on approximately 19,000 vertices
-per facial mesh. Notice that when there is no point correspondence
-between the ground truth and the estimated mesh, ICP was used but only
-to establish the correspondence, i.e. the rigid alignment was not
-used. If the rigid alignment is used, we found that, for all methods,
-the error decreases but it turns out that the relative difference in
-performance remains the same. For completeness, we included these
-results in Section~\ref{sec:faceicpres}.
 
 \subsubsection{Comparison with state-of-the-art}
 We compared against state-of-the-art 3D reconstruction methods for
@@ -674,8 +662,8 @@ in Table~\ref{tab:overviewicp}.
 \begin{table}
   \caption[Numerical performance of 3D face reconstruction with
   ICP]{Reconstruction accuracy on AFLW2000-3D, BU4DFE and Florence in
-    terms of NME where ICP has been used to remove the rigid
-    transformation. Lower is better. }
+    terms of NME (Equation~\ref{eq:3d_nme}) where ICP has been used to
+    remove the rigid transformation. Lower is better. }
   \label{tab:overviewicp}
   \centering\vspace{1mm}
   \small
@@ -698,10 +686,10 @@ in Table~\ref{tab:overviewicp}.
   \centering
   \includegraphics[width=0.75\linewidth]{curves-icp/aflw.eps}
   \caption[NME performance on AFLW2000-3D with ICP
-  Alignment]{NME-based performance on the in-the-wild AFLW2000-3D
-    dataset, where ICP has been used to remove the rigid
-    transformation. The proposed \textit{Volumetric Regression
-      Networks}, and EOS and 3DDFA are compared.}
+  Alignment]{NME-based (Equation~\ref{eq:3d_nme}) performance on the
+    in-the-wild AFLW2000-3D dataset, where ICP has been used to remove
+    the rigid transformation. The proposed \textit{Volumetric
+      Regression Networks}, and EOS and 3DDFA are compared.}
   \label{roc:aflw2000icp}
 \end{figure}
 
@@ -709,10 +697,11 @@ in Table~\ref{tab:overviewicp}.
   \centering
   \includegraphics[width=0.75\linewidth]{curves-icp/bu4dfe.eps}
   \caption[NME performance on BU4DFE with ICP Alignment]{NME-based
-    performance on our large pose and expression renderings of the
-    BU4DFE dataset, where ICP has been used to remove the rigid
-    transformation. The proposed \textit{Volumetric Regression
-      Networks}, and EOS and 3DDFA are compared.}
+    (Equation~\ref{eq:3d_nme}) performance on our large pose and
+    expression renderings of the BU4DFE dataset, where ICP has been
+    used to remove the rigid transformation. The proposed
+    \textit{Volumetric Regression Networks}, and EOS and 3DDFA are
+    compared.}
   \label{roc:bu4dfeicp}
 \end{figure}
 
@@ -720,10 +709,10 @@ in Table~\ref{tab:overviewicp}.
   \centering
   \includegraphics[width=0.75\linewidth]{curves-icp/florence.eps}
   \caption[NME performance on Florence with ICP Alignment]{NME-based
-    performance on our large pose renderings of the Florence dataset,
-    where ICP has been used to remove the rigid transformation. The
-    proposed \textit{Volumetric Regression Networks}, and EOS and
-    3DDFA are compared.}
+    (Equation~\ref{eq:3d_nme}) performance on our large pose
+    renderings of the Florence dataset, where ICP has been used to
+    remove the rigid transformation. The proposed \textit{Volumetric
+      Regression Networks}, and EOS and 3DDFA are compared.}
   \label{roc:florenceicp}
 \end{figure}
 
@@ -731,18 +720,21 @@ in Table~\ref{tab:overviewicp}.
 \section{Importance of spatial alignment}
 \label{sec:spatialimportance}
 
-The 3D reconstruction method described in~\cite{choy20163d} regresses
-a 3D volume of fixed orientation from one or more images using an
-LSTM. This is different to our approach of taking a single image and
-regressing a spatially aligned volume, which we believe is easier
-mapping to learn. To explore what the repercussions of ignoring
-spatial alignment are, we trained a variant of \textit{VRN} which
-regresses a frontal version of the face, i.e. a face of fixed
-orientation, regardless of input pose, as in ~\cite{choy20163d}. We
-also attempted to train a network using the code
-from~\cite{choy20163d} on downsampled versions of our own
-volumes. Unfortunately, we were unable to get the network to learn
-anything.
+Our approach to 3D face reconstruction preserves the spatial alignment
+between input and output. That is to say that the regressed 3D
+geometry should be capable of segmenting the input face from the
+background, given a 2D orthographic projection of the volume. A 3D
+reconstruction method is described in~\cite{choy20163d} which accepts
+as input one or more images, and as output, produces a small 3D volume
+of $32 \times 32 \times 32$ using an LSTM. In an attempt to explore
+what the repercussions of ignoring spatial alignment are, we trained a
+variant of \textit{VRN} which regresses a frontal version of the face,
+i.e. a face of fixed orientation, regardless of input pose, as
+in~\cite{choy20163d}. We call this fixed-pose variant of our method
+\textit{VRN - without alignment}. We also attempted to train a network
+using the code from~\cite{choy20163d} on downsampled versions of our
+volumes. Unfortunately we were unable to get the network to learn
+anything and found that the loss would now reduce.
 
 Although \textit{VRN - without alignment} produces a reasonable face,
 it captures only a diminished expression. The shape for all faces
@@ -771,14 +763,18 @@ experiments reported, we used the best performing \textit{VRN -
   Guided}.
 
 \subsection{Effect of pose}
+
 To measure the influence of pose on the reconstruction error, we
-measured the NME for different yaw angles using all of our
-Florence~\cite{masi2d3dFaceData} renderings. As shown in
-Figure~\ref{fig:effect_pose}, the performance of our method decreases as
-the pose increases. This is to be expected, due to less of the face
-being visible which makes evaluation for the invisible part
-difficult. We believe that our error is still very low considering
-the magnitude of these poses.
+measured the NME (Equation~\ref{eq:3d_nme}) for different amounts of
+yaw using all of our Florence~\cite{masi2d3dFaceData}
+renderings. These were rendered at $\{-80, -40, 0, 40, 80\}$ degrees
+of yaw for each of $\{-5, 0, 5\}$ degrees of pitch, for all 50
+subjects in Florence. As shown in Figure~\ref{fig:effect_pose}, the
+performance of our method decreases as the pose increases. This is to
+be expected, due to less of the face being visible which makes
+evaluation for the invisible part difficult. We believe that our error
+is still very low considering the magnitude of these poses.
+
 
 
 \subsection{Effect of expression} Certain expressions are usually
@@ -798,8 +794,8 @@ variation across different expressions is quite minor.
   \centering
   \includegraphics[width=0.6\linewidth]{curves/ablation_pose.eps}
   \caption[Effect of pose]{The effect of pose on reconstruction
-    accuracy in terms of NME on the Florence dataset. The \textit{VRN
-      - Guided} network was used.}
+    accuracy in terms of NME (Equation~\ref{eq:3d_nme}) on the
+    Florence dataset. The \textit{VRN - Guided} network was used.}
   \label{fig:effect_pose}
 \end{figure}
 
@@ -816,8 +812,9 @@ variation across different expressions is quite minor.
   \centering
   \includegraphics[width=0.7\linewidth]{curves/ablation_expression.eps}
   \caption[Effect of facial expressions]{The effect of facial
-    expression on reconstruction accuracy in terms of NME on the
-    BU-4DFE dataset. The \textit{VRN - Guided} network was used.}
+    expression on reconstruction accuracy in terms of NME
+    (Equation~\ref{eq:3d_nme}) on the BU-4DFE dataset. The \textit{VRN
+      - Guided} network was used.}
   \label{fig:effect_expression}
 \end{figure}
 
@@ -834,8 +831,8 @@ guidance will always help.
 
 In this section we explore several variations and modifications to the
 \textit{VRN - Guided} method, which may improve or impede
-performance. We provide an overview of experiments along with NME in
-Table~\ref{tab:arcexpoverview}.
+performance. We provide an overview of experiments along with NME
+(Equation~\ref{eq:3d_nme}) in Table~\ref{tab:arcexpoverview}.
 
 \begin{table*}
   \caption[Overview of architectural experiments]{An overview of the
@@ -848,8 +845,9 @@ Table~\ref{tab:arcexpoverview}.
     sequentially in any one place of the hourglass. \textbf{Stack}
     refers to the number of hourglass networks in a single stack. The
     right most column points to the relevant section of the
-    chapter. We also show the mean Normalised Mean Error (NME) for all
-    images of the AFLW2000 dataset in column \textbf{nNME}.}
+    chapter. We also show the mean Normalised Mean Error (NME,
+    Equation\ref{eq:3d_nme}) for all images of the AFLW2000 dataset in
+    column \textbf{nNME}.}
   \label{tab:arcexpoverview}
   \centering
   \small
@@ -902,8 +900,8 @@ for our 3D reconstruction experiment.
 Given a fixed computational budget one has two options when
 implementing a Volumetric Regression Network: to increase the number
 of stacks while decreasing the number of modules or vice versa.  An
-interesting question which we have not seen answered yet is whether it
-is better to have more stacked hourglasses or more modules per
+interesting question which has now been answered yet is whether it is
+better to have more stacked hourglasses or more modules per
 hourglass. In this section, we attempt to quantify any performance
 variation, at least for the task of 3D face reconstruction using
 volumetric regression while keeping the number of parameters
@@ -917,11 +915,14 @@ first of these additional networks consists of only one hourglass
 network and eight modules. Interestingly, this performs the best out
 of the three, suggesting that for this particular problem, perhaps it
 is more optimal to increase the number of modules over the number of
-hourglasses. However, it can also be observed that the performance
-difference between all three networks is very minor, suggesting that
-for our experiment as long as the number of parameters remains roughly
-fixed good performance can be achieved independently of the exact
-configuration of the hourglass network.
+hourglasses. This may also be observed from a single hourglass
+outperforming \textit{VRN - Guided}, which again, may be due to higher
+performance gains from more modules over stacked hourglasses.However,
+it can also be observed that the performance difference between all
+networks is very minor, suggesting that for our experiment as long as
+the number of parameters remains roughly fixed good performance can be
+achieved independently of the exact configuration of the hourglass
+network.
 %Perhaps our performance bottleneck is not the network but the dataset
 %from which we are learning, which may be the case if there exists any
 %noise.
@@ -983,7 +984,7 @@ Despite containing far fewer parameters than the standard VRN, the
 training took over 10 days on two Titan X GPUs and had to be performed
 with a batch size of 2. This is significantly slower than training the
 standard VRN, which takes approximately 2 days on the same
-hardware. We show the NME for this network in
+hardware. We show the NME (Equation~\ref{eq:3d_nme}) for this network in
 Table~\ref{tab:arcexpoverview}, along with a curve in
 Figure~\ref{fig:additionalexp}. Unsurprisingly, the performance of
 this method is quite poor, further illustrating the difficulty in
@@ -1000,10 +1001,11 @@ these datasets.
 \begin{figure}
   \centering
   \includegraphics[width=0.75\linewidth]{curves2/aflw.eps}
-  \caption[NME performance from architectural experiments]{Results
-    from architectural experiments described in
-    Section~\ref{sec:arcexp} on the AFLW2000 dataset, showing that in
-    the majority of cases the performance is almost the same.}
+  \caption[NME performance from architectural experiments]{Results in
+    NME (Equation~\ref{eq:3d_nme}) from architectural experiments
+    described in Section~\ref{sec:arcexp} on the AFLW2000 dataset,
+    showing that in the majority of cases the performance is almost
+    the same.}
   \label{fig:additionalexp}
 \end{figure}
 

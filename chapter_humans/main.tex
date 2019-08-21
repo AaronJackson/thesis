@@ -49,11 +49,11 @@ considered to be a very difficult problem.
 reconstruction (and 3D reconstruction in general) are typically based
 on solving difficult non-convex optimisation problems. Perhaps the
 most common approach to 3D human body reconstruction is to fit a shape
-model. For example, the recent method of \cite{bogo2016smplify}, uses
-optimisation to fit a 3D shape model to 2D body joints. However,
-optimisation methods are sensitive to initialization and are easily
-trapped to local minima, both of which are exacerbated by occlusions
-and potential scale changes.
+model. For example, the recent method of \cite{bogo2016smplify}, fits
+a 3D shape model to 2D body joints by jointly optimising the pose and
+shape. However, optimisation methods are sensitive to initialization
+and are easily trapped to local minima, both of which are exacerbated
+by occlusions and potential scale changes.
 
 In this work, we aim to significantly reduce the complexity of
 standard 3D human reconstruction techniques - to the point where it
@@ -270,17 +270,23 @@ diameter of approximately 6 pixels.
 While Human3.6M~\cite{IonescuSminchisescu11,h36m_pami} does include
 its own 3D scans, they are not in correspondence with the video
 frames. As such, we produced our training data by running
-SMPLify~\cite{bogo2016smplify} on the Human3.6M dataset. The landmarks
-required by SMPLify were generated using the code made available
-with~\cite{bulat2016human}. The fitted meshes were voxelised at a
-resolution of $128\times 128 \times 128$. In terms of depth, the
-meshes are first aligned by the mean of the Z component. However,
-through experimentation, we found that as long as the Z alignment is
-performed in a seemingly sensible way, and remains stable across all
-images, the network will learn to regress the 3D structure without
-issue. Random scale augmentation was performed in advance of the
-training procedure, as doing this on-the-fly (for 3D volumes) can be
-quite demanding in terms of CPU usage.
+SMPLify~\cite{bogo2016smplify} on the Human3.6M dataset. SMPLify is a
+3D body model fitting method which uses the SMPL
+model~\cite{loper2015smpl} by optimising the pose and shape given 2D
+landmarks as input. The landmarks required by SMPLify were generated
+using the code made available with~\cite{bulat2016human}. The fitted
+meshes were voxelised at a resolution of $128\times 128 \times
+128$. The X and Y components of the volume are aligned with the images
+width and height respectively. However, as we are going from 2D
+$\rightarrow$ 3D, we must ensure that our third component, Z, is
+handled sensibly. In terms of depth, the meshes are first aligned by
+the mean of the Z component. However, through experimentation, we
+found that as long as the Z alignment is performed in a seemingly
+sensible way, and remains stable across all images, the network will
+learn to regress the 3D structure without issue. Random scale
+augmentation was performed in advance of the training procedure, as
+doing this on-the-fly (for 3D volumes) can be quite demanding in terms
+of CPU usage.
 
 An unfortunate side effect of using SMPLify to generate our training
 data is that it is not possible to regress features such as fingers or
@@ -298,13 +304,14 @@ RMSProp~\cite{hinton2012neural} optimisation with a learning rate of
 $10^{-4}$, which was reduced after approximately 20 epochs to
 $10^{-5}$ for 40 epochs. We did not observe any performance
 improvement by reducing this learning rate further. A batch size of 6
-was used across 2 NVIDIA 1080 Ti graphics cards.  During the
-voxelisation, random scale augmentation was applied. Applying scale
-augmentation to a 3D volume on the fly, is very CPU intensive and
-slows down the training procedure too much. During training,
-augmentation to the input image was applied. This on-the-fly
-augmentation included colour channel scaling, random translation and
-random horizontal flipping.
+was used across 2 NVIDIA 1080 Ti graphics cards and our dataset
+consisted of 35,000 frames from the 7 participants in Human3.6m.
+During the voxelisation, random scale augmentation was
+applied. Applying scale augmentation to a 3D volume on the fly, is
+very CPU intensive and slows down the training procedure too
+much. During training, augmentation to the input image was
+applied. This on-the-fly augmentation included colour channel scaling,
+random translation and random horizontal flipping.
 
 
 \section{Architecture}
@@ -323,7 +330,9 @@ were trained with the same loss function as used for faces:
 _{whd})],
 \end{equation}
 where $\widehat{V}_{whd}$ is the corresponding sigmoid output at voxel
-$\{w,h,d\}$.
+$\{w,h,d\}$. In all of the architectures presented, wherever a loss
+function has been introduced, the default behaviour of summing the
+losses is used.
 
 \subsection{Multistack}
 
@@ -343,11 +352,16 @@ two. In doing so, we also halved the memory requirements, allowing us
 to increase the number of hourglass modules in the stack, from two to
 four. Next, we replace the original residual module used in
 \textit{VRN - Guided} with the multi-scale residual module proposed
-in~\cite{bulat2017binarized}. We also show the performance improvement
-from introducing just this component in the results section. Finally,
-we introduce supervision after each hourglass module. We therefore
-have four losses. Each hourglass module forks to provide features for
-the next hourglass, and to regress the volumetric representation. The
+in~\cite{bulat2017binarized}. While this module is intended for
+binarized networks (intended for high speed), we found that this can
+offer performance gains in non-binary, floating point valued
+architectures. This module aims to increase the receptive field,
+improve gradient flow while keeping the number of parameters close to
+the original. We also show the performance improvement from
+introducing just this component in the results section. Finally, we
+introduce supervision after each hourglass module. We therefore have
+four losses. Each hourglass module forks to provide features for the
+next hourglass, and to regress the volumetric representation. The
 performance after each hourglass improves. We found that there was no
 benefit to adding more than four hourglass networks as the performance
 just fluctuates as more are added. This network is depicted in
@@ -450,7 +464,9 @@ In this section we will give an overview of the performance of the
 architectures we have described above. For each network, we give our
 results as an Intersection over Union (IoU) score, which is defined as
 the number of intersecting set voxels over the number voxels set in
-either volume. These numeric results may be found in
+either volume. Our test set consisted 500 frames from Session 11 of
+Human3.6m~\cite{h36m_pami}, across all known poses in the
+dataset. These numeric results may be found in
 Table~\ref{tab:results}. We will discuss these results in more detail
 in the proceeding paragraphs.
 
@@ -458,11 +474,11 @@ We show visual results for \textit{Ours - Multistack} in
 Figure~\ref{fig:visres_ours}. The quantitative results suggest that
 the changes we made to the baseline network \textit{VRN - Guided}
 helped quite significantly, offering a performance increase of over
-4\% in terms of IoU. From this performance improvement, more than 2\%
-was due to using the residual module proposed
-in~\cite{bulat2017binarized}, this can be seen from the results for
-\textit{Ours - Old Residual}. As our data is generated by
-SMPlify~\cite{bogo2016smplify}, we are unable to provide a
+4\% in terms of IoU ($p < 0.01$, paired $t$-test). From this
+performance improvement, more than 2\% was due to using the residual
+module proposed in~\cite{bulat2017binarized}, this can be seen from
+the results for \textit{Ours - Old Residual}. As our data is generated
+by SMPlify~\cite{bogo2016smplify}, we are unable to provide a
 quantitative comparison with this method.
 
 As expected, removing either the landmarks \textit{or} the image

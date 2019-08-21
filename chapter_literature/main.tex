@@ -120,16 +120,17 @@ faces, each with a corresponding 3D mesh.
 \subsection{Synthetic Training Data for 3DMM}
 The data required for training 3D reconstruction methods typically
 consists of an image with a corresponding 3D scan. Such pairs can be
-difficult to obtain. \cite{richardson20163d} alleviate this issue by
-generating synthetic training data, comprising of renderings of
-randomly generated 3DMM with the corresponding mesh. Faces are
-rendered under random lighting conditions and pose. An iterative
-fitting method is then used during inference, optimising both geometry
-and lighting to ensure a good match with the given image. Synthetic
-data was also used for training a general purpose 3D reconstruction
-method~\cite{li2015joint}. Methods trained using synthetic training
-data often fail on real or ``in-the-wild'' images due to unrealistic
-renderings or constrained lighting.
+difficult to
+obtain. \citeauthor{richardson20163d}~\cite{richardson20163d}
+alleviate this issue by generating synthetic training data, comprising
+of renderings of randomly generated 3DMM with the corresponding
+mesh. Faces are rendered under random lighting conditions and pose. An
+iterative fitting method is then used during inference, optimising
+both geometry and lighting to ensure a good match with the given
+image. Synthetic data was also used for training a general purpose 3D
+reconstruction method~\cite{li2015joint}. Methods trained using
+synthetic training data often fail on real or ``in-the-wild'' images
+due to unrealistic renderings or constrained lighting.
 
 
 
@@ -377,7 +378,8 @@ achieve this by using a kinematic model. Synthetic training data is
 used for the full training procedure in~\cite{chen2016synthesizing},
 to ensure that the network is trained with accurate data. However,
 in~\cite{ghezelghieh2016learning}, they only augment their existing
-training set with synthetic data. ~\cite{toshev2014deeppose} propose
+training set with synthetic
+data. \citeauthor{toshev2014deeppose}\cite{toshev2014deeppose} propose
 an iterative method, in which images are first passed through an
 initalisation CNN. The output from this is then combined again with
 the input image and passed through a second CNN multiple times

@@ -296,12 +296,12 @@ groundtruth. This process is illustrated in Figure~\ref{fig:gtmasks}.
 
 For our experiments we used the 68-point landmark annotations provided
 by the 300W challenge \cite{sagonas2013300}. In particular the
-training sets of LFPW \cite{belhumeur2011localizing}, Helen
-\cite{le2012interactive}, AFW \cite{zhu2012face} and iBUG
-\cite{sagonas2013300} are all used for training while the 300W test
-set (600 images) is used for testing. Both training and test sets
-contain very challenging images in terms of appearance, pose,
-expression and occlusion.
+training sets of LFPW \cite{belhumeur2011localizing} (811 images),
+Helen \cite{le2012interactive} (2000 images), AFW \cite{zhu2012face}
+(337 images) and iBUG \cite{sagonas2013300} (135 images) are all used
+for training while the 300W test set (600 images) is used for
+testing. Both training and test sets contain very challenging images
+in terms of appearance, pose, expression and occlusion.
 
 This collection of images undergoes some pre-processing before they
 are used to train the network. The faces are normalised to be of equal
@@ -316,117 +316,6 @@ partial occlusion.
 
 \section{Method}
 \label{sec:proposed}
-
-
-\begin{figure}
-\includegraphics[width=\linewidth]{figs/Proposed.pdf}
-\caption[Our proposed end-to-end architecture for facial part
-  segmentation]{The proposed architecture, comprising of two separate
-  Fully Convolutional Networks. The first performs Landmark Detection,
-  the output of which is encoded as multichannel representation which
-  is then passed into the Semantic Part Segmentation network.}
-\label{fig:proposed}
-\end{figure}
-
-We propose a CNN cascade (shown in Figure~\ref{fig:proposed} and listed
-in Table~\ref{tab:archlist}) which performs landmark localisation
-followed by facial part segmentation. Our cascade was based on the
-VGG-FCN \cite{simonyan2014vgg,long2015fully} using Caffe
-\cite{jia2014caffe} and consists of two main components:
-\begin{enumerate}
-\item Firstly, an FCN is trained to detect facial landmarks using
-  Sigmoid Cross Entropy Loss.
-\item Secondly, inspired by the human pose estimation method of
-  \cite{carreira2016human}, the detected 68 landmarks are encoded as
-  68 separate channels each of which contains a 2D Gaussian centred
-  at the corresponding landmark's location. The 68 channels are then
-  stacked along with the original image and passed into our
-  segmentation network. This is a second FCN trained for facial part
-  segmentation using as input the stacked representation of 2D
-  Gaussians and image, and a standard Softmax loss.
-\end{enumerate}
-
-Overall we encode pose specific information by augmenting the input to
-our segmentation network with a multi-channel confidence map
-representation using Gaussians centred at the predicted landmarks'
-location. Hence, our FCN for semantic segmentation is trained to
-produce high quality, refined semantic masks by incorporating low
-level information with globally aware information. Each of the
-aforementioned components is now discussed in more detail:
-
-% Training FCN for unguided part segmentation
-% % learning rate, momentum, number of iterations, training steps
-% % chosen loss
-% Training FCN for landmark localisation
-% % learning rate, momentum, number of iterations, training steps,
-% % chosen loss
-\paragraph{Facial Landmark Detection} The training procedure for landmark
-detection is similar to training FCN for part segmentation. Landmarks
-are encoded as 2D Gaussians centred at the provided landmarks'
-location. Each landmark is allocated its own channel to prevent
-overlapping with other landmarks and allow the network to more easily
-distinguish between each point. The main difference with part
-segmentation is the loss function. Sigmoid Cross Entropy Loss
-\cite{zhang2015fine} was chosen to regress the likelihood of a pixel
-containing a point. More concretely, given our groundtruth Gaussians
-$\hat{p}$ and predicted Gaussians $p$, each of equal dimensions
-$ N \times W \times H$, we can define the Sigmoid Cross Entropy loss
-$l$ as follows:
-
-\[
-  l = \frac{1}{N} \sum^{N}_{n=1} \sum^{W}_{i=1} \sum^{H}_{j=1}
-  [p^n_{i,j} \log(\hat{p}^n_{i,j}) + (1 -p^n_{i,j})
-  \log (1-\hat{p}^n_{i,j}) ].
-\]
-
-The loss was scaled by $1\mathrm{e}^{-5}$ and a learning rate of
-0.0001 was used. The network was trained in steps as previously
-described, for approximately 400,000 iterations, until convergence.
-
-
-% Finetuning part segmentation to become guided
-\paragraph{Guided Facial Part Segmentation} To train our guided FCN part
-segmentation network we followed \cite{long2015fully}. Softmax Loss
-was also used. If $N$ is the number of outputs (in our case, classes),
-$p_{i,j}$ is the predicted output for pixel $(i,j)$, and $n$ is the
-true label for pixel $(i,j)$, then the Softmax loss $l$ can be defined
-as:
-
-% \[
-% l = \frac{-1}{N} \sum^{N}_{n=1} \log ( p^{n}_{i,j} )
-% \]
-
-\[
-l = \frac{-1}{N} \sum^{W}_{i=1} \sum^{H}_{j=1} \log(p^n_{i,j}).
-\]
-
-We firstly trained an unguided FCN for facial part segmentation
-following \cite{long2015fully}. Initially, the network was trained as
-32 stride, where no information from the lower layers is used to
-refine the output. This followed by introducing information from
-pool4, followed by pool3. A learning rate of 0.0001 was chosen, and a
-momentum of 0.9. The network was trained for approximately 300,000
-iterations until convergence.
-
-Then, our guided FCN was initialised from the weights of the unguided
-one, by expanding the first layer to accommodate the additional 68
-input channels. As mentioned earlier, each channel contains a 2D
-Gaussian centred at the corresponding landmark's location.  A key
-aspect of our cascade is how the landmarks' location is determined
-during training. We cannot use the groundtruth landmark locations nor
-the prediction of our facial landmark detection network on our
-training set as those will be significantly more accurate than those
-observed during testing. Hence, we applied our facial landmark
-detection network on our validation set and recorded the landmark
-localisation error. We used this error to create a multivariate
-Gaussian noise model that was added to the groundtruth landmark
-locations of our training set. This way our guided segmentation
-network was initialised with much more realistic input in terms of
-landmarks' location. Furthermore, the same learning rate of 0.0001 was
-used. For the first 10,000 iterations, training was disabled on all
-layers except for the first. This allowed the network to warm up
-slightly, and prevent the parameters in other layers from getting
-destroyed by a high loss.
 
 \begin{table}
   \caption[Layers of VGG-FCN]{The
@@ -474,6 +363,122 @@ Layer Name           & Kernel       & Stride       &  Outputs  \\
 \hline
 \end{tabular}
 \end{table}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figs/Proposed.pdf}
+\caption[Our proposed end-to-end architecture for facial part
+  segmentation]{The proposed architecture, comprising of two separate
+  Fully Convolutional Networks. The first performs Landmark Detection,
+  the output of which is encoded as multichannel representation which
+  is then passed into the Semantic Part Segmentation network.}
+\label{fig:proposed}
+\end{figure}
+
+
+
+We propose a CNN cascade (shown in Figure~\ref{fig:proposed} and listed
+in Table~\ref{tab:archlist}) which performs landmark localisation
+followed by facial part segmentation. Our cascade was based on the
+VGG-FCN \cite{simonyan2014vgg,long2015fully} using Caffe
+\cite{jia2014caffe} and consists of two main components:
+\begin{enumerate}
+\item Firstly, an FCN is trained to detect facial landmarks using
+  Sigmoid Cross Entropy Loss.
+\item Secondly, inspired by the human pose estimation method of
+  \cite{carreira2016human}, the detected 68 landmarks are encoded as
+  68 separate channels each of which contains a 2D Gaussian centred
+  at the corresponding landmark's location. The 68 channels are then
+  stacked along with the original image and passed into our
+  segmentation network. This is a second FCN trained for facial part
+  segmentation using as input the stacked representation of 2D
+  Gaussians and image, and a standard Softmax loss.
+\end{enumerate}
+
+Overall we encode pose specific information by augmenting the input to
+our segmentation network with a multi-channel confidence map
+representation using Gaussians centred at the predicted landmarks'
+location. Hence, our FCN for semantic segmentation is trained to
+produce high quality, refined semantic masks by incorporating low
+level information with globally aware information. Each of the
+aforementioned components is now discussed in more detail:
+
+% Training FCN for unguided part segmentation
+% % learning rate, momentum, number of iterations, training steps
+% % chosen loss
+% Training FCN for landmark localisation
+% % learning rate, momentum, number of iterations, training steps,
+% % chosen loss
+\paragraph{Facial Landmark Detection} The training procedure for landmark
+detection is similar to training FCN for part segmentation. Landmarks
+are encoded as 2D Gaussians centred at the provided landmarks'
+location. Each landmark is allocated its own channel to prevent
+overlapping with other landmarks and allow the network to more easily
+distinguish between each point. The main difference with part
+segmentation is the loss function. Sigmoid Cross Entropy Loss
+\cite{zhang2015fine} was chosen to regress the likelihood of a pixel
+containing a point. More concretely, given our groundtruth Gaussians
+$\hat{p}$ and predicted Gaussians $p$, each of equal dimensions
+$ N \times W \times H$, we can define the Sigmoid Cross Entropy loss
+$l$ as follows:
+
+\begin{equation}
+  l = \frac{1}{N} \sum^{N}_{n=1} \sum^{W}_{i=1} \sum^{H}_{j=1}
+  [p^n_{i,j} \log(\hat{p}^n_{i,j}) + (1 -p^n_{i,j})
+  \log (1-\hat{p}^n_{i,j}) ].
+\end{equation}
+
+The loss was scaled by $1\mathrm{e}^{-5}$ and a learning rate of
+0.0001 was used. The network was trained in steps as previously
+described, for approximately 400,000 iterations, until convergence.
+
+
+% Finetuning part segmentation to become guided
+\paragraph{Guided Facial Part Segmentation} To train our guided FCN part
+segmentation network we followed \cite{long2015fully}. Softmax Loss
+was also used. If $N$ is the number of outputs (in our case, classes),
+$p_{i,j}$ is the predicted output for pixel $(i,j)$, and $n$ is the
+true label for pixel $(i,j)$, then the Softmax loss $l$ can be defined
+as:
+
+% \[
+% l = \frac{-1}{N} \sum^{N}_{n=1} \log ( p^{n}_{i,j} )
+% \]
+
+\begin{equation}
+l = \frac{-1}{N} \sum^{W}_{i=1} \sum^{H}_{j=1} \log(p^n_{i,j}).
+\end{equation}
+
+We firstly trained an unguided FCN for facial part segmentation
+following \cite{long2015fully}. Initially, the network was trained as
+32 stride, where no information from the lower layers is used to
+refine the output. In this configuration, each pixel of the final
+output comes only from $32 \times 32$ of the input, resulting in only
+an approximate segmentation. This followed by introducing information
+from pool4, followed by pool3. A learning rate of 0.0001 was chosen,
+and a momentum of 0.9. The network was trained for approximately
+300,000 iterations until convergence.
+
+Then, our guided FCN was initialised from the weights of the unguided
+one, by expanding the first layer to accommodate the additional 68
+input channels. As mentioned earlier, each channel contains a 2D
+Gaussian centred at the corresponding landmark's location.  A key
+aspect of our cascade is how the landmarks' location is determined
+during training. We cannot use the groundtruth landmark locations nor
+the prediction of our facial landmark detection network on our
+training set as those will be significantly more accurate than those
+observed during testing. Hence, we applied our facial landmark
+detection network on our validation set and recorded the landmark
+localisation error. We used this error to create a multivariate
+Gaussian noise model that was added to the groundtruth landmark
+locations of our training set. This way our guided segmentation
+network was initialised with much more realistic input in terms of
+landmarks' location. Furthermore, the same learning rate of 0.0001 was
+used. For the first 10,000 iterations, training was disabled on all
+layers except for the first. This allowed the network to warm up
+slightly, and prevent the parameters in other layers from getting
+destroyed by a high loss.
+
+
 
 
 \section{Experiments}
@@ -552,17 +557,16 @@ network was trained to accept guidance from groundtruth landmarks. As
 described in Section~\ref{sec:proposed}, the guidance is provided in
 the form of landmarks encoded as 2D Gaussians. The performance
 difference between unguided and groundtruth guided part segmentation
-can be seen in Figure~\ref{fig:gt-vs-un}. As we may observe the
-difference in performance between the two methods is huge. These
-results are not surprising given that the groundtruth semantic masks
-are generated from the landmarks guiding the network. Furthermore,
-landmark detection offers an advantage because, in the case of faces,
-there can only be one tip of the nose, and one left side of the
-mouth. Giving some information to the network about where it is likely
-to be located can offer a significant advantage. Our next experiment
-shows that this is still the case when detected landmarks are used
-instead of groundtruth landmarks.
-
+can be seen in Figure~\ref{fig:gt-vs-un}. These results are not
+surprising given that the groundtruth semantic masks are generated
+from the landmarks guiding the network. Furthermore, landmark
+detection offers an advantage because, in the case of faces, there can
+only be one tip of the nose, and one left side of the mouth. Giving
+some information to the network about where it is likely to be located
+can offer a significant advantage. Our next experiment shows that this
+is still the case when detected landmarks are used instead of
+groundtruth landmarks.
+% huge was here
 
 
 \subsection{Guided Facial Part Segmentation with Detected Landmarks}
@@ -579,24 +583,39 @@ instead of groundtruth landmarks.
 \end{figure}
 
 With our upper bound and baselines defined, we can now see how much of
-an improvement we can achieve by guiding the network with our
-detected landmarks. The output of the landmark detection network is
-passed into the part segmentation network along with the original
-input image. We acknowledge that the performance of our landmark
-detector is far from groundtruth. We measure the performance as mean
-point to point Euclidean distance normalised by the outer interocular
-Euclidean distance, as in~\cite{sagonas2013300}. This results in an
-error of $0.0479$. However, we show that the performance of the
-segmentation is improved significantly. The results of facial part
-segmentation guided by the detected landmarks, compared to the network
-guided by groundtruth landmarks can be seen in
-Fig~\ref{fig:gt-vs-det}. Our main result is that performance of the
-guided by detected network is very close to the that of the guided by
-groundtruth illustrating that in practice accurate landmark
-localisation is not really required to guide segmentation. Some visual
-results can be seen in Figure~\ref{fig:visual}. Also, performance over
-all components for all methods is given in Figure~\ref{fig:all}.
+an improvement we can achieve by guiding the network with our detected
+landmarks. The output of the landmark detection network is passed into
+the part segmentation network along with the original input image. We
+acknowledge that the performance of our landmark detector is far from
+groundtruth, despite this we observe performance gains by using this
+as guidance. We measure the performance as mean point to point
+Euclidean distance normalised by the outer interocular Euclidean
+distance, as in~\cite{sagonas2013300}. This results in an error of
+$0.0479$. However, we show that the performance of the segmentation is
+improved significantly. The results of facial part segmentation guided
+by the detected landmarks, compared to the network guided by
+groundtruth landmarks can be seen in Fig~\ref{fig:gt-vs-det}. Guided
+by groundtruth landmarks offers an upper bound to our experiments, but
+we note a fixed improvement in terms of performance compared to
+unguided, and a small improvement on those which already have low
+error. Our main result is that performance of the guided by detected
+network is very close to the that of the guided by groundtruth,
+illustrating that in practice accurate landmark localisation is not
+really required to guide segmentation. Some visual results can be seen
+in Figure~\ref{fig:visual}. Finally, performance over all components
+for all methods is given in Figure~\ref{fig:all}.
 
+\begin{figure}
+\centering
+\includegraphics[width=0.6\linewidth]{figs/all.eps}
+\caption[Average images and their output from facial part
+  segmentation]{Average performance of the four tested methods over
+  all facial components: part segmentation guided by groundtruth
+  landmarks, part segmentation guided by detected landmarks, unguided
+  part segmentation, part segmentation by joining up the detected
+  landmarks.}
+\label{fig:all}
+\end{figure}
 
 
 \begin{figure}
@@ -609,17 +628,6 @@ all components for all methods is given in Figure~\ref{fig:all}.
 \label{fig:visual}
 \end{figure}
 
-\begin{figure}
-\centering
-\includegraphics[width=0.9\linewidth]{figs/all.eps}
-\caption[Average images and their output from facial part
-  segmentation]{Average performance of the four tested methods over
-  all facial components: part segmentation guided by groundtruth
-  landmarks, part segmentation guided by detected landmarks, unguided
-  part segmentation, part segmentation by joining up the detected
-  landmarks.}
-\label{fig:all}
-\end{figure}
 
 
 \section{Conclusion}

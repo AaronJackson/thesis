@@ -2,12 +2,146 @@
 \chapter{Background}
 \label{chapter:background}
 
-This chapter gives an introduction to the volumetric representation we
-use for encoding 3D geometry, along with some of the algorithms
-associated with volumetric data, such as voxelisation and surface
-extraction. This thesis assumes a basic knowledge of deep learning,
-such as the typical layers that might be used to construct a
-Convolutional Neural Network (CNN).
+This chapter gives an introduction to deep learning, the volumetric
+representation we use for encoding 3D geometry, along with some of the
+algorithms associated with volumetric data, such as voxelisation and
+surface extraction.
+
+\section{Deep Learning}
+\label{sec:background:nn}
+
+
+Neural networks have significantly grown in size since their
+inception. A neural network model of today may contain as many as
+fifty million parameters. This establishes a difficult, extremely
+large, non-convex optimisation problem. The only way to sensibly train
+these models, ignoring minor implementation details, is to use
+gradient descent optimisation.
+
+
+To assist in the explanation of gradient descent, suppose a
+classification problem with annotated training data
+$Z = \{(x_i, y_i)\}$, containing images $x_i$ each with a
+corresponding label $y_i$. We define $f$ as the classifier, mapping
+image $x_i$ to label $y_i$ given a real vector of parameters $\theta$,
+\begin{equation}
+  y_i \approx f(x_i;\theta) .
+\end{equation}
+
+\noindent To measure the performance this classifier, a loss function
+$\ell$ is defined, which is entirely dependant on the problem at
+hand. Hence, our loss over $x$ is defined as,
+
+\begin{equation}
+  loss = \sum_i \ell(y_i, f(x_i ; \theta) .
+\end{equation}
+
+
+\noindent Initially parameters $\theta$ will be unknown. Hence, in
+order to find $\theta$ (so that we can establish a trained
+classifier), we must minimise the loss function,
+\begin{equation}
+  \min_\theta \sum_i \ell(y_i, f(x_i ; \theta)) .
+\end{equation}
+
+
+
+\noindent This minimisation is typically performed using gradient
+descent, where $\theta$ is gradually learnt over many iterations. This
+is at rate $\eta$ (known as the \textit{learning rate}), and is
+directed by the gradient of the $f$ with parameters $\theta$,
+
+\begin{equation}
+  \theta = \theta - \eta \nabla_\theta \ell(y_i, f(x_i ; \theta) .
+\end{equation}
+
+More often than not, the above is extended to support batches of
+images per iteration, which results in a more stable gradient due to
+the averaging across several images.
+
+\subsection{Convolutional Neural Networks}
+
+In the previous subsection, an overview of gradient descent was
+presented, where parameters $\theta$ were used to \textit{in some way}
+to apply a mapping from an input to a label. Such a function might be
+defined as simply as a linear function, $f(x;\theta) = \theta
+x$. Unfortunately, despite being appropriate in many areas, a single
+linear function will struggle to map a non-linear problem, which is
+almost certainly the case with all computer vision based
+applications. As such, convolutions are often used to both reduce the
+number of parameters, and to allow convenient and efficient stacking,
+allowing the network to learn difficult mappings. These convolution
+operations perform a weighted sum of a window which moves across the
+input with a particular stride.
+
+Convolutional Neural Networks (CNNs) are constructed, typically, from
+stacks of convolutional filters, each followed by some form of
+activation function. These activation functions discard unwanted
+information, making it easier for future layers to make use of the
+extracted features. A commonly used activation function is the
+Rectified Linear Unit (ReLU), which discards negative values, setting
+them to zero. The tailing end of a CNN is often specific to each
+application. For example, for a numerical regression task, linear
+layers may be added, and for segmentation, a $1\times 1$ convolution
+may be added. As these networks have gradually increased in size, the
+term \textit{Deep Learning} has become popular. Networks of today may
+consist of several hundred convolutional layers, such as
+ResNet-152~\cite{he2015deep}.
+
+\subsection{Batch Normalisation}
+
+As networks grew from 15 or so layers upwards, the job of gradient
+descent became very difficult. During training, the distribution of
+every input to every layer changes slightly. This is because the
+parameters of the layer before each layer change. This problem is
+referred to as \textit{internal covariate shift}. A solution known as
+Batch Normalisation was proposed in~\cite{ioffe2015batch}, enabling
+networks with many layers (such as the 152 layers in
+ResNet~\cite{he2015deep}) to be trained in much shorter times. Some
+additional advantages of using batch normalisation include being able
+to use larger learning rates and reducing the need for such careful
+initialisation.
+
+Batch normalisation works as the name might suggest, by normalising
+the output of each parameterised layer using learnable scale and shift
+parameters, as well as the size of each minibatch, for each
+minibatch. Understanding exactly how batch normalisation works is not
+imperative to understanding the contents of this thesis. However, in
+general, batch normalisation has been applied either before or after
+every parameterised layer of the CNN models proposed in this
+thesis. Additionally, as these networks are very large, they are
+unlikely to have been possible to train without employing batch
+normalisation.
+
+
+\subsection{Frameworks}
+
+While designing and developing a framework to work with deep neural
+networks \textit{might} be an interesting thought experiment for some,
+it is far from the focus of this thesis. The work presented throughout
+this thesis was developed primarily under the
+Torch~\footnote{\url{http://torch.ch/}, except for the work on facial
+  part segmentation, which was developed under
+  Cafe~\cite{jia2014caffe}}. There are a number of reasons for this,
+but to name just a few:
+
+\begin{enumerate}
+\item Efficient GPU support. This is important, of course, in any
+  framework intended for deep learning. Torch enables networks to be
+  run in parallel (for speed) or sequentially (for additional memory)
+  across multiple GPUs.
+\item Elegant memory backend. Data can be loaded directly into memory
+  and views can be applied to create $N$-dimensional Tensors without
+  shuffling memory. This is very important when reading in large
+  volumetric training samples.
+\item Multithreading. The trade offs between I/O and CPU are discussed
+  in more detail in Section~\ref{sec:background:volstorage}. However,
+  regardless of how the data is optimised (in terms of compression or
+  just raw data), volumes are big. Loading them sequentially and
+  applying augmentation, even on very fast hardware, remains a
+  computationally expensive task.
+\end{enumerate}
+
 
 \section{3D Volumes and Volumetric Algorithms}
 \label{sec:background:volumes}
