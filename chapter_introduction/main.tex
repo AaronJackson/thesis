@@ -172,6 +172,13 @@ aim of this section is to give a brief overview of the general
 approaches to this problem. By doing so, we hope to show where and how
 our own work fits in, along with why we feel this is important.
 
+\begin{figure}
+  \includegraphics[width=\linewidth]{img/3dmm.pdf}
+  \caption[3D Morphable Model Fitting Procedure]{The fitting procedure
+    of a 3D Morphable Model (3DMM)}
+  \label{fig:3dmm_fitting}
+\end{figure}
+
 % 3D Morphable Models
 \paragraph{3D Morphable Models (3DMM)} are perhaps the most popular
 approach to estimating facial 3D geometry. These methods use a vector
@@ -179,12 +186,13 @@ of parameters for a pre-computed face
 model~\cite{jourabloo2016large,huber2016multiresolution,zhu2016face,liu2016joint},
 which varies the shape, expression, pose and optionally textural
 information. We discuss 3DMM in more detail in
-Chapter~\ref{chapter:literature}. These methods are increasingly using
-Convolutional Neural Networks as a means to regress the parameters,
-and in general, work very reliably on \textit{normal} faces. However,
-3DMM based approaches gradually perform worse as factors such as pose
-and expression increase. We show in
-Section~\ref{chapter:face:sec:ablation} that our method has a very
+Chapter~\ref{chapter:literature}, although a brief explanation of the
+fitting procedure is depicted in Figure~\ref{fig:3dmm_fitting}. These
+methods are increasingly using Convolutional Neural Networks as a
+means to regress the parameters, and in general, work very reliably on
+\textit{normal} faces. However, 3DMM based approaches gradually
+perform worse as factors such as pose and expression increase. We show
+in Section~\ref{chapter:face:sec:ablation} that our method has a very
 uniform and low error over all expressions, with only a small increase
 in error on large poses (such as around 80 degrees). Another
 disadvantage of 3DMM based approaches is that the 3DMM must be

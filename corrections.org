@@ -3,7 +3,7 @@ List of Corrections
 
 - [X] Title: 3D human face and body reconstruction.
 
-- [ ] Figure description of 3DMM is expected in the introduction
+- [X] Figure description of 3DMM is expected in the introduction
 
 - [X] Page 13, clarify last sentence of first paragraph
 
@@ -177,7 +177,6 @@ List of Corrections
 - [X] Page 94, move figure 6.9 to page 92.
 
 - [ ] Reference, use uniform style.
-
 
 - [ ] All minor typographic error and missing references are annotated
   in the thesis with a green or pencil cross. Please avoid repetition
