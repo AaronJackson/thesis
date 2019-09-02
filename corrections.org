@@ -87,13 +87,14 @@ List of Corrections
   to follow the complete story.
   - I have updated this and believe it is now easier to follow.
 
-- [-] Page 43, add statistical tests of results to demonstrate
+- [X] Page 43, add statistical tests of results to demonstrate
   statistical significance and report computational time for training
   and testing.
   - [X] I have included p-values for a paired t-test, showing whether
     the tests were significant for conclusions 1 (comparing with other
     methods) and 4 (comparing guided to multitask).
-  - [ ] TODO computational time
+  - [X] I have included a subsection on runtimes for training and
+    inference.
 
 - [X] Page 43, figure 4.6 need to be reference first before figure
   4.7.
@@ -128,9 +129,15 @@ List of Corrections
   - As discussed, this will require a significant investment in time.
 
 - [ ] Page 52, list results in a table for the ablation tests.
+  - A table may not be the most appropriate format for these results
+    as there are no comparisons with other methods (as mentioned below
+    the previous correction). Each table would only have one row of
+    results.
 
-- [ ] Page 54, add computational time to table 4.3 and some comments
+- [X] Page 54, add computational time to table 4.3 and some comments
   regarding time.
+  - This ended up being done in a separate subsection (as mentioned in
+    an earlier correction) entitled "Training and Run Times"
 
 - [X] Page 55, justify why 1 stack Hourglass performed better but
   still use 2 stacked one?
@@ -176,7 +183,13 @@ List of Corrections
 
 - [X] Page 94, move figure 6.9 to page 92.
 
-- [ ] Reference, use uniform style.
+- [X] Reference, use uniform style.
+  - While the style was consistent, many of the journal or conference
+    names were different. Additionally, many details were missing from
+    many of the bibliography entries. I have gone through these to
+    ensure they are all correct and consistent. There are of course
+    still variations between articles, in proceedings and technical
+    reports, as defined by the IEEE referencing style.
 
 - [ ] All minor typographic error and missing references are annotated
   in the thesis with a green or pencil cross. Please avoid repetition

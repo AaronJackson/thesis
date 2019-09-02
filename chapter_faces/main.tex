@@ -433,6 +433,29 @@ different standard deviations.
 
 \section{Results} \label{S:Results}
 
+\begin{table}
+  \caption[Numerical performance of 3D face
+  reconstruction]{Reconstruction accuracy on AFLW2000-3D, BU-4DFE and
+    Florence in terms of NME. Lower is better.}
+  \label{tab:overview}
+  \centering
+  \small
+  \begin{tabular}{|l||c|c|c|}
+    \hline
+    \textbf{Method}   & \textbf{AFLW2000-3D} & \textbf{BU-4DFE} & \textbf{Florence} \\
+    \hline\hline
+    VRN & 0.0676   & 0.0600 & 0.0568   \\
+    VRN - Multitask   & 0.0698        & 0.0625     & 0.0542        \\
+    VRN - Guided    & \textbf{0.0637}   & \textbf{0.0555} & \textbf{0.0509}   \\
+    \hline
+    3DDFA~\cite{zhu2016face}             & 0.1012   & 0.1227 & 0.0975   \\
+    EOS~\cite{huber2016multiresolution}  & 0.0971   & 0.1560 & 0.1253   \\
+    \hline
+  \end{tabular}
+  \vspace{-4mm}
+\end{table}
+
+
 \subsection{Evaluation Datasets}
 
 We used three different datasets for quantifying the performance of
@@ -553,8 +576,6 @@ can conclude the following:
 
 \noindent Details about our experiments are given in the proceeding subsections.
 
-
-
 \begin{figure}
   \centering
   \includegraphics[width=0.75\linewidth]{curves/aflw.eps}
@@ -643,6 +664,20 @@ input, so for the sake of a fair comparison a stacked hourglass for 2D
 landmark detection was trained for this purpose. Our tests were
 performed using v0.12 of EOS.
 
+\subsection{Training and Run Times}
+
+Due to the size of the volumetric representation, CPU and RAM can
+rapidly become a bottleneck during the training procedure. The
+voxelisation procedure took approximately 3 days using 200 parallel
+instances. This was carried out on the University of Nottingham's HPC
+service. Training takes a further 3 to 5 days. During inference, the
+face should ideally be well centred and of a similar scale to that
+used during training. Deep learning based face alignment methods take
+on the order of $100-200$ms. Our volumetric regression method takes
+approximately 200ms on an NVIDIA Titan X (Pascal). A final step of
+surface extraction is then needed to generate the mesh from the
+volumetric output. A fast implementation (such as the one implemented
+in MATLAB) takes approximately 100ms.
 
 \subsection{Results with ICP Alignment}
 \label{sec:faceicpres}
