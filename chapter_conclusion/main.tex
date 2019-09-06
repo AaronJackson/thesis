@@ -73,18 +73,18 @@ reconstruction is that vertices have a fixed index across all meshes
 mesh is modified in a refinement step). As VRN produces a volumetric
 representation, both the number of vertices and the order of them
 varies, depending on the face or surface extraction algorithm
-used. This somewhat hinders the ease-of-use for applications such as
-applications, as vertices would have to be selected manually. There
-are a number of potential solutions to this problem, such as
-regressing a vertex map, in a similar fashion to aforementioned
-texture synthesis. Alternatively, as a post-processing step,
-resampling and ordering the vertices.
+used. This somewhat hinders the ease-of-use for applications, as
+vertices would have to be selected manually. There are a number of
+potential solutions to this problem, such as regressing a vertex map,
+in a similar fashion to aforementioned texture
+synthesis. Alternatively, as a post-processing step, resampling and
+ordering the vertices.
 
 \subsection{Temporal Consistency}
 
 As our method was designed to work from just a single image, no
 consideration was really given to how well it would work over temporal
-data. While we feel there performance is reasonably good on videos, it
+data. While we feel the performance is reasonably good on videos, it
 is possible that the shape of the face might change, potentially
 making it unsuitable for a variety of purposes. Hence, a nice addition
 to our method would be to optionally accept features from several

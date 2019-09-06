@@ -35,30 +35,30 @@
 % \end{abstract}
 % \vspace{-4mm}
 
-3D face reconstruction is a fundamental Computer Vision problem, often
-considered to be of extraordinary difficultly. Current systems often
-assume the availability of multiple facial images as input, sometimes
-from the same subject. Additional, there are a number of
-methodological challenges involved, which must be addressed. These
-challenges include establishing a dense correspondence across large
-poses, expressions and non-uniform illumination. In general, these
-methods require complex and inefficient pipelines for model building
-and fitting. In this work, we propose to address many of these
-limitations by constraining the problem of 3D face reconstruction to
-the spatial domain. We do this by training a Convolutional Neural
-Network (CNN), on an appropriate dataset, consisting of 2D images and
-3D facial models, or scans. Our CNN works with just a single 2D facial
-image and does not require accurate alignment. Our method works for
-arbitrary facial poses and expressions, and can be used to
-reconstruction the whole 3D facial geometry, including non-visible
-parts. Our method bypasses the construction (during training) and
-fitting (during inference) of a 3D Morphable Model. We achieve this via
-a simple CNN architecture that performs direct regression of a
-volumetric representation of the 3D facial geometry from a single 2D
-image. We also demonstrate how the related task of facial landmark
-localisation can be incorporated into the proposed framework and help
-improve reconstruction quality, especially in the cases of large poses
-and facial expressions.
+3D face reconstruction is a fundamental Computer Vision problem with
+many associated difficulties. Current systems often assume the
+availability of multiple facial images as input, sometimes from the
+same subject. Additionally, there are a number of methodological
+challenges involved, which must be addressed. These challenges include
+establishing a dense correspondence across large poses, expressions
+and non-uniform illumination. In general, these methods require
+complex and inefficient pipelines for model building and fitting. In
+this work, we propose to address many of these limitations by
+constraining the problem of 3D face reconstruction to the spatial
+domain. We do this by training a Convolutional Neural Network (CNN),
+on an appropriate dataset, consisting of 2D images and 3D facial
+models, or scans. Our CNN works with just a single 2D facial image and
+does not require accurate alignment. Our method works for arbitrary
+facial poses and expressions, and can be used to reconstruction the
+whole 3D facial geometry, including non-visible parts. Our method
+bypasses the construction (during training) and fitting (during
+inference) of a 3D Morphable Model. We achieve this via a simple CNN
+architecture that performs direct regression of a volumetric
+representation of the 3D facial geometry from a single 2D image. We
+also demonstrate how the related task of facial landmark localisation
+can be incorporated into the proposed framework and help improve
+reconstruction quality, especially in the cases of large poses and
+facial expressions.
 
 
 \section{Introduction}

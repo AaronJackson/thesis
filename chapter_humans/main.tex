@@ -34,7 +34,7 @@
 3D reconstruction is the process of estimating the 3D geometry from
 one or more 2D images. In this work, we focus on reconstruction of the
 human body from a single image, including the non-visible parts which
-have been self-occluded. Our method builds the work in
+have been self-occluded. Our method builds on the work in
 Chapter~\ref{chapter:face}, where a 3D face is directly regressed from
 a single image, using we have already referred to as a ``Volumetric
 Regression Network'' (VRN). In this chapter, we show that the same
@@ -76,8 +76,8 @@ in this work are as follows:
   described in Chapter~\ref{chapter:face}, which show significant
   performance improvements. These include introducing intermediate
   supervision, using more advanced residual modules and altering the
-  network structure by increasing the number of hourglass modules by
-  reducing the number of residual modules.
+  network structure by increasing the number of hourglass modules, by
+  reducing the number of residual modules, freeing memory on the GPUs.
 
 \item We show that VRN is capable of reconstructing complex poses when
   trained on a suitable dataset.
@@ -466,7 +466,7 @@ results as an Intersection over Union (IoU) score, which is defined as
 the number of intersecting set voxels over the number voxels set in
 either volume. Our test set consisted 500 frames from Session 11 of
 Human3.6m~\cite{h36m_pami}, across all known poses in the
-dataset. These numeric results may be found in
+dataset. These numerical results can be found in
 Table~\ref{tab:results}. We will discuss these results in more detail
 in the proceeding paragraphs.
 
@@ -637,7 +637,7 @@ previously unseen poses.
 In this work we have shown that using Volumetric Regression Networks,
 as described in~\cite{jackson2017vrn}, for the task of 3D
 reconstruction, is not restricted to the simpler task of face
-reconstruction. Nor is it a limiting factor in terms of detail,
+reconstruction, nor is this a limiting factor in terms of detail,
 despite the small size of the volumes we are working with. We have
 proposed several improvements to the original VRN which improve the
 performance quite substantially. Finally, we have shown, by using two
