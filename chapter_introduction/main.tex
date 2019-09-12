@@ -44,13 +44,13 @@ obvious being personalisation of computer games, or trying on
 accessories online, such as glasses. However, this area has many other
 applications, such as facial expression analysis for measuring
 emotional arousal, where 3D face reconstruction can be a useful tool
-in psychological studies. Facial performance transfer is another
+in psychological studies. Facial behaviour transfer is another
 potential application of this area of work and is widely used in
 creative industries, such as the development of computer games and
 animated films where typically a large number facial point markers
 have to be attached to the actor's face. Additionally, standing
 perfectly still could certainly have a negative impact on the actor's
-performance. There is also the potential for medical applications,
+behaviours. There is also the potential for medical applications,
 such as simulating the result of reconstructive surgery after an
 accident.
 
@@ -129,7 +129,7 @@ of principal components which vary aspects such as shape, pose and
 rotation. This constraint usually leads to post-processing steps to
 extract the detail, which can destroy correspondence between vertices
 usually present in a parametric model, as well as pose and scale
-information. Second, there needs to be some way to distinguish between
+information. Second, there need to be some way to distinguish between
 what is actually \textit{detail}, such as wrinkles and spots which
 affect 3D shape versus what is noise, makeup (potentially tattoos),
 dirt or anything else affecting only textural information.
@@ -169,8 +169,8 @@ detail.
 There are a number of approaches to 3D face reconstruction. Each
 general approach has its own set of advantages and disadvantages. The
 aim of this section is to give a brief overview of the general
-approaches to this problem. By doing so, we hope to show where and how
-our own work fits in, along with why we feel this is important.
+approaches to this problem. By doing so, we aim to show where and how
+our own work fits in, along with why this is important.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{img/3dmm.pdf}
@@ -209,13 +209,14 @@ multiple images from many different angles in order to estimate the 3D
 geometry of a face (or other
 object)~\cite{dou2018multi,dai2018coarse,Piotraschke_2016_CVPR,mayo20093d}. The
 primary drawback of such methods is, of course, that multiple images
-are not always available, especially under the aforementioned
-environmental constraints associated with 3D face
-reconstruction. While the final 3D reconstruction from such methods
-can be of very high resolution and detailed, finding corresponding
-features between each image is both memory and CPU intensive. Our own
-method uses only a single RGB image, without any additional depth data
-- from this single image, we regress the full 3D facial geometry.
+are not always available, especially in unconstrained recording
+conditions (under the aforementioned environmental constraints)
+associated with 3D face reconstruction. While the final 3D
+reconstruction from such methods can be of very high resolution and
+detailed, finding corresponding features between each image is both
+memory and CPU intensive. Our own method uses only a single RGB image,
+without any additional depth data - from this single image, we regress
+the full 3D facial geometry.
 
 \paragraph{Shape-from-Shading (SfS)} methods attempt to recover the 3D
 geometry by analysing the shading and reflectance of a face relative
@@ -245,10 +246,10 @@ certain extent, those which have been self occluded without having to
 handle this cases on an individual basis.
 
 Given the numerous applications of such a technology and the
-significant disadvantages of the preexisting methods, we feel there is
-a profound requirement for something more robust to the challenges in
-this area. In this thesis we approach the problem using a single
-image, and propose a new non-parametric approach to 3D face
+significant disadvantages of the already existing methods, we feel
+there is a profound requirement for something more robust to the
+challenges in this area. In this thesis we approach the problem using
+a single image, and propose a new non-parametric approach to 3D face
 reconstruction which attempts to account for as many of these
 challenges as possible.
 
@@ -277,8 +278,8 @@ The contributions of this thesis can be summarised as follows:
 
 \item We show how a related task of facial landmark localisation can
   be incorporated into our method (also in an end-to-end fashion) to
-  improve the reconstruction quality, particularly on faces of large
-  pose and expression.
+  improve the reconstruction quality, particularly on expressive faces
+  in non-frontal views..
 
 \item We evaluate our method on both constrained and heavily
   unconstrained images from the web, demonstrating that our method

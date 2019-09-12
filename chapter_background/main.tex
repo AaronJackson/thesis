@@ -155,7 +155,7 @@ vertices for this mesh using a CNN, along with a predefined set of
 faces, would be a very elegant approach to 3D face
 reconstruction. However, such an approach has never been demonstrated
 before, and it is likely that it isn't possible using a CNN unless the
-dimensionality of the problem is first reduced (hence 3DMM).
+dimensionality of the problem is first reduced (hence the use of 3DMM).
 
 An alternative approach to representing the shape of an object is to
 encode it in a three dimensional volume. Typically, each voxel stores
@@ -274,7 +274,7 @@ mesh.
 To start with, the \textbf{size} of the volume (in terms of bytes)
 grows much more rapidly than it would in a 2D image. In order to
 represent a sensible amount of depth in a $128 \times 128$ image, a
-volume of $128^3$ voxels is likely needed. If this is uncompressed and
+volume of $128^3$ voxels is needed. If this is uncompressed and
 encoded as bytes, it will require 2MB of storage. Scale this up to a
 dataset of maybe 50,000 samples, use a slightly larger volume, and it
 is clear that this may begin to cause problems.

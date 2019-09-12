@@ -32,7 +32,7 @@
 
 
 3D reconstruction is the process of estimating the 3D geometry from
-one or more 2D images. In this work, we focus on reconstruction of the
+one or more 2D images. In this chapter, we focus on reconstruction of the
 human body from a single image, including the non-visible parts which
 have been self-occluded. Our method builds on the work in
 Chapter~\ref{chapter:face}, where a 3D face is directly regressed from
@@ -46,14 +46,14 @@ compared to a face. As such, human body reconstruction is often
 considered to be a very difficult problem.
 
 \paragraph{Motivation.} The pipelines required for 3D human
-reconstruction (and 3D reconstruction in general) are typically based
-on solving difficult non-convex optimisation problems. Perhaps the
-most common approach to 3D human body reconstruction is to fit a shape
-model. For example, the recent method of \cite{bogo2016smplify}, fits
-a 3D shape model to 2D body joints by jointly optimising the pose and
-shape. However, optimisation methods are sensitive to initialization
-and are easily trapped to local minima, both of which are exacerbated
-by occlusions and potential scale changes.
+reconstruction are typically based on solving difficult non-convex
+optimisation problems. Perhaps the most common approach to 3D human
+body reconstruction is to fit a shape model. For example, the recent
+method of~\cite{bogo2016smplify}, fits a 3D shape model to 2D body
+joints by jointly optimising the pose and shape. However, optimisation
+methods are sensitive to initialization and are easily trapped to
+local minima, both of which are exacerbated by occlusions and
+potential scale changes.
 
 In this work, we aim to significantly reduce the complexity of
 standard 3D human reconstruction techniques - to the point where it
@@ -73,11 +73,11 @@ in this work are as follows:
   human body.
 
 \item We propose several improvements to the network architecture
-  described in Chapter~\ref{chapter:face}, which show significant
-  performance improvements. These include introducing intermediate
-  supervision, using more advanced residual modules and altering the
-  network structure by increasing the number of hourglass modules, by
-  reducing the number of residual modules, freeing memory on the GPUs.
+  described in Chapter~\ref{chapter:face}, showing performance
+  improvements. These include introducing intermediate supervision,
+  using more advanced residual modules and altering the network
+  structure by increasing the number of hourglass modules, by reducing
+  the number of residual modules, freeing memory on the GPUs.
 
 \item We show that VRN is capable of reconstructing complex poses when
   trained on a suitable dataset.
@@ -206,13 +206,14 @@ In this work, our goal is to reconstruct the full geometry of a human
 body from just a single image.  There are several ways of estimating
 the geometry using deep learning. The first is to directly regress the
 vertices using a top-down network such as VGG~\cite{simonyan2014vgg}
-or ResNet~\cite{he2015deep} trained with an L2 loss. This has at least
-two disadvantages: firstly it requires the training data to be
+or ResNet~\cite{he2015deep} trained with an $l_2$ loss. This has at
+least two disadvantages: firstly it requires the training data to be
 resampled to have a fixed number of vertices, which implies finding
 correspondence between all vertices of all meshes. Secondly, and more
 importantly, training a network to directly regress a very large
-number of vertices is hard. A common, and more efficient alternative
-is to regress the parameters of a 3D shape model. However, as these
+number of vertices is hard because a single wrong vertex will increase
+error significantly. A common, and more efficient alternative is to
+regress the parameters of a 3D shape model. However, as these
 parameters are not scaled equally, it is necessary to employ
 normalisation methods, such as weighting the outputs using the
 Mahalanobis distance which has been also proven challenging to get it
@@ -253,10 +254,12 @@ regression.
 
 One of the most important aspects to note in the case of training a
 volumetric regression network is that the input and output must be
-spatially aligned. Put simply, the 2D projection of the target object
-should do a reasonable, if not very good, job at segmenting the
-input. Through experimentation, we have found that it is possible to
-ignore spatial alignment, as long as the pose is fixed (i.e. always
+spatially aligned to avoid requiring the network from learning a
+difficult transformation between the input image and output
+volume. Put simply, the 2D projection of the target object should do a
+reasonable, if not very good, job at segmenting the input. Through
+experimentation, we have found that it is possible to ignore spatial
+alignment, as long as the pose is fixed (i.e. always
 frontal). However, ignoring spatial alignment will severely impact the
 performance of the method.
 
@@ -587,19 +590,19 @@ of a detailed dataset. Hence, in this section, we demonstrate that VRN
 is provided. For this experiment, we use our best performing network
 \textit{Ours - Multistack}.
 
-Our dataset consists of highly detailed 3D scans from 40 participants,
-4 of which were reserved for quantitative testing, but all of which
-are quite restricted in terms of pose. Only one scan per participant
-was available. These models do not have a corresponding image which is
-aligned with the model. As such, we rendered and voxelised these
-models under a large variety of different lighting conditions, scales
-and views to create our training set consisting of approximately
-20,000 samples which are spatially aligned.  The voxelisation was
-performed at a resolution of $128\times 256\times 96$, which
-efficiently encapsulates the poses found in the dataset. As in our
-previous experiment, the Z alignment was performed by the mean Z
-component. Unfortunately we are not able to publicly release this
-dataset.
+This dataset consists of highly detailed 3D scans from 40
+participants, 4 of which were reserved for quantitative testing, but
+all of which are quite restricted in terms of pose. Only one scan per
+participant was available. These models do not have a corresponding
+image which is aligned with the model. As such, we rendered and
+voxelised these models under a large variety of different lighting
+conditions, scales and views to create our training set consisting of
+approximately 20,000 samples which are spatially aligned.  The
+voxelisation was performed at a resolution of
+$128\times 256\times 96$, which efficiently encapsulates the poses
+found in the dataset. As in our previous experiment, the Z alignment
+was performed by the mean Z component. Unfortunately we are not able
+to publicly release this dataset.
 
 \subsection{Performance}
 
@@ -634,7 +637,7 @@ previously unseen poses.
 
 \section{Conclusion}
 
-In this work we have shown that using Volumetric Regression Networks,
+In this chapter, we have shown that using Volumetric Regression Networks,
 as described in~\cite{jackson2017vrn}, for the task of 3D
 reconstruction, is not restricted to the simpler task of face
 reconstruction, nor is this a limiting factor in terms of detail,

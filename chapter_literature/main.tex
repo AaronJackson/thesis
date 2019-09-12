@@ -104,8 +104,8 @@ method, likely based on the facial landmarks, would have to be used to
 find the transformation for the 3D model.
 
 A partially synthetic approach to 3D face reconstruction (indirectly
-for face alignment) is proposed in~\cite{zhu2016face}. The method used
-a single CNN that is iteratively applied to estimate the model
+for face alignment) is proposed in~\cite{zhu2016face}. The method
+employs a single CNN that is iteratively applied to estimate the model
 parameters using as input the 2D image and 3D shape and pose
 representation from the previous iteration. The network consists of
 four convolution layers and two fully connected layers. The first two
@@ -122,17 +122,17 @@ faces, each with a corresponding 3D mesh.
 \subsection{Synthetic Training Data for 3DMM}
 The data required for training 3D reconstruction methods typically
 consists of an image with a corresponding 3D scan. Such pairs can be
-difficult to
-obtain. \citeauthor{richardson20163d}~\cite{richardson20163d}
-alleviate this issue by generating synthetic training data, comprising
-of renderings of randomly generated 3DMM with the corresponding
-mesh. Faces are rendered under random lighting conditions and pose. An
-iterative fitting method is then used during inference, optimising
-both geometry and lighting to ensure a good match with the given
-image. Synthetic data was also used for training a general purpose 3D
-reconstruction method~\cite{li2015joint}. Methods trained using
-synthetic training data often fail on real or ``in-the-wild'' images
-due to unrealistic renderings or constrained lighting.
+difficult to obtain. \citeauthor{richardson20163d} alleviate this
+issue by generating synthetic training data, comprising of renderings
+of randomly generated 3DMM with the corresponding
+mesh~\cite{richardson20163d}. Faces are rendered under random lighting
+conditions and pose. An iterative fitting method is then used during
+inference, optimising both geometry and lighting to ensure a good
+match with the given image. Synthetic data was also used for training
+a general purpose 3D reconstruction method~\cite{li2015joint}. Methods
+trained using synthetic training data often fail on real or
+``in-the-wild'' images due to unrealistic renderings or constrained
+lighting.
 
 
 
@@ -147,11 +147,10 @@ shape to the correct pose. For each frame, 3D flow updates the mesh,
 which both refines the detail, and updates aspects such as expression
 and pose. Another Shape from Shading approach is proposed
 in~\cite{jiang20183d}, which first aligns a coarse facial model using
-2D landmark detections. This coarse model is then \textit{corrected}
-using the smaller eigenvalues of a Laplacian eigenfunction, which
-results in small adjustments to the coarse geometry.  medium scale
-features from the image. Finally, the shape from shading step refines
-the mesh and introduces finer details.
+2D landmarks. This coarse model is then \textit{corrected} using the
+smaller eigenvalues of a Laplacian eigenfunction, which results in
+small adjustments to the coarse geometry. Finally, the shape from
+shading step refines the mesh and introduces finer details.
 
 %%%%%%%%%%%%%%% Multiview Approaches
 \subsection{Multiview Reconstruction and Structure from Motion}
@@ -182,13 +181,15 @@ in~\cite{dai2018coarse}, where first a sparse set of landmarks are
 first estimated, which are then used to estimate pose to assist in
 fitting a dense set of points to the face to create a coarse
 reconstruction. During this coarse reconstruction step, 14 images from
-specific poses are extracted, which are used to refine the model and
-extract details. Finally, in~\cite{Piotraschke_2016_CVPR}, a method is
-proposed which reconstructs individual 3D shapes from multiple single
-images of a face. The quality of each shape is evaluated. The best of
-these shapes are them combined into a single 3D model. The aim of
-doing this is to better handle variations in pose, lighting,
-occlusions and facial expressions.
+specific poses are extracted by rendering the coarse reconstruction,
+which are used to refine the model and extract details. Finally,
+in~\cite{Piotraschke_2016_CVPR}, a method is proposed which
+reconstructs individual 3D shapes from multiple single images of a
+face. The quality of each shape is evaluated by measuring the distance
+between each rendering and corresponding image. The best of these
+shapes are them combined into a single 3D model. The aim of doing this
+is to better handle variations in pose, lighting, occlusions and
+facial expressions.
 
 \subsection{Depth Estimation}
 
@@ -304,7 +305,7 @@ discarding the image entirely.
 % the 3D reconstruction process. These are discussed in detail in
 % Chapters~\ref{chapter:face} and~\ref{chapter:seg}.
 
-Until recently, the highest performing methods for face alignment were
+Until recently, the best performing methods for face alignment were
 based on a cascaded regression approach. These methods estimate the
 location of facial landmarks by applying a sequence of regressors. The
 input to these regressors is typically SIFT~\cite{lowe2004distinctive}
@@ -330,9 +331,9 @@ incorporated to provide both accuracy and precision.
 Several approaches directly regress the locations of the landmarks
 using a tail of linear layers. For example, a CNN cascade is presented
 in~\cite{sun2013deep} to directly produce the landmark locations. The
-output of this second stage is 68 $(x, y, z)$ landmarks. A multitask
-approach is proposed in~\cite{zhang2014facial}, regressing the
-location of the facial landmarks while performing facial attribute
+output of this second stage is a set of 68 $(x, y, z)$ landmarks. A
+multitask approach is proposed in~\cite{zhang2014facial}, regressing
+the location of the facial landmarks while performing facial attribute
 classification.
 
 Many CNN based alignment methods estimate the facial landmarks by

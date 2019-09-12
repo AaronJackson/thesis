@@ -14,7 +14,7 @@ the problem of facial part segmentation, and later, the problem of 3D
 face reconstruction.
 
 This chapter proposes a CNN cascade for semantic part segmentation of
-guided by post-sepcific information encoded in terms of a set of
+guided by pose-specific information encoded in terms of a set of
 landmarks. There is large amount of prior work on each of these tasks
 separately, yet, to the best of our knowledge, this is the first time
 in literature that the interplay between pose estimation and semantic
@@ -166,10 +166,11 @@ parameters with an interpolation filter (as in FCN). These filters
 learn to reconstruct the object's mask, in addition to upsampling its
 input.
 
-In the past year or so, the Encoder-Decoder network architecture has
-gained a great deal of popularity. This architecture reduces the
-spatial dimensionality of the feature maps as they are passed through
-the \textit{encoder}. These features are then upsampled again using a
+In the past year or so, Encoder-Decoder style network architectures
+(such as~\cite{newell2016stacked}) have gained a great deal of
+popularity. This architecture reduces the spatial dimensionality of
+the feature maps as they are passed through the
+\textit{encoder}. These features are then upsampled again using a
 \textit{decoder} part of the network, while being recombined with
 lower level information, much like in FCN~\cite{long2015fully}. This
 architecture has also been referred to as an hourglass network. This
@@ -219,14 +220,13 @@ segment up to 3000 classes - far higher than~\cite{long2015fully},
 which was trained on the 59 classes from VOC PASCAL
 2010~\cite{everingham2010pascal}.
 
-The primary focus of this thesis is not semantic
-segmentation. However, in Chapter~\ref{chapter:seg}, we describe our
-method for facial part segmentation, in which each component of the
-face (such as eyes, lips, nose, etc) are assigned a pixel wise
-label. Deep learning based approaches to semantic segmentation,
-particularly the fully convolutional approach described in
-~\cite{long2015fully}, have been heavily influential in our work on 3D
-reconstruction due to the spatial nature of our approach.
+This chapter describes our method for facial part segmentation, in
+which each component of the face (such as eyes, lips, nose, etc) are
+assigned a pixel wise label. Deep learning based approaches to
+semantic segmentation, particularly the fully convolutional approach
+described in ~\cite{long2015fully}, have been heavily influential in
+our work on 3D reconstruction due to the spatial nature of our
+approach.
 
 
 \subsection{Part Segmentation}

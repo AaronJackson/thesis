@@ -86,24 +86,24 @@ examples from 5 predominant approaches:
 \begin{enumerate}
 \item In the 3D Morphable Model (3DMM) \cite{blanz1999morphable,
     romdhani2005estimating}, the most popular approach for estimating
-  the full 3D facial structure from a single image (among others),
-  training includes an iterative flow procedure for dense image
-  correspondence which is prone to failure. Additionally, testing
-  requires a careful initialisation for solving a difficult highly
-  non-convex optimization problem in order to estimate the pose and
-  shape parameters, which is slow.
+  the full 3D facial structure from a single image, training includes
+  an iterative flow procedure for dense image correspondence which is
+  prone to failure. Additionally, testing requires a careful
+  initialisation for solving a difficult highly non-convex
+  optimization problem in order to estimate the pose and shape
+  parameters, which is slow.
 \item The work of \cite{kemelmacher20113d}, a popular approach for
   2.5D reconstruction from a single image, formulates and solves a
   carefully initialised (for frontal images only) non-convex
   optimization problem for recovering the lighting, depth, and albedo
   in an alternating manner where each of the sub-problems is a
   difficult optimization problem per se.
-\item In \cite{kemelmacher2011face}, a quite popular recent approach
-  for creating a neutral subject-specific 2.5D model from a near
-  frontal image, an iterative procedure is proposed which entails
-  localising facial landmarks, face frontalization, solving a
-  photometric stereo problem, local surface normal estimation, and
-  finally shape integration.
+\item In \cite{kemelmacher2011face}, a popular recent approach for
+  creating a neutral subject-specific 2.5D model from a near frontal
+  image, an iterative procedure is proposed, which entails localising
+  facial landmarks, face frontalization, solving a photometric stereo
+  problem, local surface normal estimation, and finally shape
+  integration.
 \item In \cite{suwajanakorn2014total}, a state-of-the-art pipeline for
   reconstructing a highly detailed 2.5D facial shape for each video
   frame, an average shape and an illumination subspace for the
@@ -163,7 +163,12 @@ are:
 \section{Method}
 
 
-This section describes our framework including the proposed data representation used.
+This section describes our framework for 3D reconstruction, including the proposed data
+representation used..
+
+This section begins by describing the training data used for our 3D
+reconstruction approach. This is followed by the proposed volumetric
+representation, and the 3D reconstruction method itself.
 
 
 \subsection{Dataset}
@@ -357,7 +362,8 @@ representations are shown in Figure~\ref{fig:roughvssmooth} where
 clearly the latter results in smoother results. Finally, from the 3D
 volume, a mesh can be formed by generating the iso-surface of the
 volume. If needed, correspondence between this variable length mesh
-and a fixed mesh can be found using Iterative Closest Point (ICP).
+and a fixed mesh can be found using Iterative Closest Point
+(ICP)~\cite{besl1992method}.
 
 \textbf{VRN - Multitask}. We also propose a Multitask VRN, shown in
 Figure~\ref{fig:cnnmultitask}, consisting of three hourglass
@@ -525,12 +531,14 @@ results in Section~\ref{sec:faceicpres}.
 \subsection{Evaluation}
 
 We performed cross-database experiments only, on 3 different
-databases, namely AFLW2000-3D, BU-4DFE, and Florence reporting the
-performance of all the proposed networks (\textit{VRN}, \textit{VRN -
-  Multitask} and \textit{VRN - Guided}) along with the performance of
-two state-of-the-art methods, namely 3DDFA \cite{zhu2016face} and EOS
-\cite{huber2016multiresolution}. Both methods perform 3DMM
-fitting (3DDFA uses a CNN), a process completely bypassed by \textit{VRN}.
+databases, namely AFLW2000-3D~\cite{zhu2016face},
+BU-4DFE~\cite{yin2008high}, and Florence~\cite{masi2d3dFaceData}
+reporting the performance of all the proposed networks (\textit{VRN},
+\textit{VRN - Multitask} and \textit{VRN - Guided}) along with the
+performance of two state-of-the-art methods, namely 3DDFA
+\cite{zhu2016face} and EOS \cite{huber2016multiresolution}. Both
+methods perform 3DMM fitting (3DDFA uses a CNN), a process completely
+bypassed by \textit{VRN}.
 
 
 % Don't really think this figure demonstrates what we want it to.
@@ -554,9 +562,10 @@ results from some frames in the 300-VW~\cite{sagonas2013300} video
 dataset in Figure~\ref{fig:face300vw}. From all of these results, we
 can conclude the following:
 \begin{enumerate}
-\item Volumetric Regression Networks largely outperform 3DDFA and EOS
-  on all datasets used for evaluation, statistically significant in
-  all cases ($p < 0.01$, paired $t$-test). This verifies that directly
+\item Volumetric Regression Networks largely outperform
+  3DDFA~\cite{zhu2016face} and EOS~\cite{huber2016multiresolution} on
+  all datasets used for evaluation, statistically significant in all
+  cases ($p < 0.01$, paired $t$-test). This verifies that directly
   regressing the 3D facial structure using the volumetric
   representation, is a much easier problem for CNN learning.
 \item All VRNs perform well across the whole spectrum of facial poses,
@@ -662,7 +671,7 @@ regularisation parameter $\lambda = 5000$ which we found to offer the
 best performance for most images. The method uses 2D landmarks as
 input, so for the sake of a fair comparison a stacked hourglass for 2D
 landmark detection was trained for this purpose. Our tests were
-performed using v0.12 of EOS.
+performed using version 0.12 of EOS.
 
 \subsection{Training and Run Times}
 
@@ -756,15 +765,15 @@ in Table~\ref{tab:overviewicp}.
 \label{sec:spatialimportance}
 
 Our approach to 3D face reconstruction preserves the spatial alignment
-between input and output. That is to say that the regressed 3D
-geometry should be capable of segmenting the input face from the
-background, given a 2D orthographic projection of the volume. A 3D
-reconstruction method is described in~\cite{choy20163d} which accepts
-as input one or more images, and as output, produces a small 3D volume
-of $32 \times 32 \times 32$ using an LSTM. In an attempt to explore
-what the repercussions of ignoring spatial alignment are, we trained a
-variant of \textit{VRN} which regresses a frontal version of the face,
-i.e. a face of fixed orientation, regardless of input pose, as
+between input and output. That is to say that orthographic projection
+the regressed 3D geometry should be capable of segmenting the input
+face from the background. A 3D reconstruction method is described
+in~\cite{choy20163d} which accepts as input one or more images, and as
+output, produces a small 3D volume of $32 \times 32 \times 32$ using
+an LSTM~\cite{hochreiter1997long}. In an attempt to explore what the
+repercussions of ignoring spatial alignment are, we trained a variant
+of \textit{VRN} which regresses a frontal version of the face, i.e. a
+face of fixed orientation, regardless of input pose, as
 in~\cite{choy20163d}. We call this fixed-pose variant of our method
 \textit{VRN - without alignment}. We also attempted to train a network
 using the code from~\cite{choy20163d} on downsampled versions of our
@@ -815,10 +824,9 @@ is still very low considering the magnitude of these poses.
 \subsection{Effect of expression} Certain expressions are usually
 considered harder to accurately reproduce in 3D face reconstruction.
 To measure the effect of facial expressions on performance, we
-rendered frontal images in difference expressions from BU-4DFE (since
-Florence only exhibits a neutral expression) and measured the
-performance for each expression. We show the six acted facial
-expressions which are available in BU-4DFE in
+rendered frontal images in difference expressions from BU-4DFE and
+measured the performance for each expression. We show the six acted
+facial expressions which are available in BU-4DFE in
 Figure~\ref{fig:bu4dfe_expressions}. These expressions are available
 for all participants, of which there are 102. This kind of extreme
 acted facial expressions generally do not occur in the training set,
@@ -935,7 +943,7 @@ for our 3D reconstruction experiment.
 Given a fixed computational budget one has two options when
 implementing a Volumetric Regression Network: to increase the number
 of stacks while decreasing the number of modules or vice versa.  An
-interesting question which has now been answered yet is whether it is
+interesting question which has not been answered yet is whether it is
 better to have more stacked hourglasses or more modules per
 hourglass. In this section, we attempt to quantify any performance
 variation, at least for the task of 3D face reconstruction using
