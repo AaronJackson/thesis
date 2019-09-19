@@ -4,6 +4,8 @@ List of Corrections
 - [X] Title: 3D human face and body reconstruction.
 
 - [X] Figure description of 3DMM is expected in the introduction
+  - A figure has been added which gives an brief overview of the steps
+    to fit a 3DMM.
 
 - [X] Page 13, clarify last sentence of first paragraph
 
@@ -42,9 +44,9 @@ List of Corrections
 - [X] Page 34, suggest to move the dataset description to a section
   later and combine with other datasets. Explicitly describe which one
   is for training and which one is for testing.
-  - I'm not really sure how I can structure this better. The
-    subsection we it would be merged with is under Results, and I feel
-    like this makes a lot of sense.  The training datasets are
+  - I'm not really sure how I can structure this better. The datasets
+    we use for evaluation are described under the results section, and
+    I think like this makes a lot of sense.  The training datasets are
     described in a section under Method. I've changed the titles to
     "Training Datasets" and "Evaluation Datasets". Perhaps this is
     less confusing?
@@ -185,19 +187,20 @@ List of Corrections
 
 - [X] Reference, use uniform style.
   - While the style was consistent, many of the journal or conference
-    names were different. Additionally, many details were missing from
-    many of the bibliography entries. I have gone through these to
-    ensure they are all correct and consistent. There are of course
-    still variations between articles, in proceedings and technical
-    reports, as defined by the IEEE referencing style.
+    names were inconsistent in my BibTeX fie. Additionally, details
+    were missing from many of the bibliography entries. I have gone
+    through these to ensure they are all correct and consistent. There
+    are of course still variations between articles, in proceedings
+    and technical reports, as defined by the IEEE referencing style.
 
-- [ ] All minor typographic error and missing references are annotated
+- [X] All minor typographic error and missing references are annotated
   in the thesis with a green or pencil cross. Please avoid repetition
   of certain sentences (e.g. page 31 last paragraph).
 
 - [X] Generally, it is not a good practice to use reference as part of
   the sentence (e.g. [10] suggests…). Instead you may use the author
   names (e.g. Jackson et al. [10] suggest…).
-  - I have corrected the cases I can find.
+  - I have corrected these where I feel it helps with the sentence
+    structure.
 
 

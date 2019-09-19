@@ -305,34 +305,6 @@ thesis. The volumetric representation used in the work described
 throughout this thesis is a contiguous array of bytes, which can be
 very efficiently read into memory.
 
-\section{Deep Learning Frameworks}
-
-While designing and developing a framework to work with deep neural
-networks \textit{might} be an interesting thought experiment for some,
-it is far from the focus of this thesis. This section serves a brief
-acknowledgement and justification for the choice of deep learning
-framework used. The work presented throughout this thesis was
-developed primarily under the Torch~\footnote{\url{http://torch.ch/},
-  except for the work on facial part segmentation, which was developed
-  under Cafe~\cite{jia2014caffe}}. There are a number of reasons for
-this, but to name just a few:
-
-\begin{enumerate}
-\item Efficient GPU support. This is important, of course, in any
-  framework intended for deep learning. Torch enables networks to be
-  run in parallel (for speed) or sequentially (for additional memory)
-  across multiple GPUs.
-\item Elegant memory backend. Data can be loaded directly into memory
-  and views can be applied to create $N$-dimensional Tensors without
-  shuffling memory. This is very important when reading in large
-  volumetric training samples.
-\item Multithreading. The trade offs between I/O and CPU are discussed
-  in more detail in Section~\ref{sec:background:volstorage}. However,
-  regardless of how the data is optimised (in terms of compression or
-  just raw data), volumes are big. Loading them sequentially and
-  applying augmentation, even on very fast hardware, remains a
-  computationally expensive task.
-\end{enumerate}
 
 
 %%% Local Variables:

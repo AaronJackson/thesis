@@ -49,16 +49,15 @@ domain. We do this by training a Convolutional Neural Network (CNN),
 on an appropriate dataset, consisting of 2D images and 3D facial
 models, or scans. Our CNN works with just a single 2D facial image and
 does not require accurate alignment. Our method works for arbitrary
-facial poses and expressions, and can be used to reconstruction the
-whole 3D facial geometry, including non-visible parts. Our method
-bypasses the construction (during training) and fitting (during
-inference) of a 3D Morphable Model. We achieve this via a simple CNN
-architecture that performs direct regression of a volumetric
-representation of the 3D facial geometry from a single 2D image. We
-also demonstrate how the related task of facial landmark localisation
-can be incorporated into the proposed framework and help improve
-reconstruction quality, especially in the cases of large poses and
-facial expressions.
+facial poses and expressions, and can be used to reconstruct the whole
+3D facial geometry, including non-visible parts. Our method bypasses
+the construction (during training) and fitting (during inference) of a
+3D Morphable Model. We achieve this via a simple CNN architecture that
+performs direct regression of a volumetric representation of the 3D
+facial geometry from a single 2D image. We also demonstrate how the
+related task of facial landmark localisation can be incorporated into
+the proposed framework and help improve reconstruction quality,
+especially in the cases of large poses and facial expressions.
 
 
 \section{Introduction}
@@ -98,7 +97,7 @@ examples from 5 predominant approaches:
   optimization problem for recovering the lighting, depth, and albedo
   in an alternating manner where each of the sub-problems is a
   difficult optimization problem per se.
-\item In \cite{kemelmacher2011face}, a popular recent approach for
+\item In \cite{kemelmacher2011face}, a recent approach for
   creating a neutral subject-specific 2.5D model from a near frontal
   image, an iterative procedure is proposed, which entails localising
   facial landmarks, face frontalization, solving a photometric stereo
@@ -164,14 +163,14 @@ are:
 
 
 This section describes our framework for 3D reconstruction, including the proposed data
-representation used..
+representation used.
 
 This section begins by describing the training data used for our 3D
 reconstruction approach. This is followed by the proposed volumetric
 representation, and the 3D reconstruction method itself.
 
 
-\subsection{Dataset}
+\subsection{Training Datasets}
 
 Our aim is to regress the full 3D facial structure from a 2D image. To
 this end, our method requires an appropriate dataset consisting of 2D
@@ -237,21 +236,21 @@ $\{w,h,d\}$ belongs to the 3D volumetric representation of the face
 and 0 otherwise (i.e. it belongs to the background). The conversion is
 shown in Figure~\ref{fig:discretisation}. Contrary to standard
 approaches, this data was voxelised by rotating to frontal and
-estimating a depth map is estimated using bilinear interpolation. from
-which the volume is filled back to a fixed point. This results in the
-mouth becoming filled. Notice that the process creates a volume fully
-aligned with the 2D image. The importance of spatial alignment is
-analysed in more detail in Section~\ref{sec:spatialimportance}. The
-error caused by discretization for a randomly picked facial scan as a
-function of the volume size is shown in
-Figure~\ref{fig:voxerror}. Given that the error of state-of-the-art
-methods \cite{roth2016adaptive,liu2016joint} is of the order of a few
-mms, we conclude that discretization by $192\times 192\times 200$
-produces negligible error. Such a spatial resolution is ideal for the
-type of architecture we have chosen to use as it can be reduced by
-half many times. The depth, 200, was chosen to capture as much depth
-information as possible without sacrificing the spatial resolution or
-increasing the memory requirements too much.
+estimating a depth map using bilinear interpolation, from which the
+volume is filled back to a fixed distance from the front of the
+face. This results in the mouth becoming filled. Notice that the
+process creates a volume fully aligned with the 2D image. The
+importance of spatial alignment is analysed in more detail in
+Section~\ref{sec:spatialimportance}. The error caused by
+discretization for a randomly picked facial scan as a function of the
+volume size is shown in Figure~\ref{fig:voxerror}. Given that the
+error of state-of-the-art methods \cite{roth2016adaptive,liu2016joint}
+is of the order of a few mms, we conclude that discretization by
+$192\times 192\times 200$ produces negligible error. Such a spatial
+resolution is ideal for the type of architecture we have chosen to use
+as it can be reduced by half many times. The depth, 200, was chosen to
+capture as much depth information as possible without sacrificing the
+spatial resolution or increasing the memory requirements too much.
 
 Given our volumetric facial representation, the problem of regressing
 the 3D coordinates of all vertices of a facial scan is reduced to one
@@ -592,7 +591,7 @@ can conclude the following:
     (Equation~\ref{eq:3d_nme}) performance on in-the-wild ALFW2000-3D
     dataset. The proposed \textit{Volumetric Regression Networks}, and
     EOS and 3DDFA are compared. Please note that ``VRN - without
-    allignment'' refers to a VRN where a frontal face is always
+    alignment'' refers to a VRN where a frontal face is always
     regressed, regardless of input pose, discussed in
     Section~\ref{sec:spatialimportance}.}
   \label{roc:aflw2000}
@@ -778,7 +777,7 @@ in~\cite{choy20163d}. We call this fixed-pose variant of our method
 \textit{VRN - without alignment}. We also attempted to train a network
 using the code from~\cite{choy20163d} on downsampled versions of our
 volumes. Unfortunately we were unable to get the network to learn
-anything and found that the loss would now reduce.
+anything and found that the loss would not reduce.
 
 Although \textit{VRN - without alignment} produces a reasonable face,
 it captures only a diminished expression. The shape for all faces
@@ -960,7 +959,7 @@ of the three, suggesting that for this particular problem, perhaps it
 is more optimal to increase the number of modules over the number of
 hourglasses. This may also be observed from a single hourglass
 outperforming \textit{VRN - Guided}, which again, may be due to higher
-performance gains from more modules over stacked hourglasses.However,
+performance gains from more modules over stacked hourglasses. However,
 it can also be observed that the performance difference between all
 networks is very minor, suggesting that for our experiment as long as
 the number of parameters remains roughly fixed good performance can be
