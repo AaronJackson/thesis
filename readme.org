@@ -1,0 +1,12 @@
+* 3D Face and Body Reconstruction via Volumetric Regression Networks
+
+List of TeXlive dependencies in texlive-packages.txt
+
+Following should do the trick
+
+#+begin_src
+pdflatex thesis.tex
+pdflatex thesis.tex
+bibtex thesis
+pdflatex thesis.tex
+#+end_src

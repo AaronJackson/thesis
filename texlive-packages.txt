@@ -1,0 +1,10 @@
+texlive-tocbibind
+texlive-appendix
+texlive-datetime
+texlive-nomencl
+texlive-wrapfig
+texlive-adjustbox
+texlive-pgfplots
+texlive-epigraph
+texlive-nextpage
+texlive-courier
